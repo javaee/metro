@@ -4,7 +4,7 @@ Metro is a high-performance, extensible, easy-to-use web service stack. It is a 
 
 # Latest Version
 
-[Metro 2.3.1](https://javaee.github.com/metro/download)
+[Metro 2.3.1](https://javaee.github.io/metro/download)
 
 # IMPORTANT!
 

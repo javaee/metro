@@ -7,7 +7,8 @@ Release Date: January 15, 2015
 Unless you have already done so, please download the [Metro 2.3.1 ZIP archive](https://maven.java.net/content/repositories/releases//org/glassfish/metro/metro-standalone/2.3.1/metro-standalone-2.3.1.zip). Once downloaded, you can expand it by executing following shell command:
 
     unzip metro-standalone-2.3.1.zip
-    On Windows or Mac, you may as well just double-click the zip file to expand it.
+
+On Windows or Mac, you may as well just double-click the zip file to expand it.
 
 The expanded metro directory contains following ant files:
 
