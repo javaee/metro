@@ -5,11 +5,11 @@ description: [Metro - Webservice toolkit]
 
 # sidebar links url
 links:
-  source: https://github.com/javaee/metro/sources
-  download: https://github.com/javaee/metro/download
-  #mailinglist:
+  source: sources
+  download: download
+  mailinglist: https://javaee.groups.io/g/metro
   #javadocs:
-  docs: https://github.com/javaee/metro/documentation
+  docs: documentation
   #faq:
   #mailinglist:
   #hide_issuetracker: true #set explicitly to 'true' if you don't want to have the issue tracker link displayed
