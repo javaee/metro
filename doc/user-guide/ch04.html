@@ -1,0 +1,167 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;4.&nbsp;SOAP</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Metro User Guide"><link rel="up" href="index.html" title="Metro User Guide"><link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Compiling WSDL"><link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;HTTP"><script xmlns:fo="http://www.w3.org/1999/XSL/Format" type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;SOAP</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td></tr></table><hr></div><small xmlns:fo="http://www.w3.org/1999/XSL/Format" class="small">Links: <a href="index.html">Table of Contents</a> | <a href="user-guide.html">Single HTML</a> | <a href="user-guide.pdf">Single PDF</a></small><div lang="en" class="chapter" title="Chapter&nbsp;4.&nbsp;SOAP"><div class="titlepage"><div><div><h2 class="title"><a name="soap"></a>Chapter&nbsp;4.&nbsp;SOAP</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch04.html#soap-headers">4.1. SOAP headers</a></span></dt><dd><dl><dt><span class="section"><a href="ch04.html#adding-soap-headers-when-sending-requests">4.1.1. Adding SOAP headers when sending requests</a></span></dt><dt><span class="section"><a href="ch04.html#accessing-soap-headers-for-incoming-messages">4.1.2. Accessing SOAP headers for incoming messages</a></span></dt><dt><span class="section"><a href="ch04.html#adding-soap-headers-when-sending-replies">4.1.3. Adding SOAP headers when sending replies</a></span></dt><dt><span class="section"><a href="ch04.html#mapping-additional-wsdl-headers-to-method-parameters">4.1.4. Mapping additional WSDL headers to method
+            parameters</a></span></dt></dl></dd><dt><span class="section"><a href="ch04.html#schema-validation">4.2. Schema Validation</a></span></dt><dd><dl><dt><span class="section"><a href="ch04.html#server-side-schema-validation">4.2.1. Server Side Schema Validation</a></span></dt><dt><span class="section"><a href="ch04.html#client-side-schema-validation">4.2.2. Client Side Schema Validation</a></span></dt></dl></dd></dl></div><div class="section" title="4.1.&nbsp;SOAP headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="soap-headers"></a>4.1.&nbsp;SOAP headers</h2></div></div></div><p>When the WSDL you are compiling specifies that some parts of a
+        message are bound to SOAP headers, <code class="code">wsimport</code> generates the
+        right stuff (<code class="code">@WebParam</code> <code class="code">(header=true)</code>), so
+        you can pass headers as arguments to the method invocation. When
+        starting from Java, you can use this same annotation to indicate that
+        some parameters be sent as headers.</p><p>That said, there are many WSDLs out there that do not specify
+        SOAP headers explicitly, yet the protocol still requires such headers
+        to be sent, so the JAX-WS RI offers convenient ways for you to
+        send/receive additional headers at runtime.</p><div class="section" title="4.1.1.&nbsp;Adding SOAP headers when sending requests"><div class="titlepage"><div><div><h3 class="title"><a name="adding-soap-headers-when-sending-requests"></a>4.1.1.&nbsp;Adding SOAP headers when sending requests</h3></div></div></div><p>The portable way of doing this is that you creaate a
+            <code class="code">SOAPHandler</code> and mess with SAAJ, but the RI provides a
+            better way of doing this.</p><p>When you create a proxy or dispatch object, they implement
+            <code class="code">BindingProvider</code> interface. When you use the JAX-WS
+            RI, you can downcast to <code class="code">WSBindingProvider</code> which
+            defines a few more methods provided only by the JAX-WS RI.</p><p>This interface lets you set an arbitrary number of
+            <code class="code">Header</code> object, each representing a SOAP header. You
+            can implement it on your own if you want, but most likely you'd
+            use one of the factory methods defined on <code class="code">Headers</code>
+            class to create one.</p><div class="example"><a name="d0e3397"></a><p class="title"><b>Example&nbsp;4.1.&nbsp;Adding custom headers</b></p><div class="example-contents"><pre class="programlisting">import com.sun.xml.ws.developer.WSBindingProvider;
+
+HelloPort port = helloService.getHelloPort();  // or something like that...
+WSBindingProvider bp = (WSBindingProvider) port;
+
+bp.setOutboundHeader(
+        // simple string value as a header, 
+        // like &lt;simpleHeader&gt;stringValue&lt;/simpleHeader&gt;
+        Headers.create(new QName("simpleHeader"), "stringValue"),
+        // create a header from JAXB object
+        Headers.create(jaxbContext, myJaxbObject)
+);</pre></div></div><br class="example-break"><p>Once set, it will take effect on all the successive methods.
+            If you'd like to see more factory methods on Headers, please let
+            us know.</p></div><div class="section" title="4.1.2.&nbsp;Accessing SOAP headers for incoming messages"><div class="titlepage"><div><div><h3 class="title"><a name="accessing-soap-headers-for-incoming-messages"></a>4.1.2.&nbsp;Accessing SOAP headers for incoming messages</h3></div></div></div><p>Server can access all the SOAP headers of the incoming
+            messages by using the
+            <code class="code">JAXWSProperties#INBOUND_HEADER_LIST_PROPERTY</code> property
+            like this:</p><div class="example"><a name="d0e3412"></a><p class="title"><b>Example&nbsp;4.2.&nbsp;Accessing incoming headers</b></p><div class="example-contents"><pre class="programlisting">@WebService
+public class FooService {
+    @Resource
+    WebServiceContext context;
+
+    @WebMethod
+    public void sayHelloTo(String name) {
+        HeaderList hl = context.getMessageContext().get(JAXWSProperties
+                .INBOUND_HEADER_LIST_PROPERTY);
+        Header h = hl.get(MYHEADER);
+    }
+
+    private static final QName MYHEADER = new QName("myNsUri", "myHeader");
+}</pre></div></div><br class="example-break"><p>Clients can similarly access all the SOAP headers of the
+            incoming messages:</p><div class="example"><a name="d0e3419"></a><p class="title"><b>Example&nbsp;4.3.&nbsp;Accessing incoming headers</b></p><div class="example-contents"><pre class="programlisting">HelloPort port = helloService.getHelloPort();  // or something like that...
+port.sayHelloTo("duke");
+HeaderList hl = port.getResponseContext().get(JAXWSProperties
+        .INBOUND_HEADER_LIST_PROPERTY);
+Header h = hl.get(MYHEADER);</pre></div></div><br class="example-break"><p>See the <code class="code">Header</code> interface for more details about
+            how to access the header values.</p></div><div class="section" title="4.1.3.&nbsp;Adding SOAP headers when sending replies"><div class="titlepage"><div><div><h3 class="title"><a name="adding-soap-headers-when-sending-replies"></a>4.1.3.&nbsp;Adding SOAP headers when sending replies</h3></div></div></div><p>Servers tend to be developed "from-Java" style, so we feel
+            the necessity of adding out-of-band headers is smaller (you can
+            just define headers as method
+            <code class="code">@WebParam(mode=OUT,header=true)</code> parameters.)
+            Therefore, currently there's no support for adding out-of-band
+            SOAP headers into response messages.</p><p>If you'd like us to improve on this front, please let us
+            know.</p></div><div class="section" title="4.1.4.&nbsp;Mapping additional WSDL headers to method parameters"><div class="titlepage"><div><div><h3 class="title"><a name="mapping-additional-wsdl-headers-to-method-parameters"></a>4.1.4.&nbsp;Mapping additional WSDL headers to method
+            parameters</h3></div></div></div><p>Sometimes WSDLs in the binding section reference soap:header
+            messages that are not part of the input or output contract defined
+            in the portType operation. For example:</p><div class="example"><a name="d0e3444"></a><p class="title"><b>Example&nbsp;4.4.&nbsp;Sample WSDL with additional header bindings</b></p><div class="example-contents"><pre class="programlisting">&lt;message name="additionalHeader"&gt;
+   &lt;part name="additionalHeader" element="types:additionalHeader"/&gt;
+&lt;/message&gt;
+
+&lt;wsdl:portType name="HelloPortType"&gt;
+   &lt;wsdl:operation name="echo"&gt;
+      &lt;wsdl:input message="tns:echoRequest"/&gt;
+      &lt;wsdl:output message="tns:echoResponse"/&gt;
+   &lt;/wsdl:operation&gt;
+&lt;/wsdl:portType&gt;
+
+&lt;wsdl:binding name="HelloBinding" type="tns:HelloPortType"&gt;
+   &lt;soap:binding style="document"
+                 transport="http://schemas.xmlsoap.org/soap/http"/&gt;
+   &lt;wsdl:operation name="echo"&gt;
+      &lt;soap:operation/&gt;
+      &lt;wsdl:input&gt;
+         &lt;soap:body message="tns:echoRequest"/&gt;
+         &lt;soap:header message="tns:additionalHeader"
+                      part="additionalHeader"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+         &lt;soap:body message="tns:echoResponse"/&gt;
+      &lt;/wsdl:output&gt;
+   &lt;/wsdl:operation&gt;
+&lt;/wsdl:binding&gt;</pre></div></div><br class="example-break"><p>In the above schema in the wsdl:binding section
+            tns:additionalHeader is bound but if you see this header is not
+            part of the <span class="bold"><strong>echo</strong></span> abstract
+            contract (i.e., the wsdl:portType section). According to JAX-WS
+            2.1 specification only the wsdl:part's from the abstract portion
+            are mapped to Java method parameters.</p><p>Running wsimport on this wsdl will generate this method
+            signature:</p><pre class="programlisting">wsimport sample.wsdl</pre><div class="example"><a name="d0e3458"></a><p class="title"><b>Example&nbsp;4.5.&nbsp;Default mapping</b></p><div class="example-contents"><pre class="programlisting">public String echo(String request);</pre></div></div><br class="example-break"><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Since JAX-WS RI 2.1.3, wsimport has a new option
+                -XadditionalHeaders, this option will map such additional
+                headers as method parameters.</p></div><pre class="programlisting">wsimport -XadditionalHeaders sample.wsdl</pre><div class="example"><a name="d0e3468"></a><p class="title"><b>Example&nbsp;4.6.&nbsp;WSDL to Java mapping with -XadditionalHeaders
+                switch</b></p><div class="example-contents"><pre class="programlisting">public String echo(String request, String additionalHeader);</pre></div></div><br class="example-break"></div></div><div class="section" title="4.2.&nbsp;Schema Validation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="schema-validation"></a>4.2.&nbsp;Schema Validation</h2></div></div></div><p>SOAP messages are not validated against schemas by default with
+        the JAX-WS RI. However, this can be enabled for doc/lit cases. The
+        JAXWS-RI uses JAXP's <a class="link" href="http://download.oracle.com/javase/6/docs/api/javax/xml/validation/SchemaFactory.html" target="_top">SchemaFactory</a>
+        API to do the validation.</p><div class="section" title="4.2.1.&nbsp;Server Side Schema Validation"><div class="titlepage"><div><div><h3 class="title"><a name="server-side-schema-validation"></a>4.2.1.&nbsp;Server Side Schema Validation</h3></div></div></div><p>The <a class="link" href="http://java.net/projects/jax-ws-architecture-document/sources/svn/content/trunk/www/doc/com/sun/xml/ws/developer/SchemaValidation.html?raw=true" target="_top">
+            <code class="code">@SchemaValidation</code> </a> annotation needs to be
+            specified on the endpoint implementation to enable server side
+            validation. Both the incoming SOAP request and outgoing SOAP
+            response will be validated, with exceptions returned to the client
+            for any validation errors that occur.</p><div class="example"><a name="d0e3492"></a><p class="title"><b>Example&nbsp;4.7.&nbsp;Enabling Schema Validation for an Endpoint</b></p><div class="example-contents"><pre class="programlisting">import com.sun.xml.ws.developer.SchemaValidation;
+...
+
+@SchemaValidation
+@WebService
+public class HelloImpl {
+}</pre></div></div><br class="example-break"><p>If a application wants to have complete control over
+            validation error handling, it can set up a <a class="link" href="http://java.net/projects/jax-ws-architecture-document/sources/svn/content/trunk/www/doc/com/sun/xml/ws/developer/ValidationErrorHandler.html?raw=true" target="_top"><code class="code">ValidationErrorHandler</code></a>
+            to receive notification of errors. The handler has access to the
+            <a class="link" href="http://java.net/projects/jax-ws-architecture-document/sources/svn/content/trunk/www/doc/com/sun/xml/ws/api/message/Packet.html?raw=true" target="_top"><code class="code">Packet</code></a>
+            and can store any information in its invocationProperties. These
+            properties are accessible from the endpoint's
+            <code class="code">MessageContext</code>.</p><div class="example"><a name="d0e3510"></a><p class="title"><b>Example&nbsp;4.8.&nbsp;Customizing Schema Validation</b></p><div class="example-contents"><pre class="programlisting">@SchemaValidation(handler = MyErrorHandler.class)
+@WebService
+public class HelloImpl {
+}
+
+import com.sun.xml.ws.developer.ValidationErrorHandler;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.SAXException;
+
+public class MyErrorHandler extends ValidationErrorHandler {
+    public void warning(SAXParseException e) throws SAXException {
+        // Store warnings in the packet so that they can be retrieved 
+        // from the endpoint
+        packet.invocationProperties.put("error", e);
+    }
+
+    public void error(SAXParseException e) throws SAXException {
+        throw e;
+    }
+
+    public void fatalError(SAXParseException e) throws SAXException {
+        ; // noop
+    }
+}</pre></div></div><br class="example-break"></div><div class="section" title="4.2.2.&nbsp;Client Side Schema Validation"><div class="titlepage"><div><div><h3 class="title"><a name="client-side-schema-validation"></a>4.2.2.&nbsp;Client Side Schema Validation</h3></div></div></div><p>Proxy needs to be created with <a class="link" href="http://java.net/projects/jax-ws-architecture-document/sources/svn/content/trunk/www/doc/com/sun/xml/ws/developer/SchemaValidationFeature.html?raw=true" target="_top"><code class="code">SchemaValidationFeature</code></a>
+            to enable client side validation. Both the outgoing SOAP request
+            and incoming SOAP response will be validated.</p><div class="example"><a name="d0e3524"></a><p class="title"><b>Example&nbsp;4.9.&nbsp;Enabling Proxy with Schema Validation</b></p><div class="example-contents"><pre class="programlisting">import com.sun.xml.ws.developer.SchemaValidationFeature;
+...
+
+SchemaValidationFeature feature = new SchemaValidationFeature();
+HelloPort port = new HelloService.getHelloPort(feature);
+// All invocations on this port are validated</pre></div></div><br class="example-break"><p>If a client application wants to have complete control over
+            validation error handling, it can set up a
+            <code class="code">ValidationErrorHandler</code> to receive notification of
+            errors. The handler has access to the <code class="code">Packet</code> and can
+            store any information in its invocationProperties. These
+            properties are accessible from proxy's response context.</p><div class="example"><a name="d0e3537"></a><p class="title"><b>Example&nbsp;4.10.&nbsp;Customizing Schema Validation</b></p><div class="example-contents"><pre class="programlisting">SchemaValidationFeature feature =
+        new SchemaValidationFeature(MyErrorHandler.class);
+HelloPort port = new HelloService.getHelloPort(feature);
+// All invocations on this port will be validated</pre></div></div><br class="example-break"></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Compiling WSDL&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;HTTP</td></tr></table></div></body></html>

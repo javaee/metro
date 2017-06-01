@@ -1,0 +1,237 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;6.&nbsp;Processing Large Data</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Metro User Guide"><link rel="up" href="index.html" title="Metro User Guide"><link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;HTTP"><link rel="next" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Bootstrapping and Configuration"><script xmlns:fo="http://www.w3.org/1999/XSL/Format" type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Processing Large Data</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td></tr></table><hr></div><small xmlns:fo="http://www.w3.org/1999/XSL/Format" class="small">Links: <a href="index.html">Table of Contents</a> | <a href="user-guide.html">Single HTML</a> | <a href="user-guide.pdf">Single PDF</a></small><div lang="en" class="chapter" title="Chapter&nbsp;6.&nbsp;Processing Large Data"><div class="titlepage"><div><div><h2 class="title"><a name="processing-large-data"></a>Chapter&nbsp;6.&nbsp;Processing Large Data</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch06.html#receiving-large-soap-requests">6.1. Receiving large SOAP requests</a></span></dt><dd><dl><dt><span class="section"><a href="ch06.html#providermessage">6.1.1. Provider&lt;Message&gt;</a></span></dt></dl></dd><dt><span class="section"><a href="ch06.html#binary-attachments-mtom">6.2. Binary Attachments (MTOM)</a></span></dt><dd><dl><dt><span class="section"><a href="ch06.html#mtom">6.2.1. MTOM</a></span></dt><dt><span class="section"><a href="ch06.html#enabling-mtom-on-server">6.2.2. Enabling MTOM on server</a></span></dt><dt><span class="section"><a href="ch06.html#enabling-mtom-on-client">6.2.3. Enabling MTOM on client</a></span></dt><dt><span class="section"><a href="ch06.html#mtom-threshold">6.2.4. MTOM threshold</a></span></dt><dt><span class="section"><a href="ch06.html#net-interoperability">6.2.5. .NET interoperability</a></span></dt></dl></dd><dt><span class="section"><a href="ch06.html#large-attachments">6.3. Large Attachments</a></span></dt><dd><dl><dt><span class="section"><a href="ch06.html#client-side">6.3.1. Client Side</a></span></dt><dt><span class="section"><a href="ch06.html#server-side">6.3.2. Server Side</a></span></dt><dt><span class="section"><a href="ch06.html#configuration">6.3.3. Configuration</a></span></dt><dt><span class="section"><a href="ch06.html#large-attachments-summary">6.3.4. Large Attachments Summary</a></span></dt></dl></dd></dl></div><div class="section" title="6.1.&nbsp;Receiving large SOAP requests"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="receiving-large-soap-requests"></a>6.1.&nbsp;Receiving large SOAP requests</h2></div></div></div><p>Processing of large incoming SOAP requests can be made more
+        efficient with some additional effort.</p><div class="section" title="6.1.1.&nbsp;Provider<Message&gt;"><div class="titlepage"><div><div><h3 class="title"><a name="providermessage"></a>6.1.1.&nbsp;Provider&lt;Message&gt;</h3></div></div></div><p><a class="link" href="http://weblogs.java.net/blog/kohsuke/archive/2007/03/dispatch_and_pr.html" target="_top">JAX-WS
+            RI extension Provider&lt;Message&gt;</a> can be used to read an
+            incoming SOAP message by using <code class="code">XMLStreamReader</code> (among
+            other things.) This allows you to read the SOAP message on-demand
+            lazily, without needing to buffer the whole message in
+            memory.</p><p>See <a class="link" href="http://jaxb.java.net/guide/Dealing_with_large_documents.html" target="_top">the
+            relevant JAXB users guide section</a> for how to combine JAXB
+            with such streaming processing.</p></div></div><div class="section" title="6.2.&nbsp;Binary Attachments (MTOM)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="binary-attachments-mtom"></a>6.2.&nbsp;Binary Attachments (MTOM)</h2></div></div></div><div class="section" title="6.2.1.&nbsp;MTOM"><div class="titlepage"><div><div><h3 class="title"><a name="mtom"></a>6.2.1.&nbsp;MTOM</h3></div></div></div><p><a class="link" href="http://www.w3.org/TR/soap12-mtom/" target="_top">MTOM</a> (and
+            <a class="link" href="http://www.w3.org/TR/xop10/" target="_top">XOP</a>) allows
+            you to send and receive binary attachments (such as files and
+            images) efficiently and in an interoperable manner.</p><div class="section" title="6.2.1.1.&nbsp;What is MTOM?"><div class="titlepage"><div><div><h4 class="title"><a name="what-is-mtom"></a>6.2.1.1.&nbsp;What is MTOM?</h4></div></div></div><p>Perhaps the best way to understand the pros and cons of
+                MTOM is to see an actual on-the-wire message. See an example
+                below:</p><div class="example"><a name="d0e3801"></a><p class="title"><b>Example&nbsp;6.1.&nbsp;Sample MTOM message</b></p><div class="example-contents"><pre class="programlisting">Content-Type: Multipart/Related; start-info="text/xml"; type="application/xop+xml"; boundary="----=_Part_0_1744155.1118953559416"
+Content-Length: 3453
+SOAPAction: ""
+
+------=_Part_1_4558657.1118953559446
+Content-Type: application/xop+xml; type="text/xml"; charset=utf-8
+
+&lt;S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+  &lt;S:Body&gt;
+    &lt;Detail xmlns="http://example.org/mtom/data"&gt;
+      &lt;image&gt;
+        &lt;xop:Include xmlns:xop="http://www.w3.org/2004/08/xop/include" href="cid:5aeaa450-17f0-4484-b845-a8480c363444@example.org" /&gt;
+      &lt;/image&gt;
+    &lt;/Detail&gt;
+  &lt;/S:Body&gt;
+&lt;/S:Envelope&gt;
+
+
+------=_Part_1_4558657.1118953559446
+Content-Type: image/jpeg
+Content-ID: &lt;5aeaa450-17f0-4484-b845-a8480c363444@example.org&gt;
+
+
+... binary data ...</pre></div></div><br class="example-break"><p>The noteworthy points are:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>The binary attachment is packaged in a MIME
+                        multi-part message (the same mechanism used in e-mail
+                        to handle attachments.)</p></li><li class="listitem"><p>An &lt;xop:Include&gt; element is used to mark
+                        where the binary data is.</p></li><li class="listitem"><p>The actual binary data is kept in a different
+                        MIME part.</p></li></ol></div><p>MTOM is efficient, in the sense that it doesn't have the
+                33% size increase penalty that <code class="code">xs:base64Binary</code>
+                has. It is interoperable, in the sense that it is a W3C
+                standard. However, MIME multipart incurs a small cost
+                proportional to the number of attachments, so it is not
+                suitable for a large number of tiny attachments.</p><p>The schema that describes the above message is below.
+                The MTOM spec is designed to work below the XML infoset level,
+                so the schema describes the image as being of type
+                <code class="code">xs:base64Binary</code>, even though it can be attached
+                as seen above. When using MTOM, any base64Binary can be
+                attached or inlined.</p><div class="example"><a name="d0e3828"></a><p class="title"><b>Example&nbsp;6.2.&nbsp;Schema</b></p><div class="example-contents"><pre class="programlisting">&lt;element name="Detail" type="types:DetailType"/&gt;
+&lt;complexType name="DetailType"&gt;
+  &lt;sequence&gt;
+    &lt;element name="image" type="base64Binary" /&gt;
+  &lt;/sequence&gt;
+&lt;/complexType&gt;</pre></div></div><br class="example-break"></div><div class="section" title="6.2.1.2.&nbsp;xmime:expectedContentType to Java type mapping"><div class="titlepage"><div><div><h4 class="title"><a name="xmimeexpectedcontenttype-to-java-type-mapping"></a>6.2.1.2.&nbsp;xmime:expectedContentType to Java type mapping</h4></div></div></div><p>Schema elements of type <code class="code">xs:base64Binary</code> or
+                <code class="code">xs:hexBinary</code> can be annotated by using the <a class="link" href="http://www.w3.org/TR/xml-media-types/" target="_top">xmime:expectedContentType</a>
+                attribute to indicate the type of binary that is expected.
+                <code class="code">wsimport</code> recognizes this annotation and will map
+                the binary data to its proper Java representation instead. The
+                table below is taken from JAXB spec Table 9-1, which shows the
+                mapping rules:</p><div class="table"><a name="d0e3850"></a><p class="title"><b>Table&nbsp;6.1.&nbsp;JAXB Mapping Rules</b></p><div class="table-contents"><table summary="JAXB Mapping Rules" border="1"><colgroup><col><col></colgroup><thead><tr><th>MIME Type</th><th>Java Type</th></tr></thead><tbody><tr><td>image/*</td><td>java.awt.Image</td></tr><tr><td>text/plain</td><td>java.lang.String</td></tr><tr><td>application/xml, text/xml</td><td>javax.xml.transform.Source</td></tr><tr><td>(others)</td><td>javax.activation.DataHandler</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="6.2.1.3.&nbsp;xmime:contentType attribute"><div class="titlepage"><div><div><h4 class="title"><a name="xmimecontenttype-attribute"></a>6.2.1.3.&nbsp;xmime:contentType attribute</h4></div></div></div><p>The schema can further use the <a class="link" href="http://www.w3.org/TR/xml-media-types/" target="_top">xmime:contentType</a>
+                attribute to designate the actual content type of the binary
+                data used in the message. (In contrast,
+                <code class="code">xmime:expectedContentTypes</code> specifies what are
+                allowed. This combination allows you to say "image/* is
+                expected but this message contains image/jpeg".)</p><p>This attribute can be used with elements whose content
+                is either <code class="code">xs:base64Binary</code> or
+                <code class="code">xs:hexBinary</code>. Consider the following
+                example:</p><div class="example"><a name="d0e3900"></a><p class="title"><b>Example&nbsp;6.3.&nbsp;Using xmime:contentType</b></p><div class="example-contents"><pre class="programlisting">&lt;element name="TestMtomXmimeContentType" type="types:PictureType"/&gt;
+
+&lt;complexType name="PictureType"&gt;
+  &lt;simpleContent&gt;
+    &lt;restriction base="xmime:base64Binary"&gt;
+      &lt;attribute ref="xmime:contentType" use="required" /&gt;
+    &lt;/restriction&gt;
+  &lt;/simpleContent&gt;
+&lt;/complexType&gt;</pre></div></div><br class="example-break"><p>Here <code class="code">xmime:base64Binary</code> is defined by <a class="link" href="http://www.w3.org/TR/xml-media-types/#schema" target="_top">Describing
+                Media Content of Binary Data in XML</a>. The following code
+                shows how your program can set the MIME type to the generated
+                beans:</p><div class="example"><a name="d0e3913"></a><p class="title"><b>Example&nbsp;6.4.&nbsp;Setting content type</b></p><div class="example-contents"><pre class="programlisting">PictureType req = new PictureType();
+req.setValue(name.getBytes());
+req.setContentType("application/xml");</pre></div></div><br class="example-break"><p>On the wire this is how it looks:</p><div class="example"><a name="d0e3920"></a><p class="title"><b>Example&nbsp;6.5.&nbsp;SOAP Message that uses xmime:contentType</b></p><div class="example-contents"><pre class="programlisting">&lt;S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:ns1="http://example.org/mtom/data"
+  xmlns:ns2="http://www.w3.org/2005/05/xmlmime"&gt;
+  &lt;S:Body&gt;
+    &lt;ns1:TestMtomXmimeContentTypeResponse ns2:contentType="application/xml"&gt;
+      &lt;xop:Include
+          xmlns:xop="http://www.w3.org/2004/08/xop/include"
+          href="cid:193ed174-d313-4325-8eed-16cc25595e4e@example.org"/&gt;
+    &lt;/ns1:TestMtomXmimeContentTypeResponse&gt;
+  &lt;/S:Body&gt;
+&lt;/S:Envelope&gt;</pre></div></div><br class="example-break"></div></div><div class="section" title="6.2.2.&nbsp;Enabling MTOM on server"><div class="titlepage"><div><div><h3 class="title"><a name="enabling-mtom-on-server"></a>6.2.2.&nbsp;Enabling MTOM on server</h3></div></div></div><p>There are several ways to enable MTOM.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>By using the @MTOM annotation on SEI. This is
+                    convenience and preferable for developers. </p><div class="example"><a name="d0e3934"></a><p class="title"><b>Example&nbsp;6.6.&nbsp;Annotating SEI with @MTOM</b></p><div class="example-contents"><pre class="programlisting">@javax.xml.ws.soap.MTOM
+@WebService
+public class HelloImpl implements Hello {
+    ....
+}</pre></div></div><p><br class="example-break"></p></li><li class="listitem"><p>By using the <code class="code">enable-mtom</code> attribute in
+                    the <code class="code">sun-jaxws.xml</code> configuration file. This
+                    allows the MTOM setting to be changed at deployment time.
+                    </p><div class="example"><a name="d0e3948"></a><p class="title"><b>Example&nbsp;6.7.&nbsp;Enabling MTOM in sun-jaxws.xml</b></p><div class="example-contents"><pre class="programlisting">&lt;endpoints xmlns='http://java.sun.com/xml/ns/jax-ws/ri/runtime' version='2.0'&gt;
+  &lt;endpoint name="Mtom" implementation="mtom.server.HelloImpl"
+    url-pattern="/hello"
+    enable-mtom="true"/&gt;
+&lt;/endpoints&gt;</pre></div></div><p><br class="example-break"></p></li><li class="listitem"><p>If you are using JAX-WS RI via Spring, you can also
+                    enable MTOM from the bean definition file. See the JAX-WS
+                    spring extension for more.</p></li></ol></div></div><div class="section" title="6.2.3.&nbsp;Enabling MTOM on client"><div class="titlepage"><div><div><h3 class="title"><a name="enabling-mtom-on-client"></a>6.2.3.&nbsp;Enabling MTOM on client</h3></div></div></div><p>There are several ways to enable MTOM.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>By doing nothing. If the server WSDL advertises that
+                    it supports MTOM, the MTOM support in the client will be
+                    automatically enabled. This is the preferable way.</p></li><li class="listitem"><p>By passing <code class="code">MTOMFeature</code> as
+                    <code class="code">WebServiceFeature</code> parameter while creating a
+                    <code class="code">proxy</code> or a <code class="code">Dispatch</code>. See the
+                    example below: </p><div class="example"><a name="d0e3980"></a><p class="title"><b>Example&nbsp;6.8.&nbsp;Passing MTOMFeature</b></p><div class="example-contents"><pre class="programlisting">Hello port = new HelloService().getHelloPort(new MTOMFeature());
+Dispatch d = new HelloService().createDispatch(....,new MTOMFeature());</pre></div></div><p><br class="example-break"></p></li></ol></div></div><div class="section" title="6.2.4.&nbsp;MTOM threshold"><div class="titlepage"><div><div><h3 class="title"><a name="mtom-threshold"></a>6.2.4.&nbsp;MTOM threshold</h3></div></div></div><p>As discussed above, in rare situations where you have a lot
+            of tiny attachments, the overhead of MTOM may outweigh the benefit
+            of binary transfer. To cope with this situation, the JAX-WS RI
+            supports the notion of "threshold" --- if an attachment is smaller
+            than the size specified in threshold, it will simply inline the
+            binary data as base64 binary instead of making it an attachment.
+            Because of the way MTOM spec is designed, such inline vs
+            attachment decision is handled by the toolkits of both ends and
+            will not harm the application running on both sides.</p><p>There are two ways to control the threshold:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>By using the
+                    <code class="code">com.sun.xml.ws.developer.JAXWSProperties.MTOM_THRESHOLD_VALUE</code>
+                    property in the <code class="code">RequestContext</code> on the client
+                    side and in the <code class="code">MessageContext</code> on the server
+                    side.</p></li><li class="listitem"><p>By adding parameter to the <code class="code">@MTOM</code>
+                    annotation, such as
+                    <code class="code">@MTOM(threshold=3000)</code></p></li><li class="listitem"><p>By adding parameter to the <code class="code">MTOMFeature</code>
+                    object, such as <code class="code">new MTOM(3000)</code></p></li></ol></div></div><div class="section" title="6.2.5.&nbsp;.NET interoperability"><div class="titlepage"><div><div><h3 class="title"><a name="net-interoperability"></a>6.2.5.&nbsp;.NET interoperability</h3></div></div></div><div class="section" title="6.2.5.1.&nbsp;Using Metro distribution"><div class="titlepage"><div><div><h4 class="title"><a name="using-metro-distribution"></a>6.2.5.1.&nbsp;Using Metro distribution</h4></div></div></div><p>MTOM support is fully interoperable with .NET clients
+                and servers. If you are working with <span class="bold"><strong>Metro</strong></span> then your MTOM solution as a
+                endpoint or as client will work out of the box.</p></div><div class="section" title="6.2.5.2.&nbsp;Using JAX-WS RI distribution"><div class="titlepage"><div><div><h4 class="title"><a name="using-jax-ws-ri-distribution"></a>6.2.5.2.&nbsp;Using JAX-WS RI distribution</h4></div></div></div><p>If you are using JAX-WS RI distribution, MTOM interop
+                with .NET client or server will not work out of the box. The
+                reason behind this is that JAX-WS RI does not have built in
+                support for WS-Policy and .NET 3.0/.NET 3.5 looks for an MTOM
+                policy assertion in the WSDL before turning on MTOM encoding.
+                So, you will need to turn it on explicitly on your .NET
+                3.0/3.5 or JAX-WS RI client.</p><p>The MTOM policy assertion that .NET 3.0/.NET 3.5
+                understands is: <span class="bold"><strong>&lt;wsoma:OptimizedMimeSerialization/&gt;</strong></span></p><div class="section" title="6.2.5.2.1.&nbsp;JAX-WS RI endpoint and .NET client"><div class="titlepage"><div><div><h5 class="title"><a name="jax-ws-ri-endpoint-and-net-client"></a>6.2.5.2.1.&nbsp;JAX-WS RI endpoint and .NET client</h5></div></div></div><p>Turn on MTOM explicitly on your .NET client using
+                    the WCF editor available with Visual Studio 2005.</p></div><div class="section" title="6.2.5.2.2.&nbsp;JAX-WS RI client and .NET endpoint"><div class="titlepage"><div><div><h5 class="title"><a name="jax-ws-ri-client-and-net-endpoint"></a>6.2.5.2.2.&nbsp;JAX-WS RI client and .NET endpoint</h5></div></div></div><p>Turn on MTOM on JAX-WS RI client as defined above.</p></div><div class="simplesect"><div class="titlepage"></div><p>Here is a sample <a class="link" href="download/MetroMtomService.zip" target="_top">Metro MTOM
+                    endpoint</a> and a <a class="link" href="download/WCFMtomClient.zip" target="_top">.NET 3.0
+                    client</a>.</p></div></div></div></div><div class="section" title="6.3.&nbsp;Large Attachments"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="large-attachments"></a>6.3.&nbsp;Large Attachments</h2></div></div></div><p>JAX-WS RI provides support for sending and receiving large
+        attachments in a streaming fashion. Often times, large attachments
+        need to be stored on the file system since they cannot be kept in
+        memory(limited by heap size). But in certain cases, streaming of
+        attachments is possible without ever storing the content on the file
+        system. RI will try to stream the attachments whenever it is possible.
+        Otherwise, it would store the large attachments on the file
+        system.</p><p>The programming model is based on MTOM and DataHandler. You want
+        to send large data as a SOAP attachment, see <a class="link" href="Binary_Attachments__MTOM_.html" target="_top">this section</a> for
+        more details. Also you want to bind large data to
+        <code class="code">DataHandler</code> instead of <code class="code">byte[]</code>. RI provides a
+        <code class="code">StreamingDataHandler</code>, a DataHandler implementation that
+        can be used to access the data efficiently in a streaming
+        fashion.</p><div class="section" title="6.3.1.&nbsp;Client Side"><div class="titlepage"><div><div><h3 class="title"><a name="client-side"></a>6.3.1.&nbsp;Client Side</h3></div></div></div><p>RI uses Java SE's <a class="link" href="http://download.oracle.com/javase/6/docs/api/java/net/HttpURLConnection.html" target="_top">HttpURLConnection</a>
+            for web service invocations. <code class="code">HttpURLConnection</code>
+            buffers the request data by default. So the client applications
+            need to enable streaming explicitly, see <a class="link" href="HTTP_client_streaming_support.html" target="_top">http client
+            streaming</a>. The following sample show how to send and
+            receive large data.</p><div class="example"><a name="d0e4096"></a><p class="title"><b>Example&nbsp;6.9.&nbsp;Sample client for large attachments</b></p><div class="example-contents"><pre class="programlisting">import com.sun.xml.ws.developer.JAXWSProperties;
+import com.sun.xml.ws.developer.StreamingDataHandler;
+
+MTOMFeature feature = new MTOMFeature();
+MyService service = new MyService();
+MyProxy proxy = service.getProxyPort(feature);
+Map&lt;String, Object&gt; ctxt = ((BindingProvider)proxy).getRequestContext();
+// Enable HTTP chunking mode, otherwise HttpURLConnection buffers
+ctxt.put(JAXWSProperties.HTTP_CLIENT_STREAMING_CHUNK_SIZE, 8192); 
+DataHandler dh = proxy.fileUpload(...);
+StreamingDataHandler sdh = (StreamingDataHandler)dh;
+InputStream in = sdh.readOnce();
+...
+in.close();
+sdh.close();</pre></div></div><br class="example-break"></div><div class="section" title="6.3.2.&nbsp;Server Side"><div class="titlepage"><div><div><h3 class="title"><a name="server-side"></a>6.3.2.&nbsp;Server Side</h3></div></div></div><p>Use @MTOM feature for a service and <code class="code">DataHandler</code>
+            parameter for large data. If the WSDL contains
+            xmime:expectedContentTypes="application/octet-stream", it would be
+            mapped to DataHandler in the generated SEI. If the service is
+            starting from java, @XmlMimeType("application/octet-stream") can
+            be used to generate an appropriate schema type in the generated
+            WSDL.</p><p>The following sample shows how to upload files. It uses
+            <code class="code">StreamingDataHandler.moveTo(File)</code> convenient method
+            to store the contents of the attachment to a file.</p><div class="example"><a name="d0e4114"></a><p class="title"><b>Example&nbsp;6.10.&nbsp;Sample service for large attachments</b></p><div class="example-contents"><pre class="programlisting">import com.sun.xml.ws.developer.StreamingDataHandler;
+...
+
+@MTOM
+@WebService
+public class UploadImpl {
+
+    // Use @XmlMimeType to map to DataHandler on the client side
+    public void fileUpload(String name, 
+                           @XmlMimeType("application/octet-stream") 
+                           DataHandler data) {
+        try {
+            StreamingDataHandler dh = (StreamingDataHandler) data;
+            File file = File.createTempFile(name, "");
+            dh.moveTo(file);
+            dh.close();
+        } catch (Exception e) {
+            throw new WebServiceException(e);
+        }
+    }
+}</pre></div></div><br class="example-break"></div><div class="section" title="6.3.3.&nbsp;Configuration"><div class="titlepage"><div><div><h3 class="title"><a name="configuration"></a>6.3.3.&nbsp;Configuration</h3></div></div></div><p>You can configure streaming attachments behaviour using
+            <code class="code">@StreamingAttachment</code> on the server side, and using
+            <code class="code">StreamingAttachmentFeature</code> on the client side. Using
+            this feature, you can configure only certain sized attachments are
+            written to a file.</p><div class="example"><a name="d0e4130"></a><p class="title"><b>Example&nbsp;6.11.&nbsp;Sample Service Configuration</b></p><div class="example-contents"><pre class="programlisting">import com.sun.xml.ws.developer.StreamingAttachment;
+
+// Configure such that whole MIME message is parsed eagerly,
+// Attachments under 4MB are kept in memory
+@MTOM
+@StreamingAttachment(parseEagerly=true, memoryThreshold=4000000L)
+@WebService
+public class UploadImpl {
+}</pre></div></div><br class="example-break"><div class="example"><a name="d0e4135"></a><p class="title"><b>Example&nbsp;6.12.&nbsp;Sample client configuration</b></p><div class="example-contents"><pre class="programlisting">import com.sun.xml.ws.developer.StreamingAttachmentFeature;
+
+MTOMFeature mtom = new MTOMFeature();
+// Configure such that whole MIME message is parsed eagerly,
+// Attachments under 4MB are kept in memory
+StreamingAttachmentFeature stf =
+        new StreamingAttachmentFeature(null, true, 4000000L);
+MyService service = new MyService();
+MyProxy proxy = service.getProxyPort(feature, stf);</pre></div></div><br class="example-break"></div><div class="section" title="6.3.4.&nbsp;Large Attachments Summary"><div class="titlepage"><div><div><h3 class="title"><a name="large-attachments-summary"></a>6.3.4.&nbsp;Large Attachments Summary</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Use MTOM and DataHandler in the programming
+                    model.</p></li><li class="listitem"><p>Cast the DataHandler to StreamingDataHandler and use
+                    its methods.</p></li><li class="listitem"><p>Make sure you call StreamingDataHandler.close() and
+                    also close the StreamingDataHandler.readOnce()
+                    stream.</p></li><li class="listitem"><p>Enable HTTP chunking on the client-side.</p></li></ul></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;HTTP&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Bootstrapping and Configuration</td></tr></table></div></body></html>

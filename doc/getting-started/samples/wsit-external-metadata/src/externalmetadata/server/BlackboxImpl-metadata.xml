@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<java-wsdl-mapping xmlns="http://xmlns.oracle.com/webservices/jaxws-databinding"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://xmlns.oracle.com/webservices/jaxws-databinding http://xmlns.oracle.com/webservices/jaxws-databinding/1.0/jaxws-databinding.xsd"
+                   java-type-name="externalmetadata.server.BlackboxImpl"
+                   existing-annotations="ignore"
+                   databinding="glassfish.jaxb">
+
+    <web-service />
+
+</java-wsdl-mapping>

@@ -1,0 +1,373 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;21.&nbsp;Using Metro With Spring</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Metro User Guide"><link rel="up" href="index.html" title="Metro User Guide"><link rel="prev" href="ch20.html" title="Chapter&nbsp;20.&nbsp;Monitoring and Management"><link rel="next" href="ch22.html" title="Chapter&nbsp;22.&nbsp;Further Information"><script xmlns:fo="http://www.w3.org/1999/XSL/Format" type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;21.&nbsp;Using Metro With Spring</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch20.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch22.html">Next</a></td></tr></table><hr></div><small xmlns:fo="http://www.w3.org/1999/XSL/Format" class="small">Links: <a href="index.html">Table of Contents</a> | <a href="user-guide.html">Single HTML</a> | <a href="user-guide.pdf">Single PDF</a></small><div lang="en" class="chapter" title="Chapter&nbsp;21.&nbsp;Using Metro With Spring"><div class="titlepage"><div><div><h2 class="title"><a name="springa"></a>Chapter&nbsp;21.&nbsp;Using Metro With Spring</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch21.html#spring-introduction">21.1. Spring Introduction</a></span></dt><dt><span class="section"><a href="ch21.html#springa1">21.2. Using Metro With Spring and NetBeans 6.1</a></span></dt><dd><dl><dt><span class="section"><a href="ch21.html#spring-netbeans-6.1-introduction">21.2.1. Spring NetBeans 6.1 Introduction</a></span></dt><dt><span class="section"><a href="ch21.html#creating-a-netbeans-6.1-spring-project">21.2.2. Creating a Netbeans 6.1 Spring Project</a></span></dt><dt><span class="section"><a href="ch21.html#adding-a-web-service">21.2.3. Adding a Web Service</a></span></dt></dl></dd><dt><span class="section"><a href="ch21.html#springa2">21.3. Using Metro With Spring and NetBeans 6.5</a></span></dt><dd><dl><dt><span class="section"><a href="ch21.html#spring-netbeans-6.5-introduction">21.3.1. Spring NetBeans 6.5 Introduction</a></span></dt><dt><span class="section"><a href="ch21.html#creating-a-netbeans-6.5-spring-project">21.3.2. Creating a NetBeans 6.5 Spring Project</a></span></dt><dt><span class="section"><a href="ch21.html#adding-a-web-service-">21.3.3. Adding a Web Service</a></span></dt></dl></dd><dt><span class="section"><a href="ch21.html#using-wsit-functionality-with-spring">21.4. Using WSIT Functionality With Spring</a></span></dt></dl></div><div class="section" title="21.1.&nbsp;Spring Introduction"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="spring-introduction"></a>21.1.&nbsp;Spring Introduction</h2></div></div></div><p>This <a class="link" href="http://jax-ws-commons.java.net/spring/" target="_top">project</a>
+        allows you to deploy a JAX-WS endpoint as a <a class="link" href="http://www.springframework.org/" target="_top">Spring</a> Service
+        Bean. We won't repeat the information that is on the <a class="link" href="http://jax-ws-commons.java.net/spring/" target="_top">site</a>
+        already and instead focus on how to get more out of the Spring
+        integration in the following sections.</p></div><div class="section" title="21.2.&nbsp;Using Metro With Spring and NetBeans 6.1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="springa1"></a>21.2.&nbsp;Using Metro With Spring and NetBeans 6.1</h2></div></div></div><div class="section" title="21.2.1.&nbsp;Spring NetBeans 6.1 Introduction"><div class="titlepage"><div><div><h3 class="title"><a name="spring-netbeans-6.1-introduction"></a>21.2.1.&nbsp;Spring NetBeans 6.1 Introduction</h3></div></div></div><p><a class="link" href="http://www.netbeans.org/" target="_top">NetBeans</a>
+            provides <a class="link" href="http://www.netbeans.org/kb/61/web/quickstart-webapps-spring.html" target="_top">Spring
+            support</a> out of the box. You just need to make sure you have
+            the NetBeans plugins installed (Spring Framework Library, Spring
+            Beans and Spring Web MVC). The following section explains how to
+            create a JAX-WS endpoint with a Spring Web MVC application. The
+            instructions assume NetBeans 6.1 but should work with NetBeans 6.0
+            as well.</p></div><div class="section" title="21.2.2.&nbsp;Creating a Netbeans 6.1 Spring Project"><div class="titlepage"><div><div><h3 class="title"><a name="creating-a-netbeans-6.1-spring-project"></a>21.2.2.&nbsp;Creating a Netbeans 6.1 Spring Project</h3></div></div></div><p>The Spring Web MVC support built into NetBeans is fully
+            integrated into the IDE. That means in order to create a NetBeans
+            project that integrates Spring, all we need to do is create an
+            ordinary Web Application:</p><div class="figure"><a name="f0.3909234054066213"></a><p class="title"><b>Figure&nbsp;21.1.&nbsp;Netbeans 6.1 - Creating a Web Application</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-new-project.png" height="360" alt="Netbeans 6.1 - Creating a Web Application"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>We are choosing the "Use Dedicated Folder for Storing
+            Libraries" option in the next step because we need to add a few
+            libraries later:</p><div class="figure"><a name="f0.14436660694298054"></a><p class="title"><b>Figure&nbsp;21.2.&nbsp;Netbeans 6.1 - Creating a Web Application</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-new-webapp.png" height="360" alt="Netbeans 6.1 - Creating a Web Application"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>In the third screen, I am sticking with the defaults.
+            Finally, in the last step, we get to choose the Spring Web MVC
+            framework:</p><div class="figure"><a name="f0.9597861719931743"></a><p class="title"><b>Figure&nbsp;21.3.&nbsp;Netbeans 6.1 - Creating a Web Application - Spring
+                    dependencies</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-new-framework.png" height="360" alt="Netbeans 6.1 - Creating a Web Application - Spring dependencies"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>Now we still need to add the JAX-WS Spring library to the
+            project. You can download the library from <a class="link" href="http://maven2-repository.java.net/source/browse/maven2-repository/trunk/www/repository/org/jvnet/jax-ws-commons/spring/jaxws-spring/" target="_top">http://maven2-repository.java.net/source/browse/maven2-repository/trunk/www/repository/org/jvnet/jax-ws-commons/spring/jaxws-spring/</a>.
+            Then move the library (in my case jaxws-spring-1.8.jar) into the
+            lib directory of the NetBeans project. Next, right-click on the
+            project in the NetBeans navigator and select Properties. In the
+            Properties dialog, select the Libraries category and press the Add
+            JAR/Folder button. Here you can select the library and add it to
+            the project.</p><div class="figure"><a name="f0.48554218961773654"></a><p class="title"><b>Figure&nbsp;21.4.&nbsp;Netbeans 6.1 - Creating a Web Application - Adding
+                    libraries</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-add-lib.png" height="360" alt="Netbeans 6.1 - Creating a Web Application - Adding libraries"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>The JAX-WS Spring library has a dependency on <a class="link" href="http://geronimo.apache.org/xbean/" target="_top">XBean</a>. That
+            means we need an additional library. I downloaded <a class="link" href="http://people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/xbean/xbean-spring/3.4/xbean-spring-3.4.jar" target="_top">this
+            version</a>. Remember to add this library to the project as
+            well.</p></div><div class="section" title="21.2.3.&nbsp;Adding a Web Service"><div class="titlepage"><div><div><h3 class="title"><a name="adding-a-web-service"></a>21.2.3.&nbsp;Adding a Web Service</h3></div></div></div><p>Now that we created a web application project in the
+            previous section, we can add a JAX-WS Web Service. Simply
+            right-click on the MySpringApp project that we created previously
+            and select New -&gt; Web Service... We get a dialog where you must
+            enter the name of the Web Service class and the Java package
+            name:</p><div class="figure"><a name="f0.2952713070263785"></a><p class="title"><b>Figure&nbsp;21.5.&nbsp;Netbeans 6.1 - Adding a Webservice</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-new-webservice.png" height="360" alt="Netbeans 6.1 - Adding a Webservice"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>All that NetBeans really does when you create the Web
+            Service is generate a skeleton class with the WebService
+            annotation. You can now add methods to that class etc.</p><p>At this point we could actually package and deploy our
+            application to GlassFish and we would get a working Web Service
+            because GlassFish recognizes the WebService annotation and
+            automatically instantiates the Web Service. However, we want to
+            use Spring of course, so we need to go through a few additional
+            steps to instantiate the Web Service as a Spring Bean.</p><p>NetBeans already created basic web.xml and
+            applicationContext.xml files. My web.xml file looks like this:
+            </p><div class="example"><a name="d0e17921"></a><p class="title"><b>Example&nbsp;21.1.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"&gt;
+   &lt;context-param&gt;
+      &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+      &lt;param-value&gt;/WEB-INF/applicationContext.xml&lt;/param-value&gt;
+   &lt;/context-param&gt;
+   &lt;listener&gt;
+      &lt;listener-class&gt;
+         org.springframework.web.context.ContextLoaderListener
+      &lt;/listener-class&gt;
+   &lt;/listener&gt;
+   &lt;servlet&gt;
+      &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+      &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet
+      &lt;/servlet-class&gt;
+      &lt;load-on-startup&gt;2&lt;/load-on-startup&gt;
+   &lt;/servlet&gt;
+   &lt;servlet-mapping&gt;
+      &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+      &lt;url-pattern&gt;*.html&lt;/url-pattern&gt;
+   &lt;/servlet-mapping&gt;
+   &lt;session-config&gt;
+      &lt;session-timeout&gt;
+         30
+      &lt;/session-timeout&gt;
+   &lt;/session-config&gt;
+   &lt;welcome-file-list&gt;
+      &lt;welcome-file&gt;redirect.jsp&lt;/welcome-file&gt;
+   &lt;/welcome-file-list&gt;
+&lt;/web-app&gt;</pre></div></div><p><br class="example-break"></p><p>All that needs to be added to the web.xml is the following:
+            </p><div class="example"><a name="d0e17926"></a><p class="title"><b>Example&nbsp;21.2.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;servlet&gt;
+    &lt;servlet-name&gt;jaxws-servlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;
+        com.sun.xml.ws.transport.http.servlet.WSSpringServlet
+    &lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;jaxws-servlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/ws&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre></div></div><p><br class="example-break"> The WSSpringServlet plugs JAX-WS into Spring. The
+            servlet-mapping is mapping the servlet to the subpath /ws.</p><p>The applicationContext.xml that was created by NetBeans
+            looks like this: </p><div class="example"><a name="d0e17932"></a><p class="title"><b>Example&nbsp;21.3.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"&gt;
+
+   &lt;bean id="propertyConfigurer"
+class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+         p:location="/WEB-INF/jdbc.properties"/&gt;
+
+   &lt;bean id="dataSource"
+         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+         p:driverClassName="${jdbc.driverClassName}"
+         p:url="${jdbc.url}"
+         p:username="${jdbc.username}"
+         p:password="${jdbc.password}"/&gt;
+
+   &lt;!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) --&gt;
+
+&lt;/beans&gt;</pre></div></div><p><br class="example-break"> To enable the Web Service implementation it is
+            sufficient to add the following to the applicationContext.xml:
+            </p><div class="example"><a name="d0e17936"></a><p class="title"><b>Example&nbsp;21.4.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;wss:binding url="/ws"&gt;
+    &lt;wss:service&gt;
+        &lt;ws:service bean="#webService"/&gt;
+    &lt;/wss:service&gt;
+&lt;/wss:binding&gt;
+
+&lt;!-- this bean implements web service methods --&gt;
+&lt;bean id="webService"
+      class="com.sun.xml.ws.test.MyWebService"/&gt;</pre></div></div><p><br class="example-break"> The above binds the Web Service Bean to the /ws
+            subpath that we defined in the web.xml and it defines the actual
+            implementation class (the one that has the WebService annotation).
+            We need to add a couple of namespace declarations to the
+            applicationContext.xml as well. The final product should look like
+            this: </p><div class="example"><a name="d0e17940"></a><p class="title"><b>Example&nbsp;21.5.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:ws="http://jax-ws.java.net/spring/core"
+       xmlns:wss="http://jax-ws.java.net/spring/servlet"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://jax-ws.java.net/spring/core
+       http://jax-ws.java.net/spring/core.xsd
+       http://jax-ws.java.net/spring/servlet
+       http://jax-ws.java.net/spring/servlet.xsd"&gt;
+
+   &lt;bean id="propertyConfigurer"
+class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+         p:location="/WEB-INF/jdbc.properties"/&gt;
+
+   &lt;bean id="dataSource"
+         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+         p:driverClassName="${jdbc.driverClassName}"
+         p:url="${jdbc.url}"
+         p:username="${jdbc.username}"
+         p:password="${jdbc.password}"/&gt;
+
+   &lt;!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) --&gt;
+
+   &lt;wss:binding url="/ws"&gt;
+      &lt;wss:service&gt;
+         &lt;ws:service bean="#webService"/&gt;
+      &lt;/wss:service&gt;
+   &lt;/wss:binding&gt;
+
+   &lt;!-- this bean implements web service methods --&gt;
+   &lt;bean id="webService" class="com.sun.xml.ws.test.MyWebService"/&gt;
+&lt;/beans&gt;&gt;</pre></div></div><p><br class="example-break"></p><p>If you built and deployed your web application to GlassFish,
+            you should be able to see a human-readable entry page if you point
+            your browser at <a class="link" href="http://localhost:8080/MySpringApp/ws" target="_top">http://localhost:8080/MySpringApp/ws</a>.
+            You can find more details on how to configure JAX-WS for Spring
+            <a class="link" href="http://jax-ws-commons.java.net/spring/" target="_top">here</a>.</p></div></div><div class="section" title="21.3.&nbsp;Using Metro With Spring and NetBeans 6.5"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="springa2"></a>21.3.&nbsp;Using Metro With Spring and NetBeans 6.5</h2></div></div></div><div class="section" title="21.3.1.&nbsp;Spring NetBeans 6.5 Introduction"><div class="titlepage"><div><div><h3 class="title"><a name="spring-netbeans-6.5-introduction"></a>21.3.1.&nbsp;Spring NetBeans 6.5 Introduction</h3></div></div></div><p>If you downloaded <a class="link" href="http://www.netbeans.org/" target="_top">NetBeans</a> with the Web
+            &amp; Java EE pack it already comes equipped with everything you
+            need to develop Spring web applications. Otherwise make sure that
+            you have the NetBeans plugins installed (Spring Framework Library,
+            Spring Beans and Spring Web MVC). The following section explains
+            how to create a JAX-WS endpoint with a Spring Web MVC application.
+            The instructions assume NetBeans 6.5. See <a class="xref" href="ch21.html#springa1" title="21.2.&nbsp;Using Metro With Spring and NetBeans 6.1">Using Metro With Spring and NetBeans 6.1</a> for instructions for NetBeans
+            6.1.</p></div><div class="section" title="21.3.2.&nbsp;Creating a NetBeans 6.5 Spring Project"><div class="titlepage"><div><div><h3 class="title"><a name="creating-a-netbeans-6.5-spring-project"></a>21.3.2.&nbsp;Creating a NetBeans 6.5 Spring Project</h3></div></div></div><p>The Spring Web MVC support built into NetBeans is fully
+            integrated into the IDE. That means in order to create a NetBeans
+            project that integrates Spring, all we need to do is create an
+            ordinary Web Application:</p><div class="figure"><a name="f0.6896137896548253"></a><p class="title"><b>Figure&nbsp;21.6.&nbsp;Netbeans 6.5 - Creating a Web Application</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-nb65-new-project.png" height="360" alt="Netbeans 6.5 - Creating a Web Application"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>We are choosing the "Use Dedicated Folder for Storing
+            Libraries" option in the next step because we need to add a few
+            libraries later:</p><div class="figure"><a name="f0.44980859181463606"></a><p class="title"><b>Figure&nbsp;21.7.&nbsp;Netbeans 6.5 - Creating a Web Application</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-nb65-new-webapp.png" height="360" alt="Netbeans 6.5 - Creating a Web Application"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>In the third screen, you may stick with the defaults:</p><div class="figure"><a name="f0.7488236063243116"></a><p class="title"><b>Figure&nbsp;21.8.&nbsp;Netbeans 6.5 - Creating a Web Application - Servers
+                    and Settings</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-nb65-new-webapp-2.png" height="360" alt="Netbeans 6.5 - Creating a Web Application - Servers and Settings"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>Finally, in the last step, you get to choose the Spring Web
+            MVC framework:</p><div class="figure"><a name="f0.70966785130944"></a><p class="title"><b>Figure&nbsp;21.9.&nbsp;Netbeans 6.5 - Creating a Web Application - Spring
+                    dependencies</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-nb65-new-framework.png" height="360" alt="Netbeans 6.5 - Creating a Web Application - Spring dependencies"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>Now you still need to add the JAX-WS Spring library to the
+            project. You can download the library from <a class="link" href="http://maven2-repository.java.net/source/browse/maven2-repository/trunk/www/repository/org/jvnet/jax-ws-commons/spring/jaxws-spring/" target="_top">http://maven2-repository.java.net/source/browse/maven2-repository/trunk/www/repository/org/jvnet/jax-ws-commons/spring/jaxws-spring/</a>.
+            Then move the library (i.e. jaxws-spring-1.8.jar) into the lib
+            directory of the NetBeans project. Next, right-click on the
+            project in the NetBeans navigator and select Properties. In the
+            Properties dialog, select the Libraries category and press the Add
+            JAR/Folder button. Here you can select the library and add it to
+            the project.</p><div class="figure"><a name="f0.12494192198301834"></a><p class="title"><b>Figure&nbsp;21.10.&nbsp;Netbeans 6.5 - Creating a Web Application - Adding
+                    libraries</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-nb65-add-lib.png" height="360" alt="Netbeans 6.5 - Creating a Web Application - Adding libraries"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>The JAX-WS Spring library has a dependency on <a class="link" href="http://geronimo.apache.org/xbean/" target="_top">XBean</a>. That
+            means you need an additional library. You can download <a class="link" href="http://people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/xbean/xbean-spring/3.4/xbean-spring-3.4.jar" target="_top">this
+            version</a>. Remember to add this library to the project as
+            well.</p></div><div class="section" title="21.3.3.&nbsp;Adding a Web Service"><div class="titlepage"><div><div><h3 class="title"><a name="adding-a-web-service-"></a>21.3.3.&nbsp;Adding a Web Service</h3></div></div></div><p>Now that you created a web application project in the
+            previous section, you can add a JAX-WS Web Service. Simply
+            right-click on the MySpringApp project that you created previously
+            and select New -&gt; Web Service... You get a dialog where you
+            must enter the name of the Web Service class and the Java package
+            name:</p><div class="figure"><a name="f0.8720359728656875"></a><p class="title"><b>Figure&nbsp;21.11.&nbsp;Netbeans 6.5 - Adding a Web Service</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-nb65-new-webservice.png" height="360" alt="Netbeans 6.5 - Adding a Web Service"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>All that NetBeans really does when you create the Web
+            Service is generate a skeleton class with the WebService
+            annotation. You can now add methods to that class etc.</p><p>After you added an operation to the web service you could
+            actually package and deploy our application to GlassFish and you
+            would get a working Web Service because GlassFish recognizes the
+            WebService annotation and automatically instantiates the Web
+            Service. However, since this is a Spring tutorial, you need to go
+            through a few additional steps to instantiate the Web Service as a
+            Spring Bean.</p><p>NetBeans already created basic web.xml and
+            applicationContext.xml files. The web.xml ought to look like this:
+            </p><div class="example"><a name="d0e18041"></a><p class="title"><b>Example&nbsp;21.6.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"&gt;
+   &lt;context-param&gt;
+      &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+      &lt;param-value&gt;/WEB-INF/applicationContext.xml&lt;/param-value&gt;
+   &lt;/context-param&gt;
+   &lt;listener&gt;
+      &lt;listener-class&gt;
+         org.springframework.web.context.ContextLoaderListener
+      &lt;/listener-class&gt;
+   &lt;/listener&gt;
+   &lt;servlet&gt;
+      &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+      &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet
+      &lt;/servlet-class&gt;
+      &lt;load-on-startup&gt;2&lt;/load-on-startup&gt;
+   &lt;/servlet&gt;
+   &lt;servlet-mapping&gt;
+      &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+      &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
+   &lt;/servlet-mapping&gt;
+   &lt;session-config&gt;
+      &lt;session-timeout&gt;
+         30
+      &lt;/session-timeout&gt;
+   &lt;/session-config&gt;
+   &lt;welcome-file-list&gt;
+      &lt;welcome-file&gt;redirect.jsp&lt;/welcome-file&gt;
+   &lt;/welcome-file-list&gt;
+&lt;/web-app&gt;</pre></div></div><p><br class="example-break"></p><p>All that needs to be added to the web.xml is the following:
+            </p><div class="example"><a name="d0e18046"></a><p class="title"><b>Example&nbsp;21.7.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;servlet&gt;
+    &lt;servlet-name&gt;jaxws-servlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;
+       com.sun.xml.ws.transport.http.servlet.WSSpringServlet
+    &lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;jaxws-servlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/ws&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre></div></div><p><br class="example-break"> The WSSpringServlet plugs JAX-WS into Spring. The
+            servlet-mapping is mapping the servlet to the subpath /ws.</p><p>The applicationContext.xml that was created by NetBeans
+            looks like this: </p><div class="example"><a name="d0e18052"></a><p class="title"><b>Example&nbsp;21.8.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"&gt;
+
+   &lt;bean id="propertyConfigurer"
+class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+         p:location="/WEB-INF/jdbc.properties"/&gt;
+
+   &lt;bean id="dataSource"
+         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+         p:driverClassName="${jdbc.driverClassName}"
+         p:url="${jdbc.url}"
+         p:username="${jdbc.username}"
+         p:password="${jdbc.password}"/&gt;
+
+   &lt;!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) --&gt;
+
+&lt;/beans&gt;</pre></div></div><p><br class="example-break"> To enable the Web Service implementation it is
+            sufficient to add the following to the applicationContext.xml:
+            </p><div class="example"><a name="d0e18056"></a><p class="title"><b>Example&nbsp;21.9.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;wss:binding url="/ws"&gt;
+    &lt;wss:service&gt;
+        &lt;ws:service bean="#webService"/&gt;
+    &lt;/wss:service&gt;
+&lt;/wss:binding&gt;
+
+&lt;!-- this bean implements web service methods --&gt;
+&lt;bean id="webService" class="example.test.MyWebService"/&gt;</pre></div></div><p><br class="example-break"> The above binds the Web Service Bean to the /ws
+            subpath that we defined in the web.xml and it defines the actual
+            implementation class (the one that has the WebService annotation).
+            You need to add a couple of namespace declarations to the
+            applicationContext.xml as well. The final product should look like
+            this: </p><div class="example"><a name="d0e18060"></a><p class="title"><b>Example&nbsp;21.10.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:ws="http://jax-ws.java.net/spring/core"
+       xmlns:wss="http://jax-ws.java.net/spring/servlet"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://jax-ws.java.net/spring/core
+       http://jax-ws.java.net/spring/core.xsd
+       http://jax-ws.java.net/spring/servlet
+       http://jax-ws.java.net/spring/servlet.xsd"&gt;
+
+   &lt;bean id="propertyConfigurer"
+class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+         p:location="/WEB-INF/jdbc.properties"/&gt;
+
+   &lt;bean id="dataSource"
+         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+         p:driverClassName="${jdbc.driverClassName}"
+         p:url="${jdbc.url}"
+         p:username="${jdbc.username}"
+         p:password="${jdbc.password}"/&gt;
+
+   &lt;!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) --&gt;
+
+   &lt;wss:binding url="/ws"&gt;
+      &lt;wss:service&gt;
+         &lt;ws:service bean="#webService"/&gt;
+      &lt;/wss:service&gt;
+   &lt;/wss:binding&gt;
+
+   &lt;!-- this bean implements web service methods --&gt;
+   &lt;bean id="webService" class="example.test.MyWebService"/&gt;
+
+&lt;/beans&gt;</pre></div></div><p><br class="example-break"></p><p>If you built and deployed your web application to GlassFish,
+            you should be able to see a human-readable entry page if you point
+            your browser at <a class="link" href="http://localhost:8080/MySpringApp/ws" target="_top">http://localhost:8080/MySpringApp/ws</a>.
+            You can find more details on how to configure JAX-WS for Spring
+            <a class="link" href="http://jax-ws-commons.java.net/spring/" target="_top">here</a>.</p></div></div><div class="section" title="21.4.&nbsp;Using WSIT Functionality With Spring"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-wsit-functionality-with-spring"></a>21.4.&nbsp;Using WSIT Functionality With Spring</h2></div></div></div><p>This section builds on <a class="xref" href="ch21.html#springa1" title="21.2.&nbsp;Using Metro With Spring and NetBeans 6.1">Using Metro With Spring and NetBeans 6.1</a> or <a class="xref" href="ch21.html#springa2" title="21.3.&nbsp;Using Metro With Spring and NetBeans 6.5">Using Metro With Spring and NetBeans 6.5</a> because the WSIT functionality is easiest
+        to configure with NetBeans. But you should be able to apply the
+        instructions when you are not using NetBeans as well.</p><p>We assume that you already have a working web application with a
+        Web Service that you can deploy to Spring. If you followed the
+        instructions on how to set up a NetBeans project, you can now select
+        the Web Service in the Projects navigator under the Web Services node.
+        All you need to do then is right-click on the Web Service and select
+        Edit Web Service Attributes from the pop-up window:</p><div class="figure"><a name="f0.5173347854521261"></a><p class="title"><b>Figure&nbsp;21.12.&nbsp;Netbeans - Edit Web Service Attributes</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/spring-edit-attributes.png" height="360" alt="Netbeans - Edit Web Service Attributes"></td></tr></table></div></div></div><p><br class="figure-break"></p><p>See these chapters for guidance on the configuration options:
+        </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a class="xref" href="ch02.html#using_metro-developing_with_nb" title="2.3.&nbsp;Developing with NetBeans">Developing with NetBeans</a></p></li><li class="listitem"><p><a class="xref" href="ch08.html" title="Chapter&nbsp;8.&nbsp;Message Optimization"><i>Message Optimization</i></a></p></li><li class="listitem"><p><a class="xref" href="ch10.html" title="Chapter&nbsp;10.&nbsp;Using Reliable Messaging"><i>Using Reliable Messaging</i></a></p></li><li class="listitem"><p><a class="xref" href="ch12.html" title="Chapter&nbsp;12.&nbsp;Using WSIT Security"><i>Using WSIT Security</i></a></p></li><li class="listitem"><p><a class="xref" href="ch18.html" title="Chapter&nbsp;18.&nbsp;Using Atomic Transactions"><i>Using Atomic Transactions</i></a></p></li></ul></div><p>Once you have configured everything, you would simply build and
+        deploy your application and Metro will pick up the configuration that
+        was generated. If you need to create the configuration manually,
+        create a file named wsit-<span class="emphasis"><em>package.service</em></span>.xml and
+        put it into the WEB-INF directory of your application.
+        <span class="emphasis"><em>package.service</em></span> needs to be replaced by the fully
+        qualified name of the class that has the WebService annotation. If
+        your class is named e.g. org.example.MyWebService, the file would need
+        to be named wsit-<span class="emphasis"><em>org.example.MyWebService</em></span>. For
+        more detailed instructions, see <a class="xref" href="ch14.html" title="Chapter&nbsp;14.&nbsp;WSIT Example Using a Web Container Without NetBeans IDE"><i>WSIT Example Using a Web Container Without NetBeans IDE</i></a>.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch20.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch22.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;20.&nbsp;Monitoring and Management&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;22.&nbsp;Further Information</td></tr></table></div></body></html>

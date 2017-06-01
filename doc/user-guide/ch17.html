@@ -1,0 +1,78 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;17.&nbsp;Modular Databinding</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Metro User Guide"><link rel="up" href="index.html" title="Metro User Guide"><link rel="prev" href="ch16.html" title="Chapter&nbsp;16.&nbsp;Data Contracts"><link rel="next" href="ch18.html" title="Chapter&nbsp;18.&nbsp;Using Atomic Transactions"><script xmlns:fo="http://www.w3.org/1999/XSL/Format" type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;17.&nbsp;Modular Databinding</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch16.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch18.html">Next</a></td></tr></table><hr></div><small xmlns:fo="http://www.w3.org/1999/XSL/Format" class="small">Links: <a href="index.html">Table of Contents</a> | <a href="user-guide.html">Single HTML</a> | <a href="user-guide.pdf">Single PDF</a></small><div lang="en" class="chapter" title="Chapter&nbsp;17.&nbsp;Modular Databinding"><div class="titlepage"><div><div><h2 class="title"><a name="modulardbinding"></a>Chapter&nbsp;17.&nbsp;Modular Databinding</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch17.html#md-introduction">17.1. Introduction</a></span></dt><dt><span class="section"><a href="ch17.html#md-jvm">17.2. Configure databinding for JVM</a></span></dt><dt><span class="section"><a href="ch17.html#md-endpoint">17.3. Configure databinding for an endpoint</a></span></dt></dl></div><div class="section" title="17.1.&nbsp;Introduction"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="md-introduction"></a>17.1.&nbsp;Introduction</h2></div></div></div><p>The JAX-WS reference implementation (RI) used to be dependent
+        on the JAXB RI for databinding. JAXB and JAX-WS implementations have 
+        been decoupled in Metro 2.2 release, and databinding is now modular.
+        The Eclipselink JAXB implementation, plus EclipseLink extensions,
+        is called MOXy. The <code class="code">org.eclipse.persistence.moxy.jar</code> file 
+        is bundled with GlassFish Server, which supports the JAXB RI and MOXy 
+        as databinding providers.
+        For standalone distributions, databinding plugins can be found in
+        <code class="code">lib/databinding</code> folder in the distribution. The MOXy
+        implementation (library) is not bundled with Metro. It's expected from
+        user to provide MOXy jars to classpath whenever MOXy databinding is 
+        required. EclipseLink JAXB compiler is not included as well, but can be 
+        used with GlassFish Server. Download the EclipseLink zip file at
+        <a class="link" href="http://www.eclipse.org/eclipselink/downloads/" target="_top">http://www.eclipse.org/eclipselink/downloads/</a>
+        and unzip it.
+        </p></div><div class="section" title="17.2.&nbsp;Configure databinding for JVM"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="md-jvm"></a>17.2.&nbsp;Configure databinding for JVM</h2></div></div></div><p>To specify the databinding provider for the JVM, set the 
+        <code class="code">com.sun.xml.ws.spi.db.BindingContextFactory</code> JVM property 
+        to one of the following values:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><span class="bold"><strong><code class="code">com.sun.xml.ws.db.glassfish.JAXBRIContextFactory</code></strong></span>
+                Specifies the JAXB reference implementation. This is the default.
+            </li><li class="listitem"><span class="bold"><strong><code class="code">com.sun.xml.ws.db.toplink.JAXBContextFactory</code></strong></span>
+                Specifies the EclipseLink MOXy JAXB binding.
+            </li></ul></div><p>For example:</p><code class="code">
+            asadmin create-jvm-options -Dcom.sun.xml.ws.spi.db.BindingContextFactory=com.sun.xml.ws.db.toplink.JAXBContextFactory
+        </code></div><div class="section" title="17.3.&nbsp;Configure databinding for an endpoint"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="md-endpoint"></a>17.3.&nbsp;Configure databinding for an endpoint</h2></div></div></div><p>To specify the databinding provider for a web service endpoint:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+                Set the <code class="code">org.jvnet.ws.databinding.DatabindingModeFeature</code> 
+                feature during <code class="code">WebServiceFeature</code> list initialization
+                or using the <code class="code">add</code> method. Allowed values are as follows:
+
+                <div class="itemizedlist"><ul class="itemizedlist" type="circle"><li class="listitem"><span class="bold"><strong><code class="code">org.jvnet.ws.databinding.DatabindingModeFeature.GLASSFISH_JAXB</code></strong></span>
+                        Specifies the JAXB reference implementation. This is the default.
+                    </li><li class="listitem"><span class="bold"><strong><code class="code">com.sun.xml.ws.db.toplink.JAXBContextFactory.ECLIPSELINK_JAXB</code></strong></span>
+                        Specifies Eclipselink MOXy JAXB binding.
+                    </li></ul></div>
+
+                For example:
+                <pre class="programlisting">
+import javax.xml.ws.WebServiceFeature;
+import org.jvnet.ws.databinding.DatabindingModeFeature;
+import com.sun.xml.ws.db.toplink.JAXBContextFactory;
+...
+WebServiceFeature[] features = { new DatabindingModeFeature(JAXBContextFactory.ECLIPSELINK_JAXB)};
+                </pre></li><li class="listitem">
+                Set the <code class="code">org.jvnet.ws.databinding.DatabindingModeFeature</code> 
+                feature using the <code class="code">@DatabindingMode</code> annotation.
+
+                For example:
+                <pre class="programlisting">
+import javax.jws.WebService;
+import org.jvnet.ws.databinding.DatabindingMode;
+import com.sun.xml.ws.db.toplink.JAXBContextFactory;
+...
+@WebService
+@DatabindingMode(JAXBContextFactory.ECLIPSELINK_JAXB);
+                </pre></li><li class="listitem">
+                Set the <code class="code">databinding</code> attribute of the endpoint element 
+                in the <code class="code">sun-jaxws.xml</code> file. Allowed values are 
+                <code class="code">glassfish.jaxb</code> or <code class="code">eclipselink.jaxb</code>.
+                For example:
+
+                <pre class="programlisting">
+&lt;endpoint
+    name='hello'
+    implementation='hello.HelloImpl'
+    url-pattern='/hello'
+    databinding='eclipselink.jaxb'/&gt;
+                </pre></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch16.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch18.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;16.&nbsp;Data Contracts&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;18.&nbsp;Using Atomic Transactions</td></tr></table></div></body></html>

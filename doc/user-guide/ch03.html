@@ -1,0 +1,205 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;3.&nbsp;Compiling WSDL</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Metro User Guide"><link rel="up" href="index.html" title="Metro User Guide"><link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Using Metro"><link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;SOAP"><script xmlns:fo="http://www.w3.org/1999/XSL/Format" type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Compiling WSDL</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td></tr></table><hr></div><small xmlns:fo="http://www.w3.org/1999/XSL/Format" class="small">Links: <a href="index.html">Table of Contents</a> | <a href="user-guide.html">Single HTML</a> | <a href="user-guide.pdf">Single PDF</a></small><div lang="en" class="chapter" title="Chapter&nbsp;3.&nbsp;Compiling WSDL"><div class="titlepage"><div><div><h2 class="title"><a name="compiling-wsdl"></a>Chapter&nbsp;3.&nbsp;Compiling WSDL</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch03.html#compiling-multiple-wsdls-that-share-a-common-schema">3.1. Compiling multiple WSDLs that share a common schema</a></span></dt><dt><span class="section"><a href="ch03.html#dealing-with-schemas-that-are-not-referenced">3.2. Dealing with schemas that are not referenced</a></span></dt><dt><span class="section"><a href="ch03.html#customizing-xml-schema-binding">3.3. Customizing XML Schema binding</a></span></dt><dd><dl><dt><span class="section"><a href="ch03.html#how-to-get-simple-and-better-typed-binding">3.3.1. How to get simple and better typed binding</a></span></dt></dl></dd><dt><span class="section"><a href="ch03.html#generating-javadocs-from-wsdl-documentation">3.4. Generating Javadocs from WSDL documentation</a></span></dt><dt><span class="section"><a href="ch03.html#passing-java-compiler-options-to-wsimport">3.5. Passing Java Compiler options to Wsimport</a></span></dt></dl></div><div class="section" title="3.1.&nbsp;Compiling multiple WSDLs that share a common schema"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="compiling-multiple-wsdls-that-share-a-common-schema"></a>3.1.&nbsp;Compiling multiple WSDLs that share a common schema</h2></div></div></div><p>Occasionally, a server will expose multiple services that share
+        common schema types. Perhaps the "common schema types" are from an
+        industry-standard schema, or perhaps the server was developed by a
+        Java-first web service toolkit and the services all use the same Java
+        classes as parameter/return values. When compiling such a WSDL, it's
+        desirable for the shared portion to produce the same Java classes to
+        avoid duplicates. There are two ways to do this.</p><p>The easy way is for you to compile all the WSDLs into the same
+        package:</p><pre class="programlisting">$ wsimport -p org.acme.foo first.wsdl
+$ wsimport -p org.acme.foo second.wsdl</pre><p>The Java classes that correspond to the common part will be
+        overwritten multiple times, but since they are identical, in the end
+        this will produce the desired result. If the common part is separated
+        into its own namespace, you can use <a class="link" href="http://jaxb.java.net/guide/Customizing_Java_packages.html" target="_top">a
+        JAXB customization</a> so that the common part will go to the
+        overwritten package while everything else will get its own
+        package.</p><pre class="programlisting">$ cat common.jaxb
+&lt;bindings xmlns="http://java.sun.com/xml/ns/jaxb" version="2.1"&gt;
+  &lt;bindings scd="x-schema::tns" xmlns:tns="http://common.schema.ns/"&gt;
+    &lt;schemaBindings&gt;
+      &lt;package name="org.acme.foo.common" /&gt;
+    &lt;/schemaBindings&gt;
+  &lt;/bindings&gt;
+&lt;/bindings&gt;
+$ wsimport -p org.acme.foo.first  first.wsdl  -b common.jaxb
+$ wsimport -p org.acme.foo.second second.wsdl -b common.jaxb</pre><p>You can also compile the schema upfront by xjc, then use <a class="link" href="http://weblogs.java.net/blog/kohsuke/archive/2006/09/separate_compil.html" target="_top">its
+        episode file</a> when later invoking wsimport. For this to work,
+        the common schema needs to have a URL that you can pass into xjc. If
+        the schema is inlined inside the WSDL, you'll have to pull it out into
+        a separate file.</p><pre class="programlisting">$ xjc -episode common.episode common.xsd
+$ wsimport wsdl-that-uses-common-schema.wsdl -b common.episode</pre><p>This will cause wsimport to refer to classes that are generated
+        from XJC earlier.</p><p>For more discussion on this, please see <a class="link" href="http://forums.java.net/jive/thread.jspa?threadID=28673" target="_top">this
+        forum thread</a>.</p></div><div class="section" title="3.2.&nbsp;Dealing with schemas that are not referenced"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="dealing-with-schemas-that-are-not-referenced"></a>3.2.&nbsp;Dealing with schemas that are not referenced</h2></div></div></div><p>Because of ambiguity in the XML Schema spec, some WSDLs are
+        published that reference other schemas without specifying their
+        locations. This happens most commonly with the reference to the schema
+        for XML Schema, like this:</p><div class="example"><a name="d0e3223"></a><p class="title"><b>Example&nbsp;3.1.&nbsp;Location-less reference to a schema</b></p><div class="example-contents"><pre class="programlisting">&lt;!-- notice there's no schemaLocation attribute --&gt;
+&lt;xs:import namespace="http://www.w3.org/2001/XMLSchema" /&gt;</pre></div></div><br class="example-break"><p>When you run wsimport with such a schema, this is what
+        happens:</p><pre class="programlisting">$ wsimport  SecureConversation.wsdl
+[ERROR] undefined element declaration 'xs:schema'
+line 1 of http://131.107.72.15/Security_WsSecurity_Service_Indigo/WSSecureConversation.svc?xsd=xsd0</pre><p>To fix this, two things need to be done:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Run wsimport with the -b option and pass the URL/path of
+                the actual schema (in the case of XML Schema, it's <a class="link" href="http://www.w3.org/2001/XMLSchema.xsd" target="_top">here</a>.
+                This is to provide the real resolvable schema for the missing
+                schema.</p></li><li class="listitem"><p>For the schema for Schema, potential name conflicts may
+                arise. This was discussed <a class="link" href="http://forums.java.net/jive/thread.jspa?messageID=205301" target="_top">here
+                at length</a> and a JAXB <a class="link" href="http://weblogs.java.net/blog/kohsuke/archive/20070228/xsd.xjb" target="_top">customization</a>
+                has been created to resolve such conflicts.</p></li></ol></div><p>So your wsimport command will be:</p><pre class="programlisting">$ wsimport -b  http://www.w3.org/2001/XMLSchema.xsd  -b  customization.xjb  SecureConversation.wsdl</pre><p>You can do the same with NetBeans 5.5.1 by providing local
+        copies of these schema and customization files. If you are facing this
+        issue try it and let us know if you have any problems.</p></div><div class="section" title="3.3.&nbsp;Customizing XML Schema binding"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="customizing-xml-schema-binding"></a>3.3.&nbsp;Customizing XML Schema binding</h2></div></div></div><div class="section" title="3.3.1.&nbsp;How to get simple and better typed binding"><div class="titlepage"><div><div><h3 class="title"><a name="how-to-get-simple-and-better-typed-binding"></a>3.3.1.&nbsp;How to get simple and better typed binding</h3></div></div></div><p>wsimport uses JAXB RI's XJC tool internally to achive XML
+            Schema to Java binding. The default behaviour is strictly as per
+            JAXB 2.x specification. However it does not work for everyone, for
+            example if you want to map xs:anyURI to java.net.URI instead of
+            java.lang.String (default mapping).</p><p>There is a JAXB global customization that can help you
+            achieve these tasks:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Eliminating JAXBElements as much as possible</p></li><li class="listitem"><p>Giving you a better, more typed binding in
+                    general</p></li><li class="listitem"><p>Using plural property names where applicable</p></li></ul></div><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;jaxb:bindings
+  xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+  xmlns:xjc= "http://java.sun.com/xml/ns/jaxb/xjc" jaxb:extensionBindingPrefixes="xjc"&gt;
+
+  &lt;jaxb:globalBindings&gt;
+    &lt;xjc:simple /&gt;
+  &lt;/jaxb:globalBindings&gt;
+&lt;/jaxb:bindings&gt;</pre><p>Then simply run your wsimport and pass this binding
+            customization file</p><pre class="programlisting">wsimport -p mypackage -keep -b simple.xjb myservice.wsdl</pre><p>See Kohsuke's <a class="link" href="http://weblogs.java.net/blog/kohsuke/archive/2007/01/using_jaxb_ris.html" target="_top">blog</a>
+            for more details.</p></div></div><div class="section" title="3.4.&nbsp;Generating Javadocs from WSDL documentation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="generating-javadocs-from-wsdl-documentation"></a>3.4.&nbsp;Generating Javadocs from WSDL documentation</h2></div></div></div><p>wsimport can map the documentation inside the WSDL that can map
+        as corresponding Javadoc on the generated classes. The documentation
+        inside the WSDL should be done using standard WSDL 1.1 element:
+        &lt;wsdl:documentation&gt;.</p><p>It is important to note that not everythign in the WSDL maps to
+        Java class, the table below shows wsdl:documentation to Javadoc
+        mapping for various WSDL compoenents that correspond to the generated
+        Java class.</p><div class="table"><a name="d0e3294"></a><p class="title"><b>Table&nbsp;3.1.&nbsp;<code class="code">wsdl:documentation</code> to Javadoc mapping</b></p><div class="table-contents"><table summary="wsdl:documentation to Javadoc mapping" border="1"><colgroup><col><col></colgroup><tbody><tr><td>WSDL documentation (wsdl:documentation)</td><td>Javadoc</td></tr><tr><td>wsdl:portType</td><td>As a Javadoc on the generated Service Endpoint
+                        Interface (SEI) class</td></tr><tr><td>wsdl:portType/wsdl:operation</td><td>As a Javadoc on the corresponding method of the
+                        generated SEI class</td></tr><tr><td>wsdl:service</td><td>As a Javadoc on the generated Service
+                        class</td></tr><tr><td>wsdl:service/wsdlport</td><td>As a Javadoc on the generated getXYZPort()
+                        methods of the Service class</td></tr></tbody></table></div></div><br class="table-break"><p>Let us see a sample wsdl with documentation and the generated
+        Java classes:</p><div class="example"><a name="d0e3328"></a><p class="title"><b>Example&nbsp;3.2.&nbsp;WSDL with documentation</b></p><div class="example-contents"><pre class="programlisting">&lt;wsdl:portType name="HelloWorld"&gt;
+   &lt;wsdl:documentation&gt;This is a simple HelloWorld service.
+   &lt;/wsdl:documentation&gt;
+   &lt;wsdl:operation name="echo"&gt;
+      &lt;wsdl:documentation&gt;This operation simply echoes back whatever it
+         receives
+      &lt;/wsdl:documentation&gt;
+      &lt;wsdl:input message="tns:echoRequest"/&gt;
+      &lt;wsdl:output message="tns:echoResponse"/&gt;
+   &lt;/wsdl:operation&gt;
+&lt;/wsdl:portType&gt;
+
+&lt;service name="HelloService"&gt;
+   &lt;wsdl:documentation&gt;This is a simple HelloWorld service.
+   &lt;/wsdl:documentation&gt;
+   &lt;port name="HelloWorldPort" binding="tns:HelloWorldBinding"&gt;
+      &lt;wsdl:documentation&gt;A SOAP 1.1 port&lt;/wsdl:documentation&gt;
+      &lt;soap:address location="http://localhost/HelloService"/&gt;
+   &lt;/port&gt;
+&lt;/service&gt;</pre></div></div><br class="example-break"><p>In the above WSDL the documentation is mentioned using standard
+        WSDL 1.1 element: &lt;wsdl:documentation&gt;. Running wsimport on this
+        will generate Javadoc on the SEI and Service class.</p><div class="example"><a name="d0e3335"></a><p class="title"><b>Example&nbsp;3.3.&nbsp;Generated SEI - HellowWorld.java</b></p><div class="example-contents"><pre class="programlisting">/**
+ * This is a simple HelloWorld service.
+ *
+ * This class was generated by the JAX-WS RI.
+ * JAX-WS RI 2.1.3-11/27/2007 02:44 PM(vivekp)-
+ * Generated source version: 2.1
+ *
+ */
+@WebService(name = "HelloWorld",
+        targetNamespace = "http://example.com/wsdl")
+@XmlSeeAlso({
+        ObjectFactory.class
+})
+public interface HelloWorld {
+
+
+    /**
+     * This operation simply echoes back whatever it receives
+     *
+     * @param reqInfo
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(name = "respInfo",
+            targetNamespace = "http://example.com/types")
+    @RequestWrapper(localName = "echo",
+            targetNamespace = "http://example.com/types",
+            className = "sample.EchoType")
+    @ResponseWrapper(localName = "echoResponse",
+            targetNamespace = "http://example.com/types",
+            className = "sample.EchoResponseType")
+    public String echo(
+            @WebParam(name = "reqInfo",
+                    targetNamespace = "http://example.com/types")
+            String reqInfo);
+
+}</pre></div></div><br class="example-break"><div class="example"><a name="d0e3340"></a><p class="title"><b>Example&nbsp;3.4.&nbsp;Generated Service class HelloWorldService.java</b></p><div class="example-contents"><pre class="programlisting">/**
+ * This is a simple HelloWorld service.
+ *
+ * This class was generated by the JAX-WS RI.
+ * JAX-WS RI 2.1.3-11/27/2007 02:44 PM(vivekp)-
+ * Generated source version: 2.1
+ *
+ */
+@WebServiceClient(name = "HelloService",
+        targetNamespace = "http://example.com/wsdl",
+        wsdlLocation = "file:/C:/issues/wsdl/sample.wsdl")
+public class HelloService
+        extends Service
+{
+
+    private final static URL HELLOSERVICE_WSDL_LOCATION;
+    private final static Logger logger =
+            Logger.getLogger(sample.HelloService.class.getName());
+
+    static {
+        URL url = null;
+        try {
+            URL baseUrl;
+            baseUrl = sample.HelloService.class.getResource(".");
+            url = new URL(baseUrl, "file:/C:/issues/wsdl/sample.wsdl");
+        } catch (MalformedURLException e) {
+            logger.warning("Failed to create URL for the wsdl Location: " +
+                    "'file:/C:/issues/wsdl/sample.wsdl', " +
+                    "retrying as a local file");
+            logger.warning(e.getMessage());
+        }
+        HELLOSERVICE_WSDL_LOCATION = url;
+    }
+
+    public HelloService(URL wsdlLocation, QName serviceName) {
+        super(wsdlLocation, serviceName);
+    }
+
+    public HelloService() {
+        super(HELLOSERVICE_WSDL_LOCATION,
+                new QName("http://example.com/wsdl", "HelloService"));
+    }
+
+    /**
+     * A SOAP 1.1 port
+     *
+     * @return
+     *     returns HelloWorld
+     */
+    @WebEndpoint(name = "HelloWorldPort")
+    public HelloWorld getHelloWorldPort() {
+        return super.getPort(
+                new QName("http://example.com/wsdl", "HelloWorldPort"),
+                HelloWorld.class);
+    }</pre></div></div><br class="example-break"></div><div class="section" title="3.5.&nbsp;Passing Java Compiler options to Wsimport"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="passing-java-compiler-options-to-wsimport"></a>3.5.&nbsp;Passing Java Compiler options to Wsimport</h2></div></div></div><p>wsimport invokes Javac to compile the generated classes. There
+        is no option currently to pass any options to the compiler. You can
+        use -Xnocompile option of wsimport to not compile the generated
+        classes. But, this would require you to compile the generated sources
+        separately in your project.</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>This would be useful, if you are developing the Web
+            service/Client on JDK 6 and you want to deploy it on JDK 5. Since
+            there is no option to pass Javac tool option "-target 1.5"
+            directly, you can use -Xnocompile option of wsimport and further
+            compile it yourself.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Using Metro&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;SOAP</td></tr></table></div></body></html>

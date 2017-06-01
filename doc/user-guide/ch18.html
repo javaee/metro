@@ -1,0 +1,1101 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;18.&nbsp;Using Atomic Transactions</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Metro User Guide"><link rel="up" href="index.html" title="Metro User Guide"><link rel="prev" href="ch17.html" title="Chapter&nbsp;17.&nbsp;Modular Databinding"><link rel="next" href="ch19.html" title="Chapter&nbsp;19.&nbsp;Managing Policies"><script xmlns:fo="http://www.w3.org/1999/XSL/Format" type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;18.&nbsp;Using Atomic Transactions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch17.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch19.html">Next</a></td></tr></table><hr></div><small xmlns:fo="http://www.w3.org/1999/XSL/Format" class="small">Links: <a href="index.html">Table of Contents</a> | <a href="user-guide.html">Single HTML</a> | <a href="user-guide.pdf">Single PDF</a></small><div lang="en" class="chapter" title="Chapter&nbsp;18.&nbsp;Using Atomic Transactions"><div class="titlepage"><div><div><h2 class="title"><a name="using_at"></a>Chapter&nbsp;18.&nbsp;Using Atomic Transactions</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch18.html#using_wsat">18.1. Using Web Services Atomic Transactions</a></span></dt><dd><dl><dt><span class="section"><a href="ch18.html#using_wsat-overview">18.1.1. Overview of Web Services Atomic Transactions</a></span></dt><dt><span class="section"><a href="ch18.html#using_wsat-enable_endpoint">18.1.2. Enabling Web Services Atomic Transactions on Web Service
+            Endpoint</a></span></dt><dt><span class="section"><a href="ch18.html#using_wsat-enable_client">18.1.3. Enabling Web Services Atomic Transactions on Web Service
+            Clients</a></span></dt><dt><span class="section"><a href="ch18.html#using_wsat-system_level_config">18.1.4. System Level Configuration</a></span></dt><dt><span class="section"><a href="ch18.html#compatibility">18.1.5. Compatibility</a></span></dt></dl></dd><dt><span class="section"><a href="ch18.html#ahiim">18.2. About the basicWSTX Example</a></span></dt><dt><span class="section"><a href="ch18.html#ahiip">18.3. Building, Deploying and Running the basicWSTX Example</a></span></dt></dl></div><div class="section" title="18.1.&nbsp;Using Web Services Atomic Transactions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using_wsat"></a>18.1.&nbsp;Using Web Services Atomic Transactions</h2></div></div></div><p>This section describes how to use Web services atomic
+        transactions to enable interoperability with other external
+        transaction processing systems.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a class="xref" href="ch18.html#using_wsat-overview" title="18.1.1.&nbsp;Overview of Web Services Atomic Transactions">Overview of Web Services Atomic Transactions</a></p></li><li class="listitem"><p><a class="xref" href="ch18.html#using_wsat-enable_endpoint" title="18.1.2.&nbsp;Enabling Web Services Atomic Transactions on Web Service Endpoint">Enabling Web Services Atomic Transactions on Web Service
+            Endpoint</a></p></li><li class="listitem"><p><a class="xref" href="ch18.html#using_wsat-enable_client" title="18.1.3.&nbsp;Enabling Web Services Atomic Transactions on Web Service Clients">Enabling Web Services Atomic Transactions on Web Service
+            Clients</a></p></li></ul></div><div class="section" title="18.1.1.&nbsp;Overview of Web Services Atomic Transactions"><div class="titlepage"><div><div><h3 class="title"><a name="using_wsat-overview"></a>18.1.1.&nbsp;Overview of Web Services Atomic Transactions</h3></div></div></div><p>Web services enable interoperability with other external
+            transaction processing systems, such as WebLogic, Websphere,
+            JBoss, Microsoft .NET, and so on, through the support of the
+            following specifications:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Web Services Atomic Transaction
+                    (WS-AtomicTransaction) Versions 1.0, 1.1 and 1.2:
+                    <code class="code">http://docs.oasis-open.org/ws-tx/wstx-wsat-1.2-spec-cs-01/wstx-wsat-1.2-spec-cs-01.html</code></p></li><li class="listitem"><p>Web Services Coordination (WS-Coordination) Versions
+                    1.0, 1.1 and 1.2:
+                    <code class="code">http://docs.oasis-open.org/ws-tx/wstx-wscoor-1.2-spec-cs-01/wstx-wscoor-1.2-spec-cs-01.html</code></p></li></ul></div><p>These specifications define an extensible framework for
+            coordinating distributed activities among a set of participants.
+            The coordinator, shown in the following figure, is the central
+            component, managing the transactional state (coordination context)
+            and enabling Web services and clients to register as
+            participants.</p><div class="figure"><a name="f0.3738067790934235"></a><p class="title"><b>Figure&nbsp;18.1.&nbsp;Web Services Atomic Transactions Framework</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/coordinator.png" height="360" alt="Web Services Atomic Transactions Framework"></td></tr></table></div></div></div><br class="figure-break"><p>The following table describes the components of Web services
+            atomic transactions, shown in the previous figure.</p><div class="table"><a name="using_wsat-components_table"></a><p class="title"><b>Table&nbsp;18.1.&nbsp;Components of Web Services Atomic Transactions</b></p><div class="table-contents"><table summary="Components of Web Services Atomic Transactions" border="1"><colgroup><col><col></colgroup><thead><tr><th>
+                                <p>Component</p>
+                            </th><th>
+                                <p>Description</p>
+                            </th></tr></thead><tbody><tr><td>
+                                <p>Coordinator</p>
+                            </td><td>
+                                <p>Manages the transactional state (coordination
+                                context) and enables Web services and clients to
+                                register as participants.</p>
+                            </td></tr><tr><td>
+                                <p>Activation Service</p>
+                            </td><td>
+                                <p>Enables the application to activate a
+                                transaction and create a coordination context for an
+                                activity. Once created, the coordination context is
+                                passed with the transaction flow.</p>
+                            </td></tr><tr><td>
+                                <p>Registration Service</p>
+                            </td><td>
+                                <p>Enables an application to register as a
+                                participant.</p>
+                            </td></tr><tr><td>
+                                <p>Application Protocol X, Y</p>
+                            </td><td>
+                                <p>Supported coordination protocols, such as
+                                WS-AtomicTransaction.</p>
+                            </td></tr></tbody></table></div></div><br class="table-break"><p>The following figure shows two server instances interacting
+            within the context of a Web services atomic transaction.</p><div class="figure"><a name="f0.34418460497260706"></a><p class="title"><b>Figure&nbsp;18.2.&nbsp;Atomic Transaction - Interaction between two
+                Servers</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/wsatarch.png" height="360" alt="Atomic Transaction - Interaction between two Servers"></td></tr></table></div></div></div><br class="figure-break"><p>Please note the following:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Using the local JTA transaction manager, a
+                    transaction can be imported to or exported from the local
+                    JTA environment as a subordinate transaction, all within
+                    the context of a Web service request.</p></li><li class="listitem"><p>Creation and management of the coordination context
+                    is handled by the local JTA transaction manager.</p></li><li class="listitem"><p>All transaction integrity management and recovery
+                    processing is done by the local JTA transaction
+                    manager.</p></li></ul></div><p>The following describes a sample end-to-end Web services
+            atomic transaction interaction:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Application A begins a transaction on the current
+                    thread of control using the JTA transaction manager on
+                    Server A.</p></li><li class="listitem"><p>Application A calls a Web service method in
+                    Application B on Server B.</p></li><li class="listitem"><p>Server A updates its transaction information and
+                    creates a SOAP header that contains the coordination
+                    context, and identifies the transaction and local
+                    coordinator.</p></li><li class="listitem"><p>Server B receives the request for Application B,
+                    detects that the header contains a transaction
+                    coordination context and determines whether it has already
+                    registered as a participant in this transaction. If it
+                    has, that transaction is resumed and if not, a new
+                    transaction is started.</p><p>Application B executes within the context of the
+                    imported transaction. All transactional resources with
+                    which the application interacts are enlisted with this
+                    imported transaction.</p></li><li class="listitem"><p>Server B enlists itself as a participant in the
+                    WS-AtomicTransaction transaction by registering with the
+                    registration service indicated in the transaction
+                    coordination context.</p></li><li class="listitem"><p>Server A resumes the transaction.</p></li><li class="listitem"><p>Application A resumes processing and commits the
+                    transaction.</p></li></ol></div></div><div class="section" title="18.1.2.&nbsp;Enabling Web Services Atomic Transactions on Web Service Endpoint"><div class="titlepage"><div><div><h3 class="title"><a name="using_wsat-enable_endpoint"></a>18.1.2.&nbsp;Enabling Web Services Atomic Transactions on Web Service
+            Endpoint</h3></div></div></div><p>To enable Web services atomic transactions on a Web service
+            endpoint:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>When starting from Java (bottom-up), add the
+                    <code class="code">@com.sun.xml.ws.api.tx.at.Transactional</code>
+                    annotation to the Web service endpoint implementation
+                    class or method.</p></li></ul></div><p>The following tables summarizes the configuration options
+            that you can set when enabling Web services atomic
+            transactions:</p><div class="table"><a name="using_wsat-config_table"></a><p class="title"><b>Table&nbsp;18.2.&nbsp;Web Services Atomic Transactions Configuration
+                Options</b></p><div class="table-contents"><table summary="Web Services Atomic Transactions Configuration&#xA;                Options" border="1"><colgroup><col><col></colgroup><thead><tr><th>
+                                <p>Attribute</p>
+                            </th><th>
+                                <p>Description</p>
+                            </th></tr></thead><tbody><tr><td>
+                                <p>
+                                    <code class="code">Version</code>
+                                </p>
+                            </td><td>
+                                <p>Version of the Web services atomic transaction
+                                coordination context that is used for Web services
+                                and clients. For clients, it specifies the version
+                                used for outbound messages only. The value specified
+                                must be consistent across the entire
+                                transaction.</p>
+
+                                <p>Valid values include <code class="code">WSAT10</code>,
+                                <code class="code">WSAT11</code>, <code class="code">WSAT12</code>, and
+                                <code class="code">DEFAULT</code>. The <code class="code">DEFAULT</code> value
+                                for Web services is all three versions (driven by
+                                the inbound request); the <code class="code">DEFAULT</code> value
+                                for Web service clients is
+                                <code class="code">WSAT12</code>.</p>
+                            </td></tr><tr><td>
+                                <p>
+                                    <code class="code">Flow type</code>
+                                </p>
+                            </td><td>
+                                <p>Whether the Web services atomic transaction
+                                coordination context is passed with the transaction
+                                flow. See table for valid values.</p>
+                            </td></tr></tbody></table></div></div><br class="table-break"><p>The following table summarizes the valid values for flow
+            type and their meaning on the Web service and client. The table
+            also summarizes the valid value combinations when configuring web
+            services atomic transactions for an EJB-style web service that
+            uses the <code class="code">@TransactionAttribute</code> annotation.</p><div class="table"><a name="using_wsat-flow_types_table"></a><p class="title"><b>Table&nbsp;18.3.&nbsp;Flow Types Values</b></p><div class="table-contents"><table summary="Flow Types Values" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>
+                                <p>Value</p>
+                            </th><th>
+                                <p>Web Service Client</p>
+                            </th><th>
+                                <p>Web Service</p>
+                            </th><th>
+                                <p>Valid EJB <code class="code">@TransactionAttribute</code>
+                                Values</p>
+                            </th></tr></thead><tbody><tr><td>
+                                <p>
+                                    <code class="code">NEVER</code>
+                                </p>
+                            </td><td>
+                                <p>JTA transaction: Do not export transaction
+                                coordination context.</p>
+
+                                <p>No JTA transaction: Do not export transaction
+                                coordination context.</p>
+                            </td><td>
+                                <p>Transaction flow exists: Do not import
+                                transaction coordination context. If the
+                                CoordinationContext header contains
+                                <code class="code">mustunderstand="true"</code>, a SOAP fault is
+                                thrown.</p>
+
+                                <p>No transaction flow: Do not import transaction
+                                coordination context.</p>
+                            </td><td>
+                                <p><code class="code">NEVER</code>,
+                                <code class="code">NOT_SUPPORTED</code>, <code class="code">REQUIRED</code>,
+                                <code class="code">REQUIRES_NEW</code>,
+                                <code class="code">SUPPORTS</code></p>
+                            </td></tr><tr><td>
+                                <p><code class="code">SUPPORTS</code> (Default)</p>
+                            </td><td>
+                                <p>JTA transaction: Export transaction
+                                coordination context.</p>
+
+                                <p>No JTA transaction: Do not export transaction
+                                coordination context.</p>
+                            </td><td>
+                                <p>Transaction flow exists: Import transaction
+                                context.</p>
+
+                                <p>No transaction flow: Do not import transaction
+                                coordination context.</p>
+                            </td><td>
+                                <p><code class="code">REQUIRED</code>,
+                                <code class="code">SUPPORTS</code></p>
+                            </td></tr><tr><td>
+                                <p>
+                                    <code class="code">MANDATORY</code>
+                                </p>
+                            </td><td>
+                                <p>JTA transaction: Export transaction
+                                coordination context.</p>
+
+                                <p>No JTA transaction: An exception is
+                                thrown.</p>
+                            </td><td>
+                                <p>Transaction flow exists: Import transaction
+                                context.</p>
+
+                                <p>No transaction flow: Service-side exception is
+                                thrown.</p>
+                            </td><td>
+                                <p><code class="code">MANDATORY</code>, <code class="code">REQUIRED</code>,
+                                <code class="code">SUPPORTS</code></p>
+                            </td></tr></tbody></table></div></div><br class="table-break"><div class="section" title="18.1.2.1.&nbsp;Using the @Transactional Annotation in Your JWS File"><div class="titlepage"><div><div><h4 class="title"><a name="using_wsat-enable_endpoint_using_annotation"></a>18.1.2.1.&nbsp;Using the @Transactional Annotation in Your JWS
+                File</h4></div></div></div><p>To enable Web services atomic transactions, specify the
+                <code class="code">@com.sun.xml.ws.api.tx.at.Transactional</code>
+                annotation on the Web service endpoint implementation class or
+                method.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>If you specify the <code class="code">@Transactional</code>
+                        annotation at the Web service class level, the
+                        settings apply to all two-way methods defined by the
+                        service endpoint interface. You can override the flow
+                        type value at the method level; however, the version
+                        must be consistent across the entire
+                        transaction.</p></li><li class="listitem"><p>You cannot explicitly specify the
+                        <code class="code">@Transactional</code> annotation on a Web method
+                        that is also annotated with
+                        <code class="code">@Oneway</code>.</p></li><li class="listitem"><p>Web services atomic transactions cannot be used
+                        with the client-side asynchronous programming
+                        model.</p></li></ul></div><p>The format for specifying the
+                <code class="code">@Transactional</code> annotation is as follows:</p><div class="example"><a name="d0e16033"></a><p class="title"><b>Example&nbsp;18.1.&nbsp;@Transactional annotation format</b></p><div class="example-contents"><pre class="programlisting">@Transactional(
+    version=Transactional.Version.[WSAT10|WSAT11|WSAT12|DEFAULT],
+    value=Transactional.TransactionFowType.[MANDATORY|SUPPORTS|NEVER]
+)</pre></div></div><br class="example-break"><p>For more information about the version and flow type
+                configuration options, see Table.</p><p>The following sections provide examples of using the
+                <code class="code">@Transactional</code> annotation at the Web service
+                implementation class and method levels, and with the EJB
+                @TransactionAttribute annotation.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+                            <a class="xref" href="ch18.html#using_wsat-enable_endpoint_using_annotation_example_class" title="18.1.2.1.1.&nbsp;Example: Using @Transactional Annotation on a Web Service Class">Example: Using @Transactional Annotation on a Web
+                    Service Class</a>
+                        </p></li><li class="listitem"><p>
+                            <a class="xref" href="ch18.html#using_wsat-enable_endpoint_using_annotation_example_method" title="18.1.2.1.2.&nbsp;Example: Using @Transactional Annotation on a Web Service Method">Example: Using @Transactional Annotation on a Web
+                    Service Method</a>
+                        </p></li><li class="listitem"><p>
+                            <a class="xref" href="ch18.html#using_wsat-enable_endpoint_using_annotation_example_both" title="18.1.2.1.3.&nbsp;Example: Using the @Transactional and the EJB @TransactionAttribute Annotations Together">Example: Using the @Transactional and the EJB
+                    @TransactionAttribute Annotations Together</a>
+                        </p></li></ul></div><div class="section" title="18.1.2.1.1.&nbsp;Example: Using @Transactional Annotation on a Web Service Class"><div class="titlepage"><div><div><h5 class="title"><a name="using_wsat-enable_endpoint_using_annotation_example_class"></a>18.1.2.1.1.&nbsp;Example: Using @Transactional Annotation on a Web
+                    Service Class</h5></div></div></div><p>The following example shows how to add
+                    <code class="code">@Transactional</code> annotation on a Web service
+                    class. As shown in the example, there is an active JTA
+                    transaction.</p><div class="example"><a name="d0e16069"></a><p class="title"><b>Example&nbsp;18.2.&nbsp;@Transactional Annotation on a Web Service
+                        Class</b></p><div class="example-contents"><pre class="programlisting">package examples.webservices.jaxws.wsat.simple.service;
+. . .
+import javax.transaction.UserTransaction;
+. . .
+import javax.jws.WebService;
+import com.sun.xml.ws.api.tx.at.Transactional;
+import com.sun.xml.ws.api.tx.at.Transactional.Version;
+import com.sun.xml.ws.api.tx.at.Transactional.TransactionFlowType;
+
+/**
+ * This JWS file forms the basis of a WS-Atomic Transaction Web Service 
+ * with the
+ * operations: createAccount, deleteAccount, transferMonet, listAccount
+ *
+ */
+@WebService(serviceName = "WsatBankTransferService", 
+        targetNamespace = "http://tempuri.org/",
+        portName = "WSHttpBindingIService")
+@Transactional(value = Transactional.TransactionFlowType.MANDATORY,
+        version = com.sun.xml.ws.api.tx.at.Transactional.Version.WSAT10)
+public class WsatBankTransferService {
+
+    public String createAccount(String acctNo, String amount) throws java
+            .lang.Exception {
+
+        Context ctx = null;
+        UserTransaction tx = null;
+        try {
+            ctx = new InitialContext();
+            tx = (UserTransaction) ctx.lookup("java:comp/UserTransaction");
+            try {
+                DataSource dataSource = (DataSource) ctx.lookup
+                        ("examples-demoXA-2");
+
+                String sql = "insert into wsat_acct_remote (acctno, " +
+                        "amount) values (" + acctNo +
+                        ", " + amount + ")";
+
+                int insCount = dataSource.getConnection()
+                        .prepareStatement(sql).executeUpdate();
+
+                if (insCount != 1)
+                    throw new java.lang.Exception("insert fail at remote" +
+                            ".");
+
+                return ":acctno=" + acctNo + " amount=" + amount + " " +
+                        "creating. ";
+            } catch (SQLException e) {
+                System.out.println("**** Exception caught *****");
+                e.printStackTrace();
+
+                throw new SQLException("SQL Exception during " +
+                        "createAccount() at remote.");
+            }
+        } catch (java.lang.Exception e) {
+            System.out.println("**** Exception caught *****");
+            e.printStackTrace();
+            throw new java.lang.Exception(e);
+        }
+    }
+
+    public String deleteAccount(String acctNo) throws java.lang.Exception {
+        ...
+    }
+
+    public String transferMoney(String acctNo, String amount,
+                                String direction)
+            throws java.lang.Exception {
+        ...
+    }
+
+    public String listAccount() throws java.lang.Exception {
+        ...
+    }
+}</pre></div></div><br class="example-break"></div><div class="section" title="18.1.2.1.2.&nbsp;Example: Using @Transactional Annotation on a Web Service Method"><div class="titlepage"><div><div><h5 class="title"><a name="using_wsat-enable_endpoint_using_annotation_example_method"></a>18.1.2.1.2.&nbsp;Example: Using @Transactional Annotation on a Web
+                    Service Method</h5></div></div></div><p>The following example shows how to add
+                    <code class="code">@Transactional</code> annotation on a Web service
+                    implementation method.</p><div class="example"><a name="d0e16082"></a><p class="title"><b>Example&nbsp;18.3.&nbsp;@Transactional Annotation on a Web Service
+                        Method</b></p><div class="example-contents"><pre class="programlisting">package examples.webservices.jaxws.wsat.simple.service;
+. . .
+import javax.transaction.UserTransaction;
+. . .
+import javax.jws.WebService;
+import com.sun.xml.ws.api.tx.at.Transactional;
+import com.sun.xml.ws.api.tx.at.Transactional.Version;
+import com.sun.xml.ws.api.tx.at.Transactional.TransactionFlowType;
+
+/**
+ * This JWS file forms the basis of a WS-Atomic Transaction Web Service 
+ * with the
+ * operations: createAccount, deleteAccount, transferMonet, listAccount
+ *
+ */
+@WebService(serviceName = "WsatBankTransferService",
+        targetNamespace = "http://tempuri.org/",
+        portName = "WSHttpBindingIService")
+public class WsatBankTransferService {
+
+    @Transactional(value = Transactional.TransactionFlowType.MANDATORY,
+            version = com.sun.xml.ws.api.tx.at.Transactional.Version
+                    .WSAT10)
+    public String createAccount(String acctNo, String amount) throws java
+            .lang.Exception {
+        
+        Context ctx = null;
+        UserTransaction tx = null;
+        try {
+            ctx = new InitialContext();
+            tx = (UserTransaction) ctx.lookup("javax.transaction" + "" +
+                    ".UserTransaction");
+            try {
+                DataSource dataSource = (DataSource) ctx.lookup
+                        ("examples-demoXA-2");
+
+                String sql = "insert into wsat_acct_remote (acctno, " +
+                        "amount) values (" + acctNo +
+                        ", " + amount + ")";
+
+                int insCount = dataSource.getConnection()
+                        .prepareStatement(sql).executeUpdate();
+                
+                if (insCount != 1)
+                    throw new java.lang.Exception("insert fail at remote" +
+                            ".");
+                
+                return ":acctno=" + acctNo + " amount=" + amount + " " +
+                        "creating. ";
+            } catch (SQLException e) {
+                System.out.println("**** Exception caught *****");
+                e.printStackTrace();
+                
+                throw new SQLException("SQL Exception during " + 
+                        "createAccount() at remote.");
+            }
+        } catch (java.lang.Exception e) {
+            System.out.println("**** Exception caught *****");
+            e.printStackTrace();
+            throw new java.lang.Exception(e);
+        }
+    }
+
+    public String deleteAccount(String acctNo) throws java.lang.Exception {
+        ...
+    }
+
+    public String transferMoney(String acctNo, String amount,
+                                String direction)
+            throws java.lang.Exception {
+        ...
+    }
+
+    public String listAccount() throws java.lang.Exception {
+        ...
+    }
+}</pre></div></div><br class="example-break"></div><div class="section" title="18.1.2.1.3.&nbsp;Example: Using the @Transactional and the EJB @TransactionAttribute Annotations Together"><div class="titlepage"><div><div><h5 class="title"><a name="using_wsat-enable_endpoint_using_annotation_example_both"></a>18.1.2.1.3.&nbsp;Example: Using the @Transactional and the EJB
+                    @TransactionAttribute Annotations Together</h5></div></div></div><p>The following example illustrates how to use the
+                    <code class="code">@Transactional</code> and EJB
+                    <code class="code">@TransactionAttribute</code> annotations together.
+                    In this case, the flow type values must be
+                    compatible.</p><div class="example"><a name="d0e16098"></a><p class="title"><b>Example&nbsp;18.4.&nbsp;@Transactional and the EJB
+                        @TransactionAttribute Used Together</b></p><div class="example-contents"><pre class="programlisting">package examples.webservices.jaxws.wsat.simple.service;
+. . .
+import javax.transaction.UserTransaction;
+. . .
+import javax.jws.WebService;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import com.sun.xml.ws.api.tx.at.Transactional;
+import com.sun.xml.ws.api.tx.at.Transactional.Version;
+import com.sun.xml.ws.api.tx.at.Transactional.TransactionFlowType;
+
+/**
+ * This JWS file forms the basis of a WS-Atomic Transaction Web Service 
+ * with the
+ * operations: createAccount, deleteAccount, transferMonet, listAccount
+ *
+ */
+@WebService(serviceName = "WsatBankTransferService",
+        targetNamespace = "http://tempuri.org/",
+        portName = "WSHttpBindingIService")
+@Transactional(value = Transactional.TransactionFlowType.MANDATORY,
+        version = com.sun.xml.ws.api.tx.at.Transactional.Version.WSAT10)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
+public class WsatBankTransferService {
+. . .
+}</pre></div></div><br class="example-break"></div></div><div class="section" title="18.1.2.2.&nbsp;Enabling Web Services Atomic Transactions Starting From WSDL"><div class="titlepage"><div><div><h4 class="title"><a name="using_wsat-enable_endpoint_from_wsdl"></a>18.1.2.2.&nbsp;Enabling Web Services Atomic Transactions Starting From
+                WSDL</h4></div></div></div><p>When enabled, Web services atomic transactions are
+                advertised in the WSDL file using a policy assertion.</p><p>This table summarizes the WS-AtomicTransaction 1.2
+                policy assertions that correspond to a set of common Web
+                services atomic transaction flow type and EJB Transaction
+                attribute combinations.</p><p>Web Services Atomic Transaction Policy Assertion Values
+                (WS-AtomicTransaction 1.2)</p><div class="table"><a name="using_wsat-wsat_1-2_assertion_values"></a><p class="title"><b>Table&nbsp;18.4.&nbsp;Web Services Atomic Transaction Policy Assertion
+                    Values (WS-AtomicTransaction 1.2)</b></p><div class="table-contents"><table summary="Web Services Atomic Transaction Policy Assertion&#xA;                    Values (WS-AtomicTransaction 1.2)" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>
+                                    <p>Atomic Transaction Flow Type</p>
+                                </th><th>
+                                    <p>EJB <code class="code">@TransactionAttribute</code></p>
+                                </th><th>
+                                    <p>WS-AtomicTransaction 1.2 Policy
+                                    Assertion</p>
+                                </th></tr></thead><tbody><tr><td>
+                                    <p>
+                                        <code class="code">MANDATORY</code>
+                                    </p>
+                                </td><td>
+                                    <p><code class="code">MANDATORY</code>, <code class="code">REQUIRED</code>,
+                                    <code class="code">SUPPORTS</code></p>
+                                </td><td>
+                                    <p>
+                                        <code class="code">&lt;wsat:ATAssertion/&gt;</code>
+                                    </p>
+                                </td></tr><tr><td>
+                                    <p>
+                                        <code class="code">SUPPORTS</code>
+                                    </p>
+                                </td><td>
+                                    <p><code class="code">REQUIRED</code>,
+                                    <code class="code">SUPPORTS</code></p>
+                                </td><td>
+                                    <p>
+                                        <code class="code">&lt;wsat:ATAssertion
+                                        wsp:Optional="true"/&gt;</code>
+                                    </p>
+                                </td></tr><tr><td>
+                                    <p>
+                                        <code class="code">NEVER</code>
+                                    </p>
+                                </td><td>
+                                    <p><code class="code">REQUIRED</code>,
+                                    <code class="code">REQUIRES_NEW</code>, <code class="code">NEVER</code>,
+                                    <code class="code">SUPPORTS</code>,
+                                    <code class="code">NOT_SUPPORTED</code></p>
+                                </td><td>
+                                    <p>No policy advertisement</p>
+                                </td></tr></tbody></table></div></div><br class="table-break"></div></div><div class="section" title="18.1.3.&nbsp;Enabling Web Services Atomic Transactions on Web Service Clients"><div class="titlepage"><div><div><h3 class="title"><a name="using_wsat-enable_client"></a>18.1.3.&nbsp;Enabling Web Services Atomic Transactions on Web Service
+            Clients</h3></div></div></div><p>On a Web service client, enable Web services atomic
+            transactions using one of the following methods:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Add the
+                    <code class="code">@com.sun.xml.ws.api.tx.at.Transactional</code>
+                    annotation on the Web service reference injection point
+                    for a client.</p></li><li class="listitem"><p>Pass the
+                    <code class="code">com.sun.xml.ws.api.tx.at.TransactionalFeature</code>
+                    as a parameter when creating the Web service proxy or
+                    dispatch.</p></li><li class="listitem"><p>At run-time, if the non-atomic transactional Web
+                    service client calls an atomic transaction-enabled Web
+                    service, then based on the flow type settings:
+                    </p><div class="itemizedlist"><ul class="itemizedlist" type="circle"><li class="listitem"><p>If the flow type is set to
+                                <code class="code">SUPPORTS</code> or <code class="code">NEVER</code> on the
+                                service-side, then the call is included as part of
+                                the transaction.</p></li><li class="listitem"><p>If the flow type is set to
+                                <code class="code">MANDATORY</code>, then an exception is
+                                thrown.</p></li></ul></div></li></ul></div><div class="section" title="18.1.3.1.&nbsp;Using @Transactional Annotation with the @WebServiceRef Annotation"><div class="titlepage"><div><div><h4 class="title"><a name="using_wsat-enable_client_annotation"></a>18.1.3.1.&nbsp;Using @Transactional Annotation with the @WebServiceRef
+                Annotation</h4></div></div></div><p>To enable Web services atomic transactions, specify the
+                <code class="code">@com.sun.xml.ws.api.tx.at.Transactional</code>
+                annotation on the Web service client at the Web service
+                reference (<code class="code">@WebServiceRef</code>) injection
+                point.</p><p>See <a class="xref" href="ch18.html#using_wsat-enable_endpoint_using_annotation" title="18.1.2.1.&nbsp;Using the @Transactional Annotation in Your JWS File">Using the @Transactional Annotation in Your JWS
+                File</a> for the description of
+                <code class="code">@Transactional</code> annotation format.</p><p>The following example illustrates how to annotate the
+                Web service reference injection point. As shown in the
+                example, the active JTA transaction becomes a part of the
+                atomic transaction.</p><div class="example"><a name="d0e16280"></a><p class="title"><b>Example&nbsp;18.5.&nbsp;Using @Transactional Annotation with the
+                    @WebServiceRef Annotation</b></p><div class="example-contents"><pre class="programlisting">package examples.webservices.jaxws.wsat.simple.client;
+. . .
+import javax.servlet.*;
+import javax.servlet.http.*;
+. . .
+import java.net.URL;
+import javax.xml.namespace.QName;
+
+import javax.transaction.UserTransaction;
+import javax.transaction.SystemException;
+
+import javax.xml.ws.WebServiceRef;
+import com.sun.xml.ws.api.tx.at.Transactional;
+*/
+
+/**
+ * This example demonstrates using a WS-Atomic Transaction to create or
+ * delete an account,
+ * or transfer money via Web service as a single atomic transaction.
+ */
+
+public class WsatBankTransferServlet extends HttpServlet {
+    ...
+    String url = "http://localhost:7001";
+    URL wsdlURL = new URL(url + 
+            "/WsatBankTransferService/WsatBankTransferService");
+    ...
+    DataSource ds = null;
+    UserTransaction utx = null;
+
+    try {
+        ctx = new InitialContext();
+        utx = (UserTransaction) ctx.lookup("javax.transaction" +
+                ".UserTransaction");
+        utx.setTransactionTimeout(900);
+    } catch (java.lang.Exception e) {
+        e.printStackTrace();
+    }
+
+    WsatBankTransferService port = getWebService(wsdlURL);
+
+    try {
+        utx.begin();
+        if (remoteAccountNo.length() &gt; 0) {
+            if (action.equals("create")) {
+                result = port.createAccount(remoteAccountNo, 
+                        amount);
+            } else if (action.equals("delete")) {
+                result = port.deleteAccount(remoteAccountNo);
+            } else if (action.equals("transfer")) {
+                result = port.transferMoney(remoteAccountNo, 
+                        amount, direction);
+            }
+        }
+        utx.commit();
+        result = "The transaction is committed " + result;
+    } catch (java.lang.Exception e) {
+        try {
+            e.printStackTrace();
+            utx.rollback();
+            result = "The transaction is rolled back. " + e
+                    .getMessage();
+        } catch (java.lang.Exception ex) {
+            e.printStackTrace();
+            result = "Exception is caught. Check stack trace.";
+        }
+    }
+    request.setAttribute("result", result);
+
+    ...
+    @Transactional(value = Transactional.TransactionFlowType.MANDATORY,
+            version = Transactional.Version.WSAT10)
+    @WebServiceRef()
+    WsatBankTransferService_Service service;
+
+    private WsatBankTransferService getWebService() {
+        return service.getWSHttpBindingIService();
+    }
+
+    public String createAccount(String acctNo, String amount) throws 
+            java.lang.Exception {
+        Context ctx = null;
+        UserTransaction tx = null;
+        try {
+            ctx = new InitialContext();
+            tx = (UserTransaction) ctx.lookup("javax.transaction" +
+                    ".UserTransaction");
+            try {
+                DataSource dataSource = (DataSource) ctx.lookup
+                        ("examples-dataSource-demoXAPool");
+                
+                String sql = "insert into wsat_acct_local (acctno, " +
+                        "amount) values (
+                " + acctNo + ", " + amount + ")";
+                        
+                int insCount = dataSource.getConnection()
+                        .prepareStatement(sql).executeUpdate();
+                
+                if (insCount != 1)
+                    throw new java.lang.Exception("insert fail at " +
+                            "local.");
+                
+                return ":acctno=" + acctNo + " amount=" + amount + " " +
+                        "creating.. ";
+            } catch (SQLException e) {
+                System.out.println("**** Exception caught *****");
+                e.printStackTrace();
+                
+                throw new SQLException("SQL Exception during " +
+                        "createAccount() at local.");
+            }
+        } catch (java.lang.Exception e) {
+            System.out.println("**** Exception caught *****");
+            e.printStackTrace();
+            throw new java.lang.Exception(e);
+        }
+    }
+
+    public String deleteAccount(String acctNo) throws java.lang.Exception {
+        ...
+    }
+
+    public String transferMoney(String acctNo, String amount,
+                                String direction)
+            throws java.lang.Exception {
+        ...
+    }
+
+    public String listAccount() throws java.lang.Exception {
+        ...
+    }
+}</pre></div></div><br class="example-break"></div><div class="section" title="18.1.3.2.&nbsp;Passing the TransactionalFeature to the Client"><div class="titlepage"><div><div><h4 class="title"><a name="using_wsat-enable_client_feature"></a>18.1.3.2.&nbsp;Passing the TransactionalFeature to the Client</h4></div></div></div><p>To enable Web services atomic transactions on the client
+                of the Web service, you can pass the
+                <code class="code">com.sun.xml.ws.api.tx.at.TransactionalFeature</code> as
+                a parameter when creating the Web service proxy or dispatch,
+                as illustrated in the following example.</p><div class="example"><a name="d0e16293"></a><p class="title"><b>Example&nbsp;18.6.&nbsp;Passing the TransactionalFeature to the
+                    Client</b></p><div class="example-contents"><pre class="programlisting">package examples.webservices.jaxws.wsat.simple.client;
+. . .
+import javax.servlet.*;
+import javax.servlet.http.*;
+. . .
+import java.net.URL;
+import javax.xml.namespace.QName;
+
+import javax.transaction.UserTransaction;
+import javax.transaction.SystemException;
+
+import com.sun.xml.ws.api.tx.at.TransactionalFeature;
+import com.sun.xml.ws.api.tx.at.Transactional.Version;
+import com.sun.xml.ws.api.tx.at.Transactional.TransactionFlowType;
+*/
+
+/**
+ * This example demonstrates using a WS-Atomic Transaction to create 
+ * or delete an account,
+ * or transfer money via Web service as a single atomic transaction.
+ */
+
+public class WsatBankTransferServlet extends HttpServlet {
+    ...
+    String url = "http://localhost:7001";
+    URL wsdlURL = new URL(url + 
+            "/WsatBankTransferService/WsatBankTransferService");
+    ...
+    DataSource ds = null;
+    UserTransaction utx = null;
+
+    try {
+        ctx = new InitialContext();
+        utx = (UserTransaction) ctx.lookup("javax.transaction" +
+                ".UserTransaction");
+        utx.setTransactionTimeout(900);
+    } catch (java.lang.Exception e) {
+        e.printStackTrace();
+    }
+
+    WsatBankTransferService port = getWebService(wsdlURL);
+
+    try {
+        utx.begin();
+        if (remoteAccountNo.length() &gt; 0) {
+            if (action.equals("create")) {
+                result = port.createAccount(remoteAccountNo, 
+                        amount);
+            } else if (action.equals("delete")) {
+                result = port.deleteAccount(remoteAccountNo);
+            } else if (action.equals("transfer")) {
+                result = port.transferMoney(remoteAccountNo, 
+                        amount, direction);
+            }
+        }
+        utx.commit();
+        result = "The transaction is committed " + result;
+    } catch (java.lang.Exception e) {
+        try {
+            e.printStackTrace();
+            utx.rollback();
+            result = "The transaction is rolled back.    " + e
+                    .getMessage();
+        } catch (java.lang.Exception ex) {
+            e.printStackTrace();
+            result = "Exception is caught. Check stack trace.";
+        }
+    }
+    request.setAttribute("result", result);
+
+    ...
+
+    // Passing the TransactionalFeature to the Client
+    private WsatBankTransferService getWebService(URL wsdlURL) {
+        TransactionalFeature feature = new TransactionalFeature();
+        feature.setFlowType(TransactionFlowType.MANDATORY);
+        feature.setVersion(Version.WSAT10);
+        
+        WsatBankTransferService_Service service = new 
+                WsatBankTransferService_Service(wsdlURL, 
+                new QName("http://tempuri.org/", 
+                        "WsatBankTransferService"));
+        
+        return service.getWSHttpBindingIService(new javax.xml.ws.soap
+                .AddressingFeature(), feature);
+    }
+
+    public String createAccount(String acctNo, String amount) throws 
+            java.lang.Exception {
+        Context ctx = null;
+        UserTransaction tx = null;
+        try {
+            ctx = new InitialContext();
+            tx = (UserTransaction) ctx.lookup("javax.transaction" +
+                    ".UserTransaction");
+            try {
+                DataSource dataSource = (DataSource) ctx.lookup
+                        ("examples-dataSource-demoXAPool");
+                
+                String sql = "insert into wsat_acct_local (acctno, " +
+                        "amount) values (
+                " + acctNo + ", " + amount + ")";
+                        
+                int insCount = dataSource.getConnection()
+                        .prepareStatement(sql).executeUpdate();
+                
+                if (insCount != 1)
+                    throw new java.lang.Exception("insert fail at " +
+                            "local.");
+                
+                return ":acctno=" + acctNo + " amount=" + amount + " " +
+                        "creating.. ";
+            } catch (SQLException e) {
+                System.out.println("**** Exception caught *****");
+                e.printStackTrace();
+                
+                throw new SQLException("SQL Exception during " +
+                        "createAccount() at local.");
+            }
+        } catch (java.lang.Exception e) {
+            System.out.println("**** Exception caught *****");
+            e.printStackTrace();
+            throw new java.lang.Exception(e);
+        }
+    }
+
+    public String deleteAccount(String acctNo) throws java.lang.Exception {
+        ...
+    }
+
+    public String transferMoney(String acctNo, String amount,
+                                String direction)
+            throws java.lang.Exception {
+        ...
+    }
+
+    public String listAccount() throws java.lang.Exception {
+        ...
+    }
+}</pre></div></div><br class="example-break"></div></div><div class="section" title="18.1.4.&nbsp;System Level Configuration"><div class="titlepage"><div><div><h3 class="title"><a name="using_wsat-system_level_config"></a>18.1.4.&nbsp;System Level Configuration</h3></div></div></div><p>To specify SSL be used for WS-AT protocol exchanges set the
+            <code class="code">wsat.ssl.enabled</code> system property to
+            <code class="code">true</code>, i.e. start the server with
+            <code class="code">-Dwsat.ssl.enabled=true</code>. The default value is
+            <code class="code">false</code>.</p><p>To disabled WS-AT transaction logging and recovery set the
+            <code class="code">wsat.recovery.enabled</code> system property to
+            <code class="code">false</code>, i.e. start the server with
+            <code class="code">-Dwsat.recovery.enabled=false</code>. The default value is
+            <code class="code">true</code>.</p><p>The WS-C and WS-AT endpoints necessary for WS-AT are
+            deployed only when the first web service is deployed to the
+            container. Therefore, it is necessary to have at least one web
+            service deployed to the target container for WS-AT to function
+            properly even in the case where only clients are used in the Metro
+            instance.</p></div><div class="section" title="18.1.5.&nbsp;Compatibility"><div class="titlepage"><div><div><h3 class="title"><a name="compatibility"></a>18.1.5.&nbsp;Compatibility</h3></div></div></div><p>Compatibility between the Metro 2.1 and pre-2.1 (submission
+            version) WS-AT implementions is not supported.</p></div></div><div class="section" title="18.2.&nbsp;About the basicWSTX Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ahiim"></a>18.2.&nbsp;About the basicWSTX Example</h2></div></div></div><p>The basicWSTX example shows the following on the
+        client-side:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Developers use existing Java Transaction APIs (JTA).
+                Invocations of transacted web service operations flow
+                transactional context from client to web service. Persistent
+                resources updated with client-created transactions are all
+                committed or rolled back as a single atomic
+                transaction.</p></li><li class="listitem"><p>After the client-side code commits or aborts the JTA
+                transaction, the client confirms that all operations in the
+                transaction succeeded or failed by using calls to
+                <code class="code">verify</code> methods on the transacted web
+                service.</p></li></ol></div><p><code class="code">SampleServiceClient</code>, a WSIT servlet that initiates
+        the transaction, and <code class="code">msclient</code>, a client that performs the
+        same operations but runs on the Microsoft side, both interact with the
+        following components running on the service-side:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><code class="code">SimpleService</code>, a web service implemented as
+                a Java servlet with transacted operations. The Edit Web
+                Service Attributes feature in the NetBeans IDE WSIT plug-in is
+                used to configure Transaction Attributes of each web service
+                operation.</p></li><li class="listitem"><p><code class="code">SimpleServiceASCMTEJB</code>, a web service
+                implemented as container-managed transaction enterprise bean
+                (CMT EJB). No configuration is necessary for this case.</p></li><li class="listitem"><p><code class="code">LibraryFacadeWebServiceBean</code>, a web service
+                that uses the Java Persistence API (JPA) with two JDBC
+                resources</p></li><li class="listitem"><p>Managed Java EE resources participating in a distributed
+                transaction having its transacted updates all committed or
+                rolled back</p><p>The servlet and CMT EJB transacted web service
+                operations manipulate two JMS resources:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">jms/ConnectionFactory</code>, an
+                        <code class="code">XATransaction</code> connection factory</p></li><li class="listitem"><p><code class="code">jms/Queue</code>, a JMS queue</p></li></ul></div><p>The <code class="code">LibraryFacadeWebServiceBean</code> web service
+                operations manipulate the JDBC resources:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">connectionPool</code>, an
+                        <code class="code">XATransaction</code> JDBC connection pool</p></li><li class="listitem"><p><code class="code">jdbc/javaProgrammingLibrary</code>, a JDBC
+                        connection resource</p></li></ul></div></li></ol></div><p>This example shows how to use <code class="code">XATransaction</code>
+        -enabled JMS and JDBC. The first version of this example, showing
+        WSIT-to-WSIT operations, has the <code class="code">SampleServiceClient</code>
+        client configured to run on one GlassFish instance and the service
+        running on the other GlassFish instance. Either the Java client or the
+        Java web service could be replaced by a semantically equivalent
+        Microsoft implementation. The Java client is, in fact, replaced by a
+        Microsoft WCF client in the more advanced version of the
+        example.</p><p>With the <code class="code">SampleServiceClient</code> client, the
+        WS-Coordination/WS-AtomicTransaction protocol messages flow back and
+        forth between the two GlassFish instances just as they do in the
+        Microsoft-to-Sun transaction interoperability scenario with the
+        <code class="code">msclient</code> client.</p><p>The <code class="code">basicWSTX</code> example was initially designed so it
+        could be run in either one or in two GlassFish domains. If you run the
+        example in one domain, only one coordinator is used; no
+        WS-Coordination protocol messages will be exchanged. This chapter
+        explains how to run the example in two domains so both protocols,
+        WS-Coordination and WS-AtomicTransaction (WS-AT), are used, as shown
+        in <a class="xref" href="ch18.html#ahiin" title="Figure&nbsp;18.3.&nbsp;WS-Coordination and WS-AtomicTransaction Protocols in Two GlassFish Domains">WS-Coordination and WS-AtomicTransaction Protocols in Two
+            GlassFish Domains</a>.</p><div class="figure"><a name="ahiin"></a><p class="title"><b>Figure&nbsp;18.3.&nbsp;WS-Coordination and WS-AtomicTransaction Protocols in Two
+            GlassFish Domains</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/TX-flow.png" height="360" alt="WS-Coordination and WS-AtomicTransaction Protocols in Two GlassFish Domains"></td></tr></table></div></div></div><br class="figure-break"><p>The example also provides the <code class="code">msclient</code> client,
+        which is the equivalent of the client servlet shown in Domain
+        2.</p><p><a class="xref" href="ch18.html#ahiio" title="Figure&nbsp;18.4.&nbsp;Components in the basicWSTX Example">Components in the basicWSTX Example</a> shows the
+        components that make up the two domain example. Again, the
+        <code class="code">msclient</code> client would be equivalent to the client servlet
+        in Domain 2 in this figure as well.</p><div class="figure"><a name="ahiio"></a><p class="title"><b>Figure&nbsp;18.4.&nbsp;Components in the basicWSTX Example</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/example-architecture.png" height="360" alt="Components in the basicWSTX Example"></td></tr></table></div></div></div><br class="figure-break"><p>The service, which runs in domain1, is comprised of two
+        components:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">SimpleService</code>, a web service that is
+                implemented as a servlet with transacted operations</p></li><li class="listitem"><p><code class="code">SimpleServiceASCMTEJB</code>, a container-managed
+                transaction enterprise bean (CMT EJB) web service</p></li></ul></div><p>The <code class="code">SimpleService</code> web service uses two JMS
+        resources that are created in domain1:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">jms/ConnectionFactory</code>, an
+                <code class="code">XATransaction</code> connection factory</p></li><li class="listitem"><p><code class="code">jms/Queue</code>, a JMS queue</p></li></ul></div><p>The <code class="code">LibraryFacadeWebServiceBean</code> web service uses
+        the Java Persistence API (JPA) with two JDBC resources that are
+        created in domain1:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">connectionPool</code>, an
+                <code class="code">XATransaction</code> JDBC connection pool</p></li><li class="listitem"><p><code class="code">jdbc/javaProgrammingLibrary</code>, a JDBC
+                connection resource</p></li></ul></div><p>The client servlet, which runs in domain2, initiates the
+        transaction.</p></div><div class="section" title="18.3.&nbsp;Building, Deploying and Running the basicWSTX Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ahiip"></a>18.3.&nbsp;Building, Deploying and Running the basicWSTX Example</h2></div></div></div><p>Complete the following steps to configure your environment then
+        build, deploy, and run the <code class="code">basicWSTX</code> example.</p><div class="task" title="To Build, Deploy, and Run the basicWSTX Example"><a name="gfred"></a><p class="title"><b>To Build, Deploy, and Run the basicWSTX Example</b></p><div class="procedure"><ol class="procedure" type="1"><li class="step" title="Step 1"><p><span class="bold"><strong>Download the <a class="link" href="http://java.net/projects/wsit-docs/sources/svn/content/trunk/www/releases/1.2/wsittutorial.zip" target="_top">wsittutorial.zip</a>
+                    sample kit for this example.</strong></span></p></li><li class="step" title="Step 2"><p><span class="bold"><strong>Ensure that properties that
+                    point to your local Application Server (or GlassFish) and
+                    WSIT Tutorial installations have been
+                    set.</strong></span></p><ol type="a" class="substeps"><li class="step" title="Step 2.a"><p><span class="bold"><strong>Copy file
+                            <code class="code">tut-install/wsittutorial/examples/bp-project/build.properties.sample</code>
+                            to file
+                            <code class="code">tut-install/wsittutorial/examples/bp-project/build.properties</code>.</strong></span></p></li><li class="step" title="Step 2.b"><p><span class="bold"><strong>Set the
+                            <code class="code">javaee.home</code> and
+                            <code class="code">wsit.tutorial.home</code> properties in the
+                            file
+                            <code class="code">tut-install/wsittutorial/examples/bp-project/build.properties</code>.</strong></span></p></li><li class="step" title="Step 2.c"><p><span class="bold"><strong>Ensure that Application
+                            Server (or GlassFish) and at least Ant 1.6.5 have
+                            been installed and are on the
+                            path.</strong></span></p><p>Application Server (or GlassFish) includes Ant
+                            1.6.5, which can be found in the
+                            <code class="code">as-install/lib/ant/bin</code>
+                            directory.</p></li></ol></li><li class="step" title="Step 3"><p>
+                        <span class="bold"><strong>Set up your environment to run
+                        the basicWSTX example.</strong></span>
+                    </p><p>To configure your environment to run the
+                    example:</p><ol type="a" class="substeps"><li class="step" title="Step 3.a"><p>
+                                <span class="bold"><strong>Change to the
+                                <code class="code">tut-install/wsittutorial/examples/wstx/basicWSTX/SampleService</code>
+                                directory:</strong></span>
+                            </p><pre class="programlisting"><span class="bold"><strong>cd <span class="emphasis"><em>tut-install</em></span>/wsittutorial/examples/wstx/basicWSTX/SampleService</strong></span></pre></li><li class="step" title="Step 3.b"><p>
+                                <span class="bold"><strong>Issue the following command to
+                                configure your environment to run the
+                                example:</strong></span>
+                            </p><pre class="programlisting"><span class="bold"><strong>ant setup</strong></span></pre></li></ol><p>This step performs the following configuration tasks
+                    for you:</p><ul class="stepalternatives">
+                        <li class="step" title="Step 3.1"><p>Starts domain1.</p></li>
+
+                        <li class="step" title="Step 3.2"><p>Creates the resources (<code class="code">jms/Queue</code>
+                            and <code class="code">XATransaction</code>
+                            <code class="code">jms/ConnectionFactory</code>) used in the
+                            example.</p></li>
+
+                        <li class="step" title="Step 3.3"><p>Creates and sets up two Application Server (or
+                            GlassFish) domains.</p><p>The domains can be created either on one
+                            machine or on two different machines. These steps
+                            show you how to do it on one machine. The first
+                            domain, domain1, is created as part of the
+                            Application Server (or GlassFish)
+                            installation.</p></li>
+
+                        <li class="step" title="Step 3.4"><p>Establishes trust between the two domains by
+                            installing each domain's <code class="code">s1as</code> security
+                            certificate in the other domain's truststore.</p></li>
+                    </ul></li><li class="step" title="Step 4"><p><span class="bold"><strong>Use the NetBeans IDE to create
+                    a database connection.</strong></span></p><ol type="a" class="substeps"><li class="step" title="Step 4.a"><p><span class="bold"><strong>Start the NetBeans
+                            IDE.</strong></span></p></li><li class="step" title="Step 4.b"><p><span class="bold"><strong>In the Services tab,
+                            right-click Databases and select New Connection.
+                            </strong></span></p><p>The New Database Connection dialog
+                            displays.</p></li><li class="step" title="Step 4.c"><p><span class="bold"><strong>Select <code class="code">Java DB
+                            (Network)</code> as name </strong></span></p></li><li class="step" title="Step 4.d"><p><span class="bold"><strong>Type
+                            <code class="code">localhost</code> in the Host
+                            field.</strong></span></p></li><li class="step" title="Step 4.e"><p><span class="bold"><strong>Type <code class="code">1527</code>
+                            in the Port field.</strong></span></p></li><li class="step" title="Step 4.f"><p><span class="bold"><strong>Type
+                            <code class="code">wstxSampleDB</code> in the Database
+                            field.</strong></span></p></li><li class="step" title="Step 4.g"><p><span class="bold"><strong>Type <code class="code">app</code> in
+                            the User Name field.</strong></span></p></li><li class="step" title="Step 4.h"><p><span class="bold"><strong>Type <code class="code">app</code> in
+                            the Password field.</strong></span></p></li><li class="step" title="Step 4.i"><p><span class="bold"><strong>Select the Remember
+                            password checkbox.</strong></span></p></li><li class="step" title="Step 4.j"><p><span class="bold"><strong>Click
+                            OK.</strong></span></p></li></ol></li><li class="step" title="Step 5"><p><span class="bold"><strong>Register the Application
+                    Server (or GlassFish) server instances (domain1 and
+                    domain2) in the NetBeans IDE.</strong></span></p><ol type="a" class="substeps"><li class="step" title="Step 5.a"><p><span class="bold"><strong>If Sun Java System
+                            Application Server (domain1) is already registered,
+                            go to Step 5j. If it is not, go to Step
+                            4b.</strong></span></p></li><li class="step" title="Step 5.b"><p><span class="bold"><strong>In the Services tab,
+                            right-click Servers, and select Add Server.
+                            </strong></span></p><p>The Add Server Instance dialog appears.</p></li><li class="step" title="Step 5.c"><p><span class="bold"><strong>Choose the server (Sun
+                            Java System Application Server (or GlassFish V2)
+                            from the drop-down list and give it a descriptive
+                            name, such as Sun Java System Application Server -
+                            domain1 (Server), and then click
+                            Next.</strong></span></p><p>The Platform Location dialog displays.</p></li><li class="step" title="Step 5.d"><p><span class="bold"><strong>ClickBrowse, navigate to
+                            the location where the Application Server (or
+                            GlassFish server) is installed, then click
+                            Choose.</strong></span></p></li><li class="step" title="Step 5.e"><p><span class="bold"><strong>Make sure that the
+                            Register Local Default Domain radio button has been
+                            selected.</strong></span></p></li><li class="step" title="Step 5.f"><p><span class="bold"><strong>Use the drop-down list
+                            to select domain1, then click
+                            Next.</strong></span></p><p>The Domain Admin Login Info dialog
+                            displays.</p></li><li class="step" title="Step 5.g"><p><span class="bold"><strong>Type <code class="code">admin</code>
+                            in the Admin Username field.</strong></span></p></li><li class="step" title="Step 5.h"><p><span class="bold"><strong>Type
+                            <code class="code">adminadmin</code> in the Admin Password
+                            field.</strong></span></p></li><li class="step" title="Step 5.i"><p><span class="bold"><strong>Click
+                            Finish.</strong></span></p><p>The server instance you just registered is the
+                            one in which you will run the web service
+                            (SampleService).</p></li><li class="step" title="Step 5.j"><p><span class="bold"><strong>Right-click Servers and
+                            select Add Server.</strong></span></p><p>The Add Server Instance dialog appears.</p></li><li class="step" title="Step 5.k"><p><span class="bold"><strong>Choose the server (Sun
+                            Java System Application Server (or GlassFish V2)
+                            from the drop-down list and give it a descriptive
+                            name, such as Sun Java System Application Server -
+                            domain2 (Client), and then click
+                            Next.</strong></span></p><p>The Platform Location dialog displays.</p></li><li class="step" title="Step 5.l"><p><span class="bold"><strong>ClickBrowse, navigate to
+                            the location where the Application Server (or
+                            GlassFish server) is installed, then click
+                            Choose.</strong></span></p></li><li class="step" title="Step 5.m"><p><span class="bold"><strong>Make sure that the
+                            Register Local Default Domain radio button has been
+                            selected.</strong></span></p></li><li class="step" title="Step 5.n"><p><span class="bold"><strong>Use the drop-down list
+                            to select domain2, then click
+                            Next.</strong></span></p><p>The Domain Admin Login Info dialog
+                            displays.</p></li><li class="step" title="Step 5.o"><p><span class="bold"><strong>Type <code class="code">admin</code>
+                            in the Admin Username field.</strong></span></p></li><li class="step" title="Step 5.p"><p><span class="bold"><strong>Type
+                            <code class="code">adminadmin</code> in the Admin Password
+                            field.</strong></span></p></li><li class="step" title="Step 5.q"><p><span class="bold"><strong>Click
+                            Finish.</strong></span></p><p>The server instance you just registered is the
+                            one in which you will run the web service client
+                            (SampleServiceClient).</p></li></ol></li><li class="step" title="Step 6"><p><span class="bold"><strong>Open the SampleService project
+                    and associate the SampleService web service with the
+                    appropriate instance (domain1) of the Application Server
+                    (or GlassFish server).</strong></span></p><ol type="a" class="substeps"><li class="step" title="Step 6.a"><p><span class="bold"><strong>Select File, then Open
+                            Project.</strong></span></p></li><li class="step" title="Step 6.b"><p><span class="bold"><strong>Browse to the
+                            <code class="code">tut-install/wsittutorial/examples/wstx/basicWSTX/</code>
+                            directory and select the SampleService
+                            project.</strong></span></p></li><li class="step" title="Step 6.c"><p><span class="bold"><strong>Select the Open as Main
+                            Project check box.</strong></span></p></li><li class="step" title="Step 6.d"><p><span class="bold"><strong>Select the Open Required
+                            Projects check box.</strong></span></p></li><li class="step" title="Step 6.e"><p><span class="bold"><strong>Click Open
+                            Project.</strong></span></p><p>The SampleService project and two required
+                            projects, SampleService-ejb and SampleService-war,
+                            are opened and are shown in the Projects tab.</p></li><li class="step" title="Step 6.f"><p><span class="bold"><strong>In the Projects tab,
+                            right-click SampleService, select Properties, then
+                            select the Run category.</strong></span></p></li><li class="step" title="Step 6.g"><p><span class="bold"><strong>Use the Server drop-down
+                            list to point to the default domain, domain1, for
+                            the Application Server (or Glassfish) server
+                            instance you registered in Step 5.</strong></span></p></li><li class="step" title="Step 6.h"><p><span class="bold"><strong>Click
+                            OK.</strong></span></p></li></ol></li><li class="step" title="Step 7"><p><span class="bold"><strong>Resolve references to or add
+                    the Toplink Essentials Library to the SampleService-ejb
+                    project.</strong></span></p><p>The SampleService-ejb project references the Toplink
+                    Essentials Library Module that is included with NetBeans
+                    IDE. To verify whether the reference to this library is
+                    resolved in your NetBeans IDE environment:</p><ol type="a" class="substeps"><li class="step" title="Step 7.a"><p><span class="bold"><strong>Right click the
+                            SampleService-ejb project and select
+                            Properties.</strong></span></p></li><li class="step" title="Step 7.b"><p><span class="bold"><strong>Select the Libraries
+                            category.</strong></span></p><p>You should see Toplink Essentials in the
+                            Compile-time Libraries pane of the Compile
+                            tab.</p></li><li class="step" title="Step 7.c"><p><span class="bold"><strong>If you do not see the
+                            library, click Add Library to display the Add
+                            Library dialog.</strong></span></p></li><li class="step" title="Step 7.d"><p><span class="bold"><strong>Locate and select
+                            Toplink Essentials and then click Add
+                            Library.</strong></span></p><p>You should now see Toplink Essentials in the
+                            Compile-time Libraries pane of the Compile
+                            tab.</p></li><li class="step" title="Step 7.e"><p><span class="bold"><strong>Click
+                            OK.</strong></span></p></li></ol><p>To verify that you have Toplink Essentials library
+                    in NetBeans IDE, select Tools and then Library Manager.
+                    You should see "Toplink Essentials" in the left pane. If
+                    you don't, you can create the library yourself using the
+                    two Toplink JAR files in the Application Server (or
+                    GlassFish) <code class="code">lib</code> directory and then resolve the
+                    reference to the newly created library.</p></li><li class="step" title="Step 8"><p><span class="bold"><strong>Set the proper transaction
+                    attributes for each mapping (<code class="code">wsdl:binding
+                    /wsdl:operation</code>) in the
+                    <code class="code">SimpleService-war</code> web
+                    service.</strong></span></p><p>To set the transaction attributes for the
+                    <code class="code">SampleService-war</code> web service:</p><ol type="a" class="substeps"><li class="step" title="Step 8.a"><p><span class="bold"><strong>In the Projects tab,
+                            expand the SampleService-war node.</strong></span></p></li><li class="step" title="Step 8.b"><p><span class="bold"><strong>Expand the Web Services
+                            node.</strong></span></p></li><li class="step" title="Step 8.c"><p><span class="bold"><strong>Right-click Simple
+                            Service and select Edit Web Service
+                            Attributes.</strong></span></p></li><li class="step" title="Step 8.d"><p><span class="bold"><strong>In the Quality of
+                            Service tab, expand the five operation nodes and
+                            then expand the method nodes under each operation
+                            node. Use the Transaction drop-down list to set the
+                            appropriate transaction attribute for each
+                            method:</strong></span></p><ul class="stepalternatives">
+                                <li class="step" title="Step 8.d.a"><p>Set <code class="code">init</code> to Required.</p></li>
+
+                                <li class="step" title="Step 8.d.b"><p>Set <code class="code">publishRequired</code> to
+                                    Required.</p></li>
+
+                                <li class="step" title="Step 8.d.c"><p>Set <code class="code">publishSupports</code> to
+                                    Supported.</p></li>
+
+                                <li class="step" title="Step 8.d.d"><p>Set <code class="code">verify</code> to Required.</p></li>
+
+                                <li class="step" title="Step 8.d.e"><p>Set <code class="code">getMessage</code> to
+                                    Required.</p></li>
+                            </ul><p>If any other operations are displayed, ignore
+                            them.</p></li><li class="step" title="Step 8.e"><p><span class="bold"><strong>Click
+                            OK.</strong></span></p><p>Transaction attributes for
+                            <code class="code">SampleServiceASCMTEJB</code> do not need to be
+                            set; EJB 3.0 transaction attributes are used.</p></li></ol><p>The transaction attribute settings for the
+                    <code class="code">SampleService-war</code> are stored in the file
+                    <code class="code">SampleService\SampleService-war\web\WEB-INF\wsit-wstx.sample.service.Simple.xml</code>.</p></li><li class="step" title="Step 9"><p><span class="bold"><strong>Deploy the SampleService web
+                    service. </strong></span></p><p>Right-click SampleService and select Undeploy and
+                    Deploy. NetBeans IDE will start domain1 and deploy the web
+                    service to that domain.</p></li><li class="step" title="Step 10"><p><span class="bold"><strong>Register the
+                    SampleServiceClient client with the appropriate instance
+                    (domain2) of the Application Server (or GlassFish)
+                    server.</strong></span></p><ol type="a" class="substeps"><li class="step" title="Step 10.a"><p><span class="bold"><strong>Select File, then Open
+                            Project.</strong></span></p></li><li class="step" title="Step 10.b"><p><span class="bold"><strong>Browse to the
+                            <code class="code">tut-install/wsittutorial/examples/wstx/basicWSTX/</code>
+                            directory and select the SampleServiceClient
+                            project.</strong></span></p></li><li class="step" title="Step 10.c"><p><span class="bold"><strong>Select the Open as Main
+                            Project check box.</strong></span></p></li><li class="step" title="Step 10.d"><p><span class="bold"><strong>Select the Open Required
+                            Projects check box.</strong></span></p></li><li class="step" title="Step 10.e"><p><span class="bold"><strong>Click Open
+                            Project.</strong></span></p><p>The SampleServiceClient project is opened and
+                            is displayed in the Projects tab.</p></li><li class="step" title="Step 10.f"><p><span class="bold"><strong>In the Projects tab,
+                            right-click SampleServiceClient, select Properties,
+                            then select the Run category.</strong></span></p></li><li class="step" title="Step 10.g"><p><span class="bold"><strong>Use the Server drop-down
+                            list to point to domain2.</strong></span></p></li><li class="step" title="Step 10.h"><p><span class="bold"><strong>Click
+                            OK.</strong></span></p></li></ol></li><li class="step" title="Step 11"><p><span class="bold"><strong>Create web service references
+                    for the client (three web service clients, a simpleServlet
+                    and two CMT EJB clients) and generate the WSDL for
+                    all.</strong></span></p><ol type="a" class="substeps"><li class="step" title="Step 11.a"><p><span class="bold"><strong>In the Projects tab,
+                            right-click SampleServiceClient, select New, then
+                            select Web Service Client.</strong></span></p><p>The New Web Service Client dialog
+                            displays.</p></li><li class="step" title="Step 11.b"><p><span class="bold"><strong>Click Browse next to the
+                            Project field.</strong></span></p><p>The Browse Web Services dialog
+                            displays.</p></li><li class="step" title="Step 11.c"><p><span class="bold"><strong>Expand
+                            SampleService-war, select Simple, then click
+                            OK.</strong></span></p></li><li class="step" title="Step 11.d"><p><span class="bold"><strong>In the Package field,
+                            type <code class="code">wstx.sample.client</code>, then click
+                            Finish.</strong></span></p></li><li class="step" title="Step 11.e"><p><span class="bold"><strong>Right-click
+                            SampleServiceClient, select New, then select Web
+                            Service Client.</strong></span></p><p>The New Web Service Client dialog
+                            displays.</p></li><li class="step" title="Step 11.f"><p><span class="bold"><strong>Click Browse next to the
+                            Project field.</strong></span></p><p>The Browse Web Services dialog
+                            displays.</p></li><li class="step" title="Step 11.g"><p><span class="bold"><strong>Expand
+                            SampleService-ejb, select SimpleAsCMTEjb, then click
+                            OK.</strong></span></p></li><li class="step" title="Step 11.h"><p><span class="bold"><strong>In the Package field,
+                            type <code class="code">wstx.sample.ejbclient</code>, then click
+                            Finish.</strong></span></p></li><li class="step" title="Step 11.i"><p><span class="bold"><strong>Right-click
+                            SampleServiceClient, select New, then select Web
+                            Service Client.</strong></span></p><p>The New Web Service Client dialog
+                            displays.</p></li><li class="step" title="Step 11.j"><p><span class="bold"><strong>Click Browse next to the
+                            Project field.</strong></span></p><p>The New Web Service Client dialog
+                            displays.</p></li><li class="step" title="Step 11.k"><p><span class="bold"><strong>Expand
+                            SampleService-ejb, select
+                            LibraryFacadeWebServiceBean, then click
+                            OK.</strong></span></p></li><li class="step" title="Step 11.l"><p><span class="bold"><strong>In the Package field,
+                            type <code class="code">wstx.sample.library</code>, then click
+                            Finish.</strong></span></p></li></ol></li><li class="step" title="Step 12"><p><span class="bold"><strong>If transaction attributes for
+                    the servlet (see Step 7) or CMT EJB web service have
+                    changed, those services must be deployed and client web
+                    service references refreshed to get new web service
+                    attributes.</strong></span></p><p>To refresh the client web service references for
+                    this example:</p><ol type="a" class="substeps"><li class="step" title="Step 12.a"><p><span class="bold"><strong>In the Projects tab,
+                            open the SampleServiceClient, then open Web Service
+                            References.</strong></span></p></li><li class="step" title="Step 12.b"><p><span class="bold"><strong>Right-click Simple and
+                            select Refresh Client to refresh the client node and
+                            regenerate the WSDL for the
+                            simpleServlet.</strong></span></p></li><li class="step" title="Step 12.c"><p><span class="bold"><strong>Right-click
+                            SimpleAsCMTEjb to do the same for the CMT EJB
+                            client. </strong></span></p></li><li class="step" title="Step 12.d"><p><span class="bold"><strong>Right-click
+                            LibraryFacadeWebServiceBean to do the same for the
+                            LibraryFacadeWebServiceBean client.
+                            </strong></span></p></li></ol></li><li class="step" title="Step 13"><p><span class="bold"><strong>Deploy and run the
+                    client.</strong></span></p><p>Right-click SampleServiceClient and select
+                    Run.</p><p>NetBeans IDE will start domain2, deploy the servlet
+                    and EJB CMT clients to that domain, then display the
+                    results for both in a pop-up browser window, as shown in
+                    <a class="xref" href="ch18.html#gfrdv" title="Figure&nbsp;18.5.&nbsp;basicWSTX Results">basicWSTX Results</a>.</p><div class="figure"><a name="gfrdv"></a><p class="title"><b>Figure&nbsp;18.5.&nbsp;basicWSTX Results</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/results_basicWSTX.png" height="360" alt="basicWSTX Results"></td></tr></table></div></div></div><br class="figure-break"></li></ol></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch17.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch19.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;17.&nbsp;Modular Databinding&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;19.&nbsp;Managing Policies</td></tr></table></div></body></html>
