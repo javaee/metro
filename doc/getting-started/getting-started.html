@@ -1,0 +1,343 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Getting Started with Metro</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><meta name="description" content="This series of articles will familiarize developers with the basics of Metro and introduce some of its main features."><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><small class="small">Links: <a href="index.html">Table of Contents</a> | <a href="getting-started.html">Single HTML</a> | <a href="getting-started.pdf">Single PDF</a></small><div lang="en" class="book" title="Getting Started with Metro"><div class="titlepage"><div><div><h1 class="title"><a name="getting-started"></a>Getting Started with Metro</h1></div><div><div class="abstract" title="Abstract"><p>
+                This series of articles will familiarize developers with the basics of Metro and introduce some of its
+                main
+                features.
+            </p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><div class="article"><a href="#building-a-simple-metro-application"><img src="icons/book.gif" class="article-image">Building a Simple Metro Application</a><br><br>The intent of this article is to demonstrate the steps
+            required to build a web service starting both from Java code and
+            from a WSDL document, to deploy that application into a web
+            container, and to build a corresponding web service client
+            application. In this example, the resulting application is
+            portable across JAX-WS 2.0 implementations and do not use any
+            Metro-specific technologies. It is intended as a baseline from
+            which to develop your understanding of the larger Metro
+            stack.</div></dt><dt><div class="article"><a href="#enabling-advanced-features-in-a-web-service-application"><img src="icons/book.gif" class="article-image">Enabling Advanced Features in a Web Service Application</a><br><br>This article highlights the steps required to enable
+            Metro-specific advanced functionalities in a web service and its
+            corresponding client application. As with the previous article,
+            two accompanying code samples are included. Again, one starts from
+            Java source code and the other from an existing WSDL document to
+            develop their respective web services. However, this article and
+            its code samples show how WS-Policy can used to enable
+            WS-Addressing and WS-Reliable Messaging in the web services and
+            their clients.</div></dt></dl></div><div lang="en" class="article" title="Building a Simple Metro Application"><div class="titlepage"><div><div><h2 class="title"><a name="building-a-simple-metro-application"></a>Building a Simple Metro Application</h2></div><div><div class="abstract" title="Abstract"><p>The intent of this article is to demonstrate the steps
+            required to build a web service starting both from Java code and
+            from a WSDL document, to deploy that application into a web
+            container, and to build a corresponding web service client
+            application. In this example, the resulting application is
+            portable across JAX-WS 2.0 implementations and do not use any
+            Metro-specific technologies. It is intended as a baseline from
+            which to develop your understanding of the larger Metro
+            stack.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><div class="section"><a href="#d0e20">1. Overview</a></div></dt><dt><div class="section"><a href="#basma-environment">2. Environment Configuration Settings</a></div></dt><dt><div class="section"><a href="#basma-building">3. Building a JAX-WS Web Service</a></div></dt><dt><div class="section"><a href="#basma-deploying">4. Deploying the Web Service to a Web Container</a></div></dt><dt><div class="section"><a href="#basma-building-client">5. Building a JAX-WS Web Service Client</a></div></dt><dt><div class="section"><a href="#basma-running-client">6. Running the Web Service Client</a></div></dt><dt><div class="section"><a href="#basma-undeploying">7. Undeploying a JAX-WS Web Service</a></div></dt></dl></div><div class="section" title="1.&nbsp;Overview"><div class="titlepage"><div><div><h2 class="title"><a name="d0e20"></a>1.&nbsp;Overview</h2></div></div></div><p>Supporting code samples are included to demonstrate building a
+        JAX-WS web service in the Metro environment. The examples show how to
+        develop a web service both starting from Java source code and starting
+        from an existing WSDL document. For both scenarios, it shows how to
+        develop a corresponding client application from the web service's WSDL
+        document. Additional example shows how to use external web service metadata
+        feature, which is necessary in case we are unable to use java annotations.
+        The examples can be found below:</p><div class="itemizedlist package"><ul class="itemizedlist package"><li class="listitem"><p><a class="link" href="download/wsit-jaxws-fromjava.zip" target="_top">From-Java
+                example</a></p></li><li class="listitem"><p><a class="link" href="download/wsit-jaxws-fromwsdl.zip" target="_top">From-WSDL
+                example</a></p></li><li class="listitem"><p><a class="link" href="download/wsit-external-metadata.zip" target="_top">External web service metadata
+                example</a></p></li></ul></div><p>As mentioned above, these examples do not enable any
+        Metro-specific technologies. However, the following article in this
+        series, <a class="xref" href="#enabling-advanced-features-in-a-web-service-application" title="Enabling Advanced Features in a Web Service Application">Enabling Advanced Features in a Web Service Application</a>, builds on the information presented in
+        this document. It explains configuring a web service and its client to
+        enable advanced features available in Metro.</p></div><div class="section" title="2.&nbsp;Environment Configuration Settings"><div class="titlepage"><div><div><h2 class="title"><a name="basma-environment"></a>2.&nbsp;Environment Configuration Settings</h2></div></div></div><div class="section" title="2.1.&nbsp;Prerequisites"><div class="titlepage"><div><div><h3 class="title"><a name="d0e45"></a>2.1.&nbsp;Prerequisites</h3></div></div></div><p>These series of articles require the following software to
+            be installed on your system:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p><a class="link" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_top">JDK
+                    6.0 Update 29</a> or later,</p></li><li class="listitem"><p><a class="link" href="http://ant.apache.org/" target="_top">Apache Ant
+                    1.6.5</a> or later,</p></li><li class="listitem"><p>web container: either <a class="link" href="http://glassfish.java.net/" target="_top">Glassfish
+                    v3.x</a> or <a class="link" href="http://tomcat.apache.org/" target="_top">Apache Tomcat
+                    7.0</a></p></li><li class="listitem"><p><a class="link" href="http://metro.java.net/" target="_top">Metro
+                    Standalone Budle 2.x</a> (in case of using Apache
+                    Tomcat as a web container)</p></li></ul></div></div><div class="section" title="2.2.&nbsp;Adding WSIT (Metro) libraries into your web container"><div class="titlepage"><div><div><h3 class="title"><a name="d0e74"></a>2.2.&nbsp;Adding WSIT (Metro) libraries into your web
+            container</h3></div></div></div><p>The following steps are required only if using Apache Tomcat
+            as a web container (Glassfish v3 already contains Metro
+            libraries): Unzip downloaded Metro Standalone Bundle and copy all
+            <code class="literal">.jar</code> files from the <code class="literal">lib/</code>
+            directory into
+            <code class="literal">&lt;tomcat-install-directory&gt;/endorsed</code>
+            (where <code class="literal">&lt;tomcat-install-directory&gt;</code> points
+            to your Apache Tomcat installation directory). Also put a copy of
+            the <code class="literal">servlet-api.jar</code> library
+            (<code class="literal">&lt;tomcat-install-directory&gt;/lib</code>) into
+            <code class="literal">endorsed/</code> libs.</p></div><div class="section" title="2.3.&nbsp;Web Container &#34;Listen&#34; Port"><div class="titlepage"><div><div><h3 class="title"><a name="d0e100"></a>2.3.&nbsp;Web Container "Listen" Port</h3></div></div></div><p>The Java code and configuration files for the examples used
+            in this document presume that the web container is listening on
+            port 8080. Port 8080 is the default "listen" port for both
+            GlassFish (<code class="literal">domain1</code>) and Tomcat. If you have
+            changed the "listen" port, you will need to edit the example
+            source files to account for that. The following is a list of the
+            files which contain references to the "listen" port:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><code class="literal">wsit-jaxws-fromjava/src/fromjava/server/AddWebservice.java</code></p></li><li class="listitem"><p><code class="literal">wsit-jaxws-fromjava/etc/custom-schema.xml</code></p></li><li class="listitem"><p><code class="literal">wsit-jaxws-fromjava/etc/custom-client.xml</code></p></li><li class="listitem"><p><code class="literal">wsit-jaxws-fromjava/etc/build.properties</code></p></li><li class="listitem"><p><code class="literal">wsit-jaxws-fromwsdl/etc/custom-client.xml</code></p></li><li class="listitem"><p><code class="literal">wsit-jaxws-fromwsdl/etc/build.properties</code></p></li></ol></div></div><div class="section" title="2.4.&nbsp;Web Container Home Directory"><div class="titlepage"><div><div><h3 class="title"><a name="d0e133"></a>2.4.&nbsp;Web Container Home Directory</h3></div></div></div><p>Before building and deploying the web service and its
+            client, the home directory of the web container must be set either
+            as an environment variable or as a property in the respective
+            <code class="literal">build.xml</code> file.</p><div class="simplesect" title="Environment Variables"><div class="titlepage"><div><div><h4 class="title"><a name="d0e141"></a>Environment Variables</h4></div></div></div><p>Assuming that you are running from the command-line, it
+                is probably simplest to set the appropriate environment
+                variable indicating the web container's "home" directory. For
+                GlassFish, <code class="literal">AS_HOME</code> should be set to the
+                top-level directory of the GlassFish installation. For Tomcat,
+                <code class="literal">CATALINA_HOME</code> needs to be set to the Tomcat
+                top-level directory.</p></div><div class="simplesect" title="Ant build.xml File"><div class="titlepage"><div><div><h4 class="title"><a name="d0e152"></a>Ant <code class="literal">build.xml</code> File</h4></div></div></div><p>If you would rather not have to set the environment
+                variable for each new terminal session, you can edit the
+                <code class="literal">build.xml</code> file located at the top-level
+                directory of each of the examples. There are two commented
+                lines, one each for GlassFish (<code class="literal">as.home</code>) and
+                Tomcat (<code class="literal">catalina.home</code>). Simply uncomment
+                the appropriate line and edit the value for the directory
+                name.</p></div></div></div><div class="section" title="3.&nbsp;Building a JAX-WS Web Service"><div class="titlepage"><div><div><h2 class="title"><a name="basma-building"></a>3.&nbsp;Building a JAX-WS Web Service</h2></div></div></div><div class="section" title="3.1.&nbsp;Starting from Java"><div class="titlepage"><div><div><h3 class="title"><a name="d0e172"></a>3.1.&nbsp;Starting from Java</h3></div></div></div><p>One way to create a web service application is to start by
+            coding the endpoint in Java. If you are developing your Java web
+            service from scratch or have an existing Java class you wish to
+            expose as a web service, this is the most direct path.</p><p>The web service is written as a normal Java class. Then the
+            class and its methods that are to be exposed are annotated with
+            specific web service annotations, <code class="literal">@WebService</code>
+            and <code class="literal">@WebMethod</code>. The following code snippet
+            shows an example:</p><pre class="programlisting"><i><span class="hl-annotation" style="color: gray">@WebService</span></i>
+<span class="ReservedWord">public</span> <span class="ReservedWord">class</span> AddNumbersImpl {
+    <i><span class="hl-annotation" style="color: gray">@WebMethod</span></i>
+    <span class="ReservedWord">public</span> <span class="ReservedWord">int</span> addNumbers(<span class="ReservedWord">int</span> a, <span class="ReservedWord">int</span> b) <span class="ReservedWord">throws</span> AddNumbersException {
+        <span class="ReservedWord">if</span> (a &lt; <span class="hl-number">0</span> || b &lt; <span class="hl-number">0</span>) {
+            <span class="ReservedWord">throw</span> <span class="ReservedWord">new</span> AddNumbersException(<span class="String">"Negative number cant be added!"</span>,
+                    <span class="String">"Numbers: "</span> + a + <span class="String">", "</span> + b);
+        }
+        <span class="ReservedWord">return</span> a + b;
+    }
+}</pre><p>If you are using GlassFish, the web service in the
+            <code class="literal">wsit-jaxws-fromjava</code> example can be compiled and
+            bundled simply by invoking:</p><pre class="programlisting">ant server</pre><p>If using Tomcat, the command-line would be:</p><pre class="programlisting">ant -Duse.tomcat=true server</pre><p>The <code class="literal">server</code> target in
+            <code class="literal">build.xml</code> in turn invokes the tools necessary
+            to process the annotations and compile the sources, and to bundle
+            the Java class files and configuration files into a deployable web
+            archive (WAR file). The WAR file will be
+            <code class="literal">build/war/wsit-jaxws-fromjava.war</code>. The tools
+            that were called by ant during this step are briefly described
+            next.</p><p>The JAX-WS tool <span class="command"><strong>apt</strong></span> (annotation
+            processing tool) processes the annotated source code and invokes
+            the compiler itself, resulting in the class files for each of the
+            Java source files. In the accompanying <code class="literal">fromjava</code>
+            example, the <span class="command"><strong>ant</strong></span> target
+            <span class="command"><strong>build-server-java</strong></span> in
+            <code class="literal">build.xml</code> handles this portion of the process.
+            Then the individual class files are bundled together along with
+            the web service's supporting configuration files into the
+            application's WAR file. It is this file that will be deployed to
+            the web container in the next step. The
+            <span class="command"><strong>create-war</strong></span> target takes care of this.</p></div><div class="section" title="3.2.&nbsp;Starting from WSDL"><div class="titlepage"><div><div><h3 class="title"><a name="d0e229"></a>3.2.&nbsp;Starting from WSDL</h3></div></div></div><p>Typically, you would start from WSDL to build your web
+            service if you want to implement a web service that is already
+            defined either by a standard or an existing instance of the
+            service. In either case, the WSDL already exists. The JAX-WS
+            <span class="command"><strong>wsimport</strong></span> tool will process the existing WSDL
+            document, either from a local copy on disk or by retrieving it
+            from a network address. An example of manually accessing a
+            service's WSDL using a web browser is shown below as part of the
+            section on verifying deployment.</p><p>As in the previous example, to build the
+            <code class="literal">wsit-jaxws-fromwsdl</code> service for GlassFish, you
+            can simply invoke:</p><pre class="programlisting">ant server</pre><p>Otherwise for Tomcat use:</p><pre class="programlisting">ant -Duse.tomcat=true server</pre><p><span class="command"><strong>wsimport</strong></span> will take the WSDL description
+            and generate a corresponding Java interface and other supporting
+            classes. Then the Java compiler needs to be called to compile both
+            the user's code and the generated code. Finally, the class files
+            are bundled together into the WAR file. The details can be seen in
+            the <code class="literal">wsit-jaxws-fromwsdl</code>
+            <code class="literal">build.xml</code> file as the
+            <span class="command"><strong>build-server-wsdl</strong></span> and
+            <span class="command"><strong>create-war</strong></span> targets.</p></div></div><div class="section" title="4.&nbsp;Deploying the Web Service to a Web Container"><div class="titlepage"><div><div><h2 class="title"><a name="basma-deploying"></a>4.&nbsp;Deploying the Web Service to a Web Container</h2></div></div></div><p>As a convenience, invoking each sample's
+        <span class="command"><strong>server</strong></span> target will build that web service's WAR
+        file and immediately deploy it to the web container. However, in some
+        situations, such as after undeploying a web service from its
+        container, it may be useful to deploy the web service without
+        rebuilding it.</p><p>For both the <span class="emphasis"><em>from Java</em></span> and <span class="emphasis"><em>from
+        WSDL</em></span> scenarios described above, the resulting application
+        is deployed in the same manner. However, the details of the deployment
+        process differ slightly between the GlassFish and Tomcat web
+        containers.</p><div class="section" title="4.1.&nbsp;Deploying to GlassFish"><div class="titlepage"><div><div><h3 class="title"><a name="d0e280"></a>4.1.&nbsp;Deploying to GlassFish</h3></div></div></div><p>For development purposes, it is simplest to use the
+            "autodeploy" facility of GlassFish. To do so, copy your
+            application's WAR file to the <code class="literal">autodeploy</code>
+            directory for the domain to which you want to deploy. If you are
+            using the default domain, <code class="literal">domain1</code>, set up by
+            the GlassFish installation process, then the appropriate directory
+            path would be
+            <code class="literal">&lt;glassfish-install-home&gt;/domains/domain1/autodeploy</code>.</p><p>The <code class="literal">build.xml</code> file which accompanies this
+            example has a deploy target for GlassFish. Invoke that target by
+            running <span class="command"><strong>ant</strong></span> in the top-level directory of the
+            respective examples, either <code class="literal">fromjava</code> or
+            <code class="literal">fromwsdl</code>, as follows.</p><pre class="programlisting">ant deploy</pre></div><div class="section" title="4.2.&nbsp;Deploying to Tomcat"><div class="titlepage"><div><div><h3 class="title"><a name="d0e310"></a>4.2.&nbsp;Deploying to Tomcat</h3></div></div></div><p>Tomcat also has an "autodeploy" feature. That feature can be
+            turned off but is enabled by Tomcat&#8217;s "out of the box"
+            configuration settings. Look in
+            <code class="literal">&lt;tomcat-install-directory&gt;/conf/server.xml</code>
+            for the value of "<em class="parameter"><code>autoDeploy</code></em>" if you are
+            unsure. Assuming "<em class="parameter"><code>autoDeploy</code></em>" is enabled,
+            then copying your application to
+            <code class="literal">&lt;tomcat-install-home&gt;/webapps</code> is all that
+            is necessary. Again, there is a target in the
+            <span class="command"><strong>ant</strong></span> <code class="literal">build.xml</code> file which
+            accompanies this sample. The deploy target can be invoked by
+            running the following command in the example's top-level
+            directory.</p><pre class="programlisting">ant -Duse.tomcat=true deploy</pre></div><div class="section" title="4.3.&nbsp;Verifying Successful Deployment"><div class="titlepage"><div><div><h3 class="title"><a name="d0e335"></a>4.3.&nbsp;Verifying Successful Deployment</h3></div></div></div><p>One basic test to verify that the application has deployed
+            properly is to use a web browser to retrieve the application's
+            WSDL from its hosting web container. The following URLs would
+            retrieve the WSDL from each of the two example services. If you
+            are running your web browser and web container on different
+            machines, you will need to replace "localhost" with the name of
+            the machine hosting your web service. It is also worth ensuring
+            that your web container is actually running at this
+            point.</p><div class="itemizedlist document"><ul class="itemizedlist document"><li class="listitem"><p><a class="link" href="http://localhost:8080/wsit-jaxws-fromjava/addnumbers?wsdl" target="_top">http://localhost:8080/wsit-jaxws-fromjava/addnumbers?wsdl</a></p></li><li class="listitem"><p><a class="link" href="http://localhost:8080/wsit-jaxws-fromwsdl/addnumbers?wsdl" target="_top">http://localhost:8080/wsit-jaxws-fromwsdl/addnumbers?wsdl</a></p></li></ul></div><p>If the browser displays a pageful of XML, things are
+            working. If not, check the web container logs for any error
+            messages related to the the sample WAR you have just deployed. For
+            GlassFish, the appropriate log can be found at
+            <code class="literal">&lt;glassfish-install-directory&gt;/domains/&lt;your-domain&gt;/logs/server.log</code>.
+            For Tomcat, the appropriate log file will be
+            <code class="literal">&lt;tomcat-install-directory&gt;/logs/catalina.out</code>.</p></div></div><div class="section" title="5.&nbsp;Building a JAX-WS Web Service Client"><div class="titlepage"><div><div><h2 class="title"><a name="basma-building-client"></a>5.&nbsp;Building a JAX-WS Web Service Client</h2></div></div></div><p>Unlike developing a web service provider, the process for
+        creating a web service client application will always start with an
+        existing WSDL document. This process is similar to the steps taken
+        when building a service from an existing WSDL. Typically, the WSDL
+        will be retrieved directly from a web service provider by the
+        <span class="command"><strong>wsimport</strong></span> tool . Wsimport then generates the
+        corresponding Java source code for the described interface.
+        <span class="command"><strong>javac</strong></span>, the Java compiler, is then called to compile
+        the source into class files. The programmer's code uses the generated
+        classes to access the web service. Here is an example code
+        snippet:</p><pre class="programlisting">AddNumbersPortType port = <span class="ReservedWord">new</span> AddNumbersService().getAddNumbersPort();
+<span class="ReservedWord">int</span> a = <span class="hl-number">10</span>;
+<span class="ReservedWord">int</span> b = <span class="hl-number">20</span>;
+<span class="ReservedWord">int</span> result = port.addNumbers(a,b);</pre><p>For both of the associated examples, invoking</p><pre class="programlisting">ant client</pre><p>or</p><pre class="programlisting">ant -Duse.tomcat=true client</pre><p>will run <span class="command"><strong>wsimport</strong></span> to retrieve the service's
+        WSDL and compile the source.</p></div><div class="section" title="6.&nbsp;Running the Web Service Client"><div class="titlepage"><div><div><h2 class="title"><a name="basma-running-client"></a>6.&nbsp;Running the Web Service Client</h2></div></div></div><p>For both examples, execute the resulting command-line clients
+        via</p><pre class="programlisting">ant run</pre><p>or</p><pre class="programlisting">ant -Duse.tomcat=true run</pre><p>That target simply runs Java with the name of the client's
+        class, such as <span class="command"><strong>java
+        fromwsdl.client.AddNumbersClient</strong></span>. However, for convenience
+        the <span class="command"><strong>run</strong></span> target takes care of passing a list of jar
+        files via Java's <code class="option">-classpath</code> option. When you invoke
+        the <span class="command"><strong>run</strong></span> target, you can expect to see output from
+        the client similar to the following:</p><pre class="programlisting">[java] May 4, 2006 2:45:50 PM [com.sun.xml.ws.policy.jaxws.PolicyWSDLParserExten
+       sion]  addClientConfigToMap
+[java] WARNING: Optional client configuration file URL is missing. No client con
+       figuration is processed.
+[java] Invoking addNumbers(10, 20)
+[java] The result of adding 10 and 20 is 30.
+
+[java] Invoking addNumbers(-10, 20)
+[java] Caught AddNumbersFault_Exception: Numbers: -10, 20</pre><p>The <code class="literal">WARNING</code> line above is expected for both
+        of these examples. Given that no Metro technologies are enabled, a
+        configuration file is unnecessary. More information will be provided
+        on Metro configuration files in the following article.</p></div><div class="section" title="7.&nbsp;Undeploying a JAX-WS Web Service"><div class="titlepage"><div><div><h2 class="title"><a name="basma-undeploying"></a>7.&nbsp;Undeploying a JAX-WS Web Service</h2></div></div></div><p>Undeploying a web service means to disable &amp; remove it from
+        the web container. Clients will no longer be able to use the web
+        service nor will the web service restart without explicit redeployment
+        by the user. During the development process, it is often useful to
+        undeploy a web service. This section explains the necessary steps for
+        both GlassFish and Tomcat.</p><div class="section" title="7.1.&nbsp;Undeploying from GlassFish"><div class="titlepage"><div><div><h3 class="title"><a name="d0e420"></a>7.1.&nbsp;Undeploying from GlassFish</h3></div></div></div><p>The <span class="command"><strong>asadmin</strong></span> command provides the simplest
+            method of undeploying a web service from GlassFish.</p><pre class="programlisting">asadmin undeploy --user admin wsit-jaxws-fromjava
+asadmin undeploy --user admin wsit-jaxws-fromwsdl</pre></div><div class="section" title="7.2.&nbsp;Undeploying from Tomcat"><div class="titlepage"><div><div><h3 class="title"><a name="d0e430"></a>7.2.&nbsp;Undeploying from Tomcat</h3></div></div></div><p>Undeploying a given web service from Tomcat requires
+            deleting its WAR file from the Tomcat <code class="literal">webapps</code>
+            directory. For a typical UNIX scenario the commands below would
+            delete the sample WAR files. Tomcat then automatically undeploys
+            the web service within a few seconds.</p><pre class="programlisting">rm $CATALINA_HOME/webapps/wsit-jaxws-fromjava.war
+rm $CATALINA_HOME/webapps/wsit-jaxws-fromwsdl.war</pre></div></div></div><div lang="en" class="article" title="Enabling Advanced Features in a Web Service Application"><div class="titlepage"><div><div><h2 class="title"><a name="enabling-advanced-features-in-a-web-service-application"></a>Enabling Advanced Features in a Web Service Application</h2></div><div><div class="abstract" title="Abstract"><p>This article highlights the steps required to enable
+            Metro-specific advanced functionalities in a web service and its
+            corresponding client application. As with the previous article,
+            two accompanying code samples are included. Again, one starts from
+            Java source code and the other from an existing WSDL document to
+            develop their respective web services. However, this article and
+            its code samples show how WS-Policy can used to enable
+            WS-Addressing and WS-Reliable Messaging in the web services and
+            their clients.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><div class="section"><a href="#d0e449">1. Overview</a></div></dt><dt><div class="section"><a href="#d0e477">2. Prerequisites and Environment Configuration</a></div></dt><dt><div class="section"><a href="#d0e496">3. WSIT Configuration and WS-Policy</a></div></dt><dt><div class="section"><a href="#d0e516">4. Configuring WSIT in the Web Service</a></div></dt><dt><div class="section"><a href="#d0e552">5. Building and Deploying the Web Service</a></div></dt><dt><div class="section"><a href="#d0e572">6. Configuring WSIT in the Web Service Client</a></div></dt><dt><div class="section"><a href="#d0e577">7. Building and Running a Web Service Client</a></div></dt><dt><div class="section"><a href="#d0e588">8. Undeploying a Web Service</a></div></dt></dl></div><div class="section" title="1.&nbsp;Overview"><div class="titlepage"><div><div><h2 class="title"><a name="d0e449"></a>1.&nbsp;Overview</h2></div></div></div><p>Supporting code samples are included to demonstrate building a
+        web service using WSIT functionality. The examples show how to develop
+        a web service both starting from Java source code and starting from an
+        existing WSDL document. For both cases, it shows how to develop a
+        corresponding client application from the web service's WSDL document.
+        The examples can be found in the WSIT source tree here:</p><div class="itemizedlist package"><ul class="itemizedlist package"><li class="listitem"><p><a class="link" href="download/wsit-enabled-fromjava.zip" target="_top">From-Java
+                example</a></p></li><li class="listitem"><p><a class="link" href="download/wsit-enabled-fromwsdl.zip" target="_top">From-WSDL
+                example</a></p></li></ul></div><p>As you follow along with the sample code, please confirm that
+        you are working in either <code class="literal">wsit-enabled-fromjava</code> or
+        <code class="literal">wsit-enabled-fromwsdl</code> rather than one of the
+        previous article's sample code directories,
+        <code class="literal">wsit-jaxws-fromjava</code> or
+        <code class="literal">wsit-jaxws-fromwsdl</code>.</p></div><div class="section" title="2.&nbsp;Prerequisites and Environment Configuration"><div class="titlepage"><div><div><h2 class="title"><a name="d0e477"></a>2.&nbsp;Prerequisites and Environment Configuration</h2></div></div></div><p>As in the previous article, the steps in this document require
+        that you have already installed the WSIT jars into your web container.
+        It also requires the following software be installed: <a class="link" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_top">JDK
+        6.0 Update 29</a> or later, <a class="link" href="http://ant.apache.org/" target="_top">Apache Ant 1.6.5</a> or later,
+        and a web container: either <a class="link" href="http://glassfish.java.net/" target="_top">Glassfish v3.x</a> or <a class="link" href="http://tomcat.apache.org/" target="_top">Apache Tomcat 7.0</a>.
+        Further, your Metro build environment needs to be configured as
+        described in the <a class="xref" href="#basma-environment" title="2.&nbsp;Environment Configuration Settings">Environment Configuration Settings</a> section of the previous article.</p></div><div class="section" title="3.&nbsp;WSIT Configuration and WS-Policy"><div class="titlepage"><div><div><h2 class="title"><a name="d0e496"></a>3.&nbsp;WSIT Configuration and WS-Policy</h2></div></div></div><p>Advanced web service features are enabled and configured using a
+        mechanism defined by the <a class="link" href="http://specs.xmlsoap.org/ws/2004/09/policy/" target="_top">Web Services
+        Policy Framework</a> (WS-Policy) specification. A web service
+        expresses its requirements and capabilities via policies embedded in
+        the service's WSDL description. A service consumer verifies it can
+        handle the expressed requirements and, optionally, uses server
+        capabilities advertised in policies.</p><p>Technologies like Reliable Messaging, Addressing, or Secure
+        Conversations, provides a set of policy assertions it can process.
+        Those assertions provide the necessary configuration details to the
+        Metro run-time to enable proper operation of these features used by a
+        given web service. The assertions may specify particular configuration
+        settings or rely on default settings that are pre-determined by the
+        specific technology. For instance, in the snippet shown below,
+        <code class="literal">wsrm:AcknowledgementInterval</code> and
+        <code class="literal">wsrm:InactivityTimeout</code> are both optional and could
+        be omitted. The following is an XML snippet showing WS-Policy
+        assertions for WS-Addressing and WS-Reliable Messaging:</p><pre class="programlisting"><span class="ReservedWord">&lt;wsp:Policy</span> <span class="Identifier">wsu:Id</span>=<span class="String">"AddNumbers_policy"</span><span class="ReservedWord">&gt;</span>
+  <span class="ReservedWord">&lt;wsp:ExactlyOne&gt;</span>
+    <span class="ReservedWord">&lt;wsp:All&gt;</span>
+      <span class="ReservedWord">&lt;wsam:Addressing</span> <span class="Identifier">wsp:Optional</span>=<span class="String">"false"</span><span class="ReservedWord">/&gt;</span>
+      <span class="ReservedWord">&lt;wsrm:RMAssertion&gt;</span>
+        <span class="ReservedWord">&lt;wsrm:InactivityTimeout</span> <span class="Identifier">Milliseconds</span>=<span class="String">"600000"</span><span class="ReservedWord">/&gt;</span>
+        <span class="ReservedWord">&lt;wsrm:AcknowledgementInterval</span> <span class="Identifier">Milliseconds</span>=<span class="String">"200"</span><span class="ReservedWord">/&gt;</span>
+      <span class="ReservedWord">&lt;/wsrm:RMAssertion&gt;</span>
+    <span class="ReservedWord">&lt;/wsp:All&gt;</span>
+  <span class="ReservedWord">&lt;/wsp:ExactlyOne&gt;</span>
+<span class="ReservedWord">&lt;/wsp:Policy&gt;</span></pre><p>This snippet would be equally valid in either a WSIT
+        configuration file or a web service's WSDL document.</p></div><div class="section" title="4.&nbsp;Configuring WSIT in the Web Service"><div class="titlepage"><div><div><h2 class="title"><a name="d0e516"></a>4.&nbsp;Configuring WSIT in the Web Service</h2></div></div></div><div class="section" title="4.1.&nbsp;Starting from Java"><div class="titlepage"><div><div><h3 class="title"><a name="d0e519"></a>4.1.&nbsp;Starting from Java</h3></div></div></div><p>When developing a web service from scratch or based on an
+            existing Java class, WSIT features are enabled using a
+            configuration file. That file,
+            <code class="literal">wsit-fromjava.server.AddNumberImpl.xml</code>, is
+            written in WSDL format. An example configuration file can be found
+            in the accompanying samples:</p><div class="itemizedlist document"><ul class="itemizedlist document"><li class="listitem"><p><a class="link" href="samples/wsit-enabled-fromjava/etc/wsit-fromjava.server.AddNumbersImpl.xml" target="_top">wsit-enabled-fromjava/etc/wsit-fromjava.server.AddNumbersImpl.xml</a></p></li></ul></div><p>The configuration file settings will be incorporated
+            dynamically by the WSIT run-time into the WSDL it generates for
+            the web service. So when a client requests the service's WSDL, the
+            run-time will embed into the WSDL any publically visible policy
+            assertions contained in the configuration file. For the example
+            link above, the Addressing and Reliable Messsaging assertions
+            would be part of the WSDL as seen by the client.</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><code class="literal">wsit.xml</code> must be in the
+                <code class="literal">WEB-INF</code> sub-directories of the
+                application's WAR file when it is deployed to the web
+                container. Otherwise, the WSIT run-time environment will not
+                find it.</p></div></div><div class="section" title="4.2.&nbsp;Starting from WSDL"><div class="titlepage"><div><div><h3 class="title"><a name="d0e542"></a>4.2.&nbsp;Starting from WSDL</h3></div></div></div><p>When developing a web service starting from an existing
+            WSDL, the situation is actually simpler. The policy assertions
+            needed to enable various WSIT technologies will already be
+            embedded in the WSDL document. Here is an example WSDL document in
+            the accompanying samples:</p><div class="itemizedlist document"><ul class="itemizedlist document"><li class="listitem"><p><a class="link" href="samples/wsit-enabled-fromwsdl/etc/AddNumbers.wsdl" target="_top">wsit-enabled-fromwsdl/etc/AddNumbers.wsdl</a></p></li></ul></div></div></div><div class="section" title="5.&nbsp;Building and Deploying the Web Service"><div class="titlepage"><div><div><h2 class="title"><a name="d0e552"></a>5.&nbsp;Building and Deploying the Web Service</h2></div></div></div><p>Once configured, a WSIT-enabled web service is built and
+        deployed in the same manner as a standard JAX-WS web service. If you
+        are not familiar with those steps, please review the following
+        sections from <a class="xref" href="#building-a-simple-metro-application" title="Building a Simple Metro Application">Building a Simple Metro Application</a>: <a class="xref" href="#basma-building" title="3.&nbsp;Building a JAX-WS Web Service">Building a JAX-WS Web Service</a> and <a class="xref" href="#basma-deploying" title="4.&nbsp;Deploying the Web Service to a Web Container">Deploying the Web Service to a Web Container</a>. However, the URLs needed to verify the
+        respective web services differ from the previous article's examples
+        and are listed below:</p><div class="itemizedlist document"><ul class="itemizedlist document"><li class="listitem"><p><a class="link" href="http://localhost:8080/wsit-enabled-fromjava/addnumbers?wsdl" target="_top">http://localhost:8080/wsit-enabled-fromjava/addnumbers?wsdl</a></p></li><li class="listitem"><p><a class="link" href="http://localhost:8080/wsit-enabled-fromwsdl/addnumbers?wsdl" target="_top">http://localhost:8080/wsit-enabled-fromwsdl/addnumbers?wsdl</a></p></li></ul></div></div><div class="section" title="6.&nbsp;Configuring WSIT in the Web Service Client"><div class="titlepage"><div><div><h2 class="title"><a name="d0e572"></a>6.&nbsp;Configuring WSIT in the Web Service Client</h2></div></div></div><p>Client-side configuration of WSIT functionality is largely
+        automatic in the WSIT environment. The WSDL document seen by the
+        client will already contain the WSIT policy assertions. Those
+        assertions describe any requirements from the server as well as any
+        optional features the client may use. The WSIT build tools and
+        run-time environment will detect the WSDL's policy assertions and
+        configure themselves appropriately, if possible. If an unsupported
+        assertion is found, an error message describing the problem will be
+        displayed.</p></div><div class="section" title="7.&nbsp;Building and Running a Web Service Client"><div class="titlepage"><div><div><h2 class="title"><a name="d0e577"></a>7.&nbsp;Building and Running a Web Service Client</h2></div></div></div><p>As with the web service itself, building and running a
+        WSIT-enabled client application is identical to running a standard
+        JAX-WS client application. Those steps are described in the following
+        sections of the previous article: <a class="xref" href="#basma-building-client" title="5.&nbsp;Building a JAX-WS Web Service Client">Building a JAX-WS Web Service Client</a> and <a class="xref" href="#basma-running-client" title="6.&nbsp;Running the Web Service Client">Running the Web Service Client</a>. You can
+        expect to see output from the client similar to the following:</p><pre class="programlisting">[java] Invoking addNumbers(10, 20)
+[java] The result of adding 10 and 20 is 30.
+[java]
+[java] Invoking addNumbers(-10, 20)
+[java] Caught AddNumbersFault_Exception: Numbers: -10, 20
+[java] 12.1.2012 15:34:37 [com.sun.xml.ws.rx.rm.runtime.ClientTube]  closeSequences
+[java] INFO: WSRM1157: Waiting for sequence [ uuid:6ecc55a3-78cf-4e8f-9b18-87ffa6fbb8b0 ] state change to [ CLOSED ] has timed out after 3 000 milliseconds
+
+[java] 12.1.2012 15:34:40 [com.sun.xml.ws.rx.rm.runtime.ClientTube]  closeRmSession
+[java] INFO: WSRM1157: Waiting for sequence [ uuid:6ecc55a3-78cf-4e8f-9b18-87ffa6fbb8b0 ] state change to [ TERMINATING ] has timed out after 3 000 milliseconds</pre></div><div class="section" title="8.&nbsp;Undeploying a Web Service"><div class="titlepage"><div><div><h2 class="title"><a name="d0e588"></a>8.&nbsp;Undeploying a Web Service</h2></div></div></div><p>As described in <a class="xref" href="#basma-undeploying" title="7.&nbsp;Undeploying a JAX-WS Web Service">Undeploying a JAX-WS Web Service</a>, to undeploy a web service means to both
+        disable and remove it from the web container. This section provides
+        the necessary commands to undeploy this article's sample web services
+        from both GlassFish and Tomcat.</p><div class="section" title="8.1.&nbsp;Undeploying from GlassFish"><div class="titlepage"><div><div><h3 class="title"><a name="d0e595"></a>8.1.&nbsp;Undeploying from GlassFish</h3></div></div></div><pre class="programlisting">asadmin undeploy --user admin wsit-enabled-fromjava
+asadmin undeploy --user admin wsit-enabled-fromwsdl</pre></div><div class="section" title="8.2.&nbsp;Undeploying from Tomcat"><div class="titlepage"><div><div><h3 class="title"><a name="d0e600"></a>8.2.&nbsp;Undeploying from Tomcat</h3></div></div></div><pre class="programlisting">rm $CATALINA_HOME/webapps/wsit-enabled-fromjava.war
+rm $CATALINA_HOME/webapps/wsit-enabled-fromwsdl.war</pre></div></div></div></div></body></html>

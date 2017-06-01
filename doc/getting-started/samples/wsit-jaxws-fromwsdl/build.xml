@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<project basedir="." default="help" name="wsit-jaxws-fromwsdl">
+
+    <property environment="env"/>
+    <property file="etc/build.properties"/>
+    <property name="build.home" value="${basedir}/build"/>
+    <property name="build.classes.home" value="${build.home}/classes"/>
+    <property name="build.war.home" value="${build.home}/war"/>
+    <property name="war.file" value="${build.war.home}/${ant.project.name}.war"/>
+    <property name="domain" value="domain1"/>
+
+    <!--property name="as.home" value="" /-->
+    <!--property name="catalina.home" value="" /-->
+
+    <condition property="as.home" value="${env.AS_HOME}">
+        <isset property="env.AS_HOME"/>
+    </condition>
+
+    <condition property="catalina.home" value="${env.CATALINA_HOME}">
+        <isset property="env.CATALINA_HOME"/>
+    </condition>
+
+    <!--
+        There are 2 ways to designate a tomcat build.
+    -->
+    <condition property="bld.for.tomcat" value="true">
+          <or>
+             <and>
+                 <not><isset property="as.home"/></not>
+                 <isset property="catalina.home"/>
+             </and>
+
+             <and>
+                 <isset property="as.home"/>
+                 <isset property="catalina.home"/>
+                 <isset property="use.tomcat"/>
+             </and>
+          </or>
+    </condition>
+
+    <!--
+        Verify that one of the two supported containers is identified
+        for use.  If these are not set correctly lib.home and deploy.dir
+        will not be correct and all elements that use them will not be correct.
+    -->
+    <fail message="Web container not identified. Require AS_HOME or CATALINA_HOME be set" >
+          <condition >
+              <and>
+                  <not><isset property="as.home"/></not>
+                  <not><isset property="catalina.home"/></not>
+              </and>
+          </condition>
+      </fail>
+   <fail message="Two Web containers identified. Only one allowed AS_HOME or CATALINA_HOME" >
+      <condition>
+          <and>
+              <isset property="as.home"/>
+              <isset property="catalina.home"/>
+              <not><isset property="use.tomcat"/></not>
+          </and>
+      </condition>
+   </fail>
+
+
+    <condition property="lib.home" value="${catalina.home}/shared/lib" else="${as.home}/lib">
+	    <isset property="bld.for.tomcat"/>
+    </condition>
+
+    <condition property="lib.endorsed" value="${catalina.home}/endorsed" else="${as.home}/lib/endorsed">
+        <isset property="bld.for.tomcat"/>
+    </condition>
+
+    <condition property="deploy.dir" value="${catalina.home}/webapps" else="${as.home}/domains/${domain}/autodeploy">
+        <isset property="bld.for.tomcat"/>
+    </condition> 
+ 
+    <condition property="modules.home" value="" else="${as.home}/modules">
+	<isset property="bld.for.tomcat"/>
+    </condition>
+
+    <condition property="modules.endorsed" value="" else="${as.home}/modules/endorsed">
+	<isset property="bld.for.tomcat"/>
+    </condition>
+
+    <path id="wsit.classpath">
+        <!-- GF v2 Classpath -->
+        <fileset dir="${lib.home}">
+            <include name="webservices-rt.jar"/>
+            <include name="webservices-tools.jar"/>
+            <include name="webservices-extra.jar"/>
+            <include name="webservices-extra-api.jar"/>
+            <include name="javaee.jar"/>
+            <include name="activation.jar"/>
+        </fileset>
+        <fileset dir="${lib.endorsed}">
+            <include name="webservices-api.jar"/>
+        </fileset>
+        <!-- GF v3 Classpath -->
+        <fileset dir="${modules.home}">
+            <include name="gmbal.jar"/>
+            <include name="webservices-osgi.jar"/>
+            <include name="ha-api.jar"/>
+        </fileset>
+        <fileset dir="${modules.endorsed}">
+            <include name="jaxb-api.jar"/>
+            <include name="webservices-api-osgi.jar"/>
+        </fileset>
+    </path>
+
+    <path id="wsit.endorsed">
+        <pathelement location="${lib.endorsed}"/>
+        <pathelement location="${modules.endorsed}"/>
+    </path>
+
+    <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+        <classpath refid="wsit.classpath"/>
+    </taskdef>
+
+    <target name="setup">
+        <mkdir dir="${build.home}"/>
+        <mkdir dir="${build.classes.home}"/>
+        <mkdir dir="${build.war.home}"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.home}" includeEmptyDirs="true" />
+    </target>
+
+    <target name="build-server-wsdl" depends="setup">
+        <wsimport
+            debug="${debug}"
+            verbose="${verbose}"
+            keep="${keep}"
+            extension="${extension}"
+            destdir="${build.classes.home}"
+            xendorsed="true"
+            wsdl="${basedir}/${server.wsdl}">
+            <binding dir="${basedir}/etc" includes="${server.binding}"/>
+        </wsimport>
+        <javac
+            fork="true"
+            srcdir="${basedir}/src"
+            destdir="${build.classes.home}"
+            includes="**/server/**,**/common/**">
+            <classpath refid="wsit.classpath"/>
+        </javac>
+    </target>
+
+    <target name="create-war">
+        <war warfile="${war.file}" webxml="etc/web.xml">
+    	      <webinf dir="${basedir}/etc" includes="sun-jaxws.xml"/>
+    	      <zipfileset
+                dir="${basedir}/etc"
+                includes="*.wsdl, *.xsd"
+                prefix="WEB-INF/wsdl"/>
+    	      <classes dir="${build.classes.home}"/>
+        </war>
+    </target>
+
+    <target name="generate-client" depends="setup">
+        <wsimport
+            debug="${debug}"
+            verbose="${verbose}"
+            keep="${keep}"
+            xendorsed="true"
+            extension="${extension}"
+            destdir="${build.classes.home}"
+            wsdl="${client.wsdl}">
+            <binding dir="${basedir}/etc" includes="${client.binding}"/>
+        </wsimport>
+    </target>
+
+    <target name="client" depends="generate-client">
+        <javac
+            fork="true"
+            srcdir="${basedir}/src"
+            destdir="${build.classes.home}"
+            includes="**/client/**,**/common/**">
+            <classpath refid="wsit.classpath"/>
+        </javac>
+    </target>
+
+    <target name="run">
+        <java fork="true" classname="${client}">
+            <jvmarg value="-Djava.endorsed.dirs=${toString:wsit.endorsed}"/>
+            <classpath>
+                <path refid="wsit.classpath"/>               
+                <pathelement location="${build.classes.home}"/>
+                <pathelement location="${basedir}/etc"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="deploy">
+        <copy file="${war.file}" todir="${deploy.dir}"/>
+    </target>
+
+    <target name="help">
+        <echo message="server:       Builds and deploy the service endpoint WAR"/>
+        <echo message="client:       Builds the client"/>
+        <echo message="run:          Runs the client"/>
+    </target>
+
+    <target name="server" depends="setup">
+
+        <antcall target="clean" />
+
+        <antcall target="build-server-wsdl" />
+
+        <antcall target="create-war" />
+
+        <antcall target="deploy" />
+    </target>
+
+</project>

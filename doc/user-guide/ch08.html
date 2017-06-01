@@ -1,0 +1,169 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;8.&nbsp;Message Optimization</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Metro User Guide"><link rel="up" href="index.html" title="Metro User Guide"><link rel="prev" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Bootstrapping and Configuration"><link rel="next" href="ch09.html" title="Chapter&nbsp;9.&nbsp;SOAP/TCP Web Service transport"><script xmlns:fo="http://www.w3.org/1999/XSL/Format" type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;8.&nbsp;Message Optimization</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td></tr></table><hr></div><small xmlns:fo="http://www.w3.org/1999/XSL/Format" class="small">Links: <a href="index.html">Table of Contents</a> | <a href="user-guide.html">Single HTML</a> | <a href="user-guide.pdf">Single PDF</a></small><div lang="en" class="chapter" title="Chapter&nbsp;8.&nbsp;Message Optimization"><div class="titlepage"><div><div><h2 class="title"><a name="ahibx"></a>Chapter&nbsp;8.&nbsp;Message Optimization</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch08.html#ahiby">8.1. Creating a MTOM Web Service</a></span></dt><dt><span class="section"><a href="ch08.html#ahibz">8.2. Configuring Message Optimization in a Web Service</a></span></dt><dt><span class="section"><a href="ch08.html#ahica">8.3. Deploying and Testing a Web Service with Message Optimization
+        Enabled</a></span></dt><dt><span class="section"><a href="ch08.html#ahicb">8.4. Creating a Client to Consume a Message Optimization-enabled Web
+        Service</a></span></dt><dt><span class="section"><a href="ch08.html#ahicc">8.5. Message Optimization and Secure Conversation</a></span></dt></dl></div><div class="section" title="8.1.&nbsp;Creating a MTOM Web Service"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ahiby"></a>8.1.&nbsp;Creating a MTOM Web Service</h2></div></div></div><p>The starting point for developing a web service to use WSIT is a
+        Java class file annotated with the <code class="code">javax.jws.WebService</code>
+        annotation.</p><p>For detailed instructions for how to use NetBeans IDE to create
+        a web service, see <a class="xref" href="ch02.html#ahibp" title="2.3.2.&nbsp;Creating a Web Service">Creating a Web Service</a>.</p></div><div class="section" title="8.2.&nbsp;Configuring Message Optimization in a Web Service"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ahibz"></a>8.2.&nbsp;Configuring Message Optimization in a Web Service</h2></div></div></div><p>To use the IDE to configure a web service for message
+        optimization, perform the following steps.</p><div class="task" title="To Configure Message Optimization in a Web Service"><p class="title"><b>To Configure Message Optimization in a Web Service</b></p><div class="procedure"><ol class="procedure" type="1"><li class="step" title="Step 1"><p><span class="bold"><strong>In the IDE
+                    <span class="guilabel">Projects</span> window, expand the
+                    <span class="guilabel">Web Services</span> node, right-click the
+                    <span class="guilabel">CalculatorWSService</span> node, and choose
+                    <span class="guilabel">Edit Web Service Attributes</span>.
+                    </strong></span></p><p>The <span class="guilabel">Web Service Attributes</span>
+                    editor appears.</p></li><li class="step" title="Step 2"><p><span class="bold"><strong>Select the <span class="guilabel">Optimize
+                    Transfer of Binary Data (MTOM)</span> check box, as
+                    shown in <a class="xref" href="ch08.html#gfrdw" title="Figure&nbsp;8.1.&nbsp;Enabling MTOM">Enabling MTOM</a>, and click
+                    <span class="guibutton">OK</span>.</strong></span></p><p>This setting configures the web service to optimize
+                    messages that it transmits and to decode optimized
+                    messages that it receives.</p><div class="figure"><a name="gfrdw"></a><p class="title"><b>Figure&nbsp;8.1.&nbsp;Enabling MTOM</b></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="figures/MTOM_screen.png" height="360" alt="Enabling MTOM"></td></tr></table></div></div></div><br class="figure-break"></li></ol></div></div></div><div class="section" title="8.3.&nbsp;Deploying and Testing a Web Service with Message Optimization Enabled"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ahica"></a>8.3.&nbsp;Deploying and Testing a Web Service with Message Optimization
+        Enabled</h2></div></div></div><p>Now that you have configured the web service to use message
+        optimization, you can deploy and test it.</p><div class="task" title="To Deploy and Test a Web Service with Message Optimization Enabled"><p class="title"><b>To Deploy and Test a Web Service with Message Optimization
+            Enabled</b></p><div class="tasksummary">
+                <p>To deploy and test the web service, perform the
+                following steps.</p>
+            </div><div class="procedure"><ol class="procedure" type="1"><li class="step" title="Step 1"><p><span class="bold"><strong>Right-click the project node
+                    and select <span class="guimenuitem">Properties</span>, then
+                    select <span class="guimenuitem">Run</span>.</strong></span></p></li><li class="step" title="Step 2"><p><span class="bold"><strong>Type
+                    <code class="code">/CalculatorWSService?wsdl</code> in the
+                    <span class="guilabel">Relative URL</span> field and click
+                    <span class="guibutton">OK</span>.</strong></span></p></li><li class="step" title="Step 3"><p><span class="bold"><strong>Right-click the project node
+                    and choose <span class="guimenuitem">Run</span>.
+                    </strong></span></p><p>The IDE starts the web container, builds the
+                    application, and displays the WSDL file page in your
+                    browser.</p><p>The following WSIT tags related to message
+                    optimization display in the WSDL file:</p><div class="example"><a name="d0e4324"></a><p class="title"><b>Example&nbsp;8.1.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;ns1:Policy wsu:Id="CalculatorWSPortBindingPolicy"/&gt;
+  &lt;ns1:ExactlyOne&gt;
+    &lt;ns1:All&gt;
+      &lt;ns2:OptimizedMimeSerialization/&gt;
+        &lt;ns3:RMAssertion/&gt;
+          &lt;ns4:UsingAddressing ns1:Optional="true"/&gt;
+    &lt;/ns1:All&gt;
+  &lt;/ns1:ExactlyOne&gt;
+&lt;/ns1:Policy&gt;</pre></div></div><br class="example-break"></li></ol></div></div></div><div class="section" title="8.4.&nbsp;Creating a Client to Consume a Message Optimization-enabled Web Service"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ahicb"></a>8.4.&nbsp;Creating a Client to Consume a Message Optimization-enabled Web
+        Service</h2></div></div></div><p>Now that you have built and tested a web service that uses the
+        WSIT Message Optimization technology, you can create a client that
+        accesses and consumes that web service. The client will use the web
+        service's WSDL to create the functionality necessary to satisfy the
+        interoperability requirements of the web service.</p><div class="task" title="To Create a Client to Consume a WSIT-enabled Web Service"><a name="gfrcw"></a><p class="title"><b>To Create a Client to Consume a WSIT-enabled Web
+            Service</b></p><div class="tasksummary">
+                <p>To create a client to access and consume the web
+                service, perform the following steps.</p>
+            </div><div class="procedure"><ol class="procedure" type="1"><li class="step" title="Step 1"><p><span class="bold"><strong>Choose <span class="guimenu">File</span> &#8594; <span class="guimenuitem">New Project</span>, select <span class="guilabel">Java Web</span>
+                    from the <span class="guilabel">Web category</span> and click
+                    <span class="guibutton">Next</span>.</strong></span></p></li><li class="step" title="Step 2"><p><span class="bold"><strong>Name the project, for example,
+                    CalculatorWSServletClient, and click
+                    <span class="guibutton">Finish</span>.</strong></span></p></li><li class="step" title="Step 3"><p><span class="bold"><strong>Right-click the
+                    <span class="guilabel">CalculatorWSServletClient</span> node and
+                    select <span class="guimenu">New</span> &#8594; <span class="guimenuitem">Web Service Client</span>. </strong></span></p><p>The <span class="guilabel">New Web Service Client</span>
+                    window displays.</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>NetBeans submenus are dynamic, so the
+                        <span class="guilabel">Web Service Client</span> option may not
+                        appear. If you do not see the <span class="guilabel">Web Service
+                        Client</span> option, select <span class="guisubmenu">New</span> &#8594; <span class="guisubmenu">File\Folder</span> &#8594; <span class="guisubmenu">Webservices</span> &#8594; <span class="guimenuitem">Web Service Client</span>.</p></div></li><li class="step" title="Step 4"><p><span class="bold"><strong>Select the <span class="guilabel">WSDL
+                    URL</span> option.</strong></span></p></li><li class="step" title="Step 5"><p><span class="bold"><strong>Cut and paste the URL of the
+                    web service that you want the client to consume into the
+                    <span class="guilabel">WSDL URL</span> field. </strong></span></p><p>For example, here is the URL for the
+                    <code class="code">CalculatorWS</code> web service:</p><div class="example"><a name="d0e4427"></a><p class="title"><b>Example&nbsp;8.2.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">http://localhost:8080/CalculatorApplication/CalculatorWSService?wsdl</pre></div></div><br class="example-break"><p>When JAX-WS generates the web service, it appends
+                    <code class="code">Service</code> to the class name by default.</p></li><li class="step" title="Step 6"><p><span class="bold"><strong>Type
+                    <code class="code">org.me.calculator.client</code> in the
+                    <span class="guilabel">Package</span> field, and click
+                    <span class="guibutton">Finish</span>. </strong></span></p></li><li class="step" title="Step 7"><p><span class="bold"><strong>Right-click the
+                    <span class="guilabel">CalculatorWSServletClient</span> project
+                    node and choose <span class="guisubmenu">New</span> &#8594; <span class="guimenuitem">Servlet</span>.</strong></span></p></li><li class="step" title="Step 8"><p><span class="bold"><strong>Name the servlet
+                    <code class="code">ClientServlet</code>, specify the package name, for
+                    example, <code class="code">org.me.calculator.client</code> and click
+                    <span class="guibutton">Finish</span>.</strong></span></p></li><li class="step" title="Step 9"><p><span class="bold"><strong>To make the servlet the entry
+                    point to your application, right-click the
+                    <span class="guilabel">CalculatorWSServletClient</span> project
+                    node, choose <span class="guimenuitem">Properties</span>, click
+                    <span class="guilabel">Run</span>, type <code class="code">/ClientServlet</code>
+                    in the <span class="guilabel">Relative URL</span> field, and click
+                    <span class="guibutton">OK</span>.</strong></span></p></li><li class="step" title="Step 10"><p><span class="bold"><strong>If
+                    <code class="code">ClientServlet.java</code> is not already open in the
+                    <span class="guilabel">Source Editor</span>, open
+                    it.</strong></span></p></li><li class="step" title="Step 11"><p><span class="bold"><strong>In the <span class="guilabel">Source
+                    Editor</span>, remove the line that comments out the
+                    body of the <code class="code">processRequest</code> method.
+                    </strong></span></p><p>This is the start-comment line that starts the
+                    section that comments out the code:</p><div class="example"><a name="d0e4518"></a><p class="title"><b>Example&nbsp;8.3.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">/* TODO output your page here</pre></div></div><br class="example-break"></li><li class="step" title="Step 12"><p><span class="bold"><strong>Delete the end-comment line
+                    that ends the section of commented out code:</strong></span>
+                    </p><div class="example"><a name="d0e4526"></a><p class="title"><b>Example&nbsp;8.4.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">*/</pre></div></div><p><br class="example-break"></p></li><li class="step" title="Step 13"><p><span class="bold"><strong>Add some empty lines after the
+                    following line:</strong></span> </p><div class="example"><a name="d0e4534"></a><p class="title"><b>Example&nbsp;8.5.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">out.println("&lt;h1&gt;Servlet ClientServlet at " +
+        request.getContextPath () + "&lt;/h1&gt;");</pre></div></div><p><br class="example-break"></p></li><li class="step" title="Step 14"><p><span class="bold"><strong>Right-click in one of the
+                    empty lines that you added, then choose <span class="guisubmenu">Web Service Client
+                            Resources</span> &#8594; <span class="guimenuitem">Call Web Service
+                            Operation</span>. </strong></span></p><p>The <span class="guilabel">Select Operation to Invoke</span>
+                    dialog box appears.</p></li><li class="step" title="Step 15"><p><span class="bold"><strong>Browse to the <span class="guilabel">Add
+                    operation</span> and click <span class="guibutton">OK</span>.
+                    </strong></span></p><p>The <code class="code">processRequest</code> method is as
+                    follows, with bold indicating code added by the
+                    IDE:</p><div class="example"><a name="d0e4567"></a><p class="title"><b>Example&nbsp;8.6.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">protected void processRequest(HttpServletRequest request, 
+                              HttpServletResponse response) throws 
+        ServletException, IOException {
+    
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = response.getWriter();
+    out.println("&lt;html&gt;");
+    out.println("&lt;head&gt;");
+    out.println("&lt;title&gt;Servlet ClientServlet&lt;/title&gt;");
+    out.println("&lt;/head&gt;");
+    out.println("&lt;body&gt;");
+    out.println("&lt;h1&gt;Servlet ClientServlet at " + request
+            .getContextPath() + "&lt;/h1&gt;");
+    try { // Call Web Service Operation
+        org.me.calculator.client.CalculatorWS port = service
+                .getCalculatorWSPort();
+        // TODO initialize WS operation arguments here
+        int i = 0;
+        int j = 0;
+        // TODO process result here
+        int result = port.add(i, j);
+        out.println("Result = " + result);
+    } catch (Exception ex) {
+        // TODO handle custom exceptions here
+    }
+    out.println("&lt;/body&gt;");
+    out.println("&lt;/html&gt;");
+    out.close();
+}</pre></div></div><br class="example-break"></li><li class="step" title="Step 16"><p><span class="bold"><strong>Change the values for
+                    <code class="code">int i</code> and <code class="code">int j</code> to other
+                    numbers, such as 3 and 4.</strong></span></p></li><li class="step" title="Step 17"><p><span class="bold"><strong>Add a line that prints out an
+                    exception, if an exception is thrown. </strong></span></p><p>The <code class="code">try/catch</code> block is as follows (new
+                    and changed lines from this step and the previous step are
+                    highlighted in bold text):</p><div class="example"><a name="d0e4589"></a><p class="title"><b>Example&nbsp;8.7.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">try { // Call Web Service Operation
+    org.me.calculator.client.CalculatorWS port = service
+            .getCalculatorWSPort();
+    // TODO initialize WS operation arguments here
+    int i = 3;
+    int j = 4;
+    // TODO process result here
+    int result = port.add(i, j);
+    out.println("&lt;p&gt;Result: " + result);
+} catch (Exception ex) {
+    out.println("&lt;p&gt;Exception: " + ex);
+}</pre></div></div><br class="example-break"></li><li class="step" title="Step 18"><p><span class="bold"><strong>Save
+                    <code class="code">ClientServlet.java</code>.</strong></span></p></li><li class="step" title="Step 19"><p><span class="bold"><strong>Right-click the project node
+                    and choose <span class="guimenuitem">Run</span>.
+                    </strong></span></p><p>The server starts (if it was not running already),
+                    the application is built, deployed, and run. The browser
+                    opens and displays the calculation result.</p></li></ol></div></div></div><div class="section" title="8.5.&nbsp;Message Optimization and Secure Conversation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ahicc"></a>8.5.&nbsp;Message Optimization and Secure Conversation</h2></div></div></div><p>The Web Services Secure Conversation technology has message
+        optimization benefits. While providing better message-level security
+        it also improves the efficiency of multiple-message exchanges. It
+        accomplishes this by providing basic mechanisms on top of which secure
+        messaging semantics can be defined for multiple-message exchanges.
+        This feature allows for contexts to be established so that potentially
+        more efficient keys or new key material can be exchanged. The result
+        is that the overall performance of subsequent message exchanges is
+        improved.</p><p>For more information on how to use Secure Conversation, see
+        <a class="xref" href="ch12.html" title="Chapter&nbsp;12.&nbsp;Using WSIT Security"><i>Using WSIT Security</i></a>.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Bootstrapping and Configuration&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;SOAP/TCP Web Service transport</td></tr></table></div></body></html>

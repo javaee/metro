@@ -1,0 +1,47 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;7.&nbsp;Bootstrapping and Configuration</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Metro User Guide"><link rel="up" href="index.html" title="Metro User Guide"><link rel="prev" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Processing Large Data"><link rel="next" href="ch08.html" title="Chapter&nbsp;8.&nbsp;Message Optimization"><script xmlns:fo="http://www.w3.org/1999/XSL/Format" type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;7.&nbsp;Bootstrapping and Configuration</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td></tr></table><hr></div><small xmlns:fo="http://www.w3.org/1999/XSL/Format" class="small">Links: <a href="index.html">Table of Contents</a> | <a href="user-guide.html">Single HTML</a> | <a href="user-guide.pdf">Single PDF</a></small><div lang="en" class="chapter" title="Chapter&nbsp;7.&nbsp;Bootstrapping and Configuration"><div class="titlepage"><div><div><h2 class="title"><a name="bootstrap_config"></a>Chapter&nbsp;7.&nbsp;Bootstrapping and Configuration</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch07.html#bootstrap_config-server_endpoint">7.1. What is a Server-Side Endpoint?</a></span></dt><dt><span class="section"><a href="ch07.html#bootstrap_config-client_from_wsdl">7.2. Creating a Client from WSDL</a></span></dt><dt><span class="section"><a href="ch07.html#bootstrap_config-client_from_wsdl_examples">7.3. Client From WSDL Examples</a></span></dt></dl></div><div class="section" title="7.1.&nbsp;What is a Server-Side Endpoint?"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="bootstrap_config-server_endpoint"></a>7.1.&nbsp;What is a Server-Side Endpoint?</h2></div></div></div><p>Web services expose one or more endpoints to which messages can
+        be sent. A web service endpoint is an entity, processor, or resource
+        that can be referenced and to which web services messages can be
+        addressed. Endpoint references convey the information needed to
+        address a web service endpoint. Clients need to know this information
+        before they can access a service.</p><p>Typically, web services package endpoint descriptions and use a
+        WSDL file to share these descriptions with clients. Clients use the
+        web service endpoint description to generate code that can send SOAP
+        messages to and receive SOAP messages from the web service
+        endpoint.</p></div><div class="section" title="7.2.&nbsp;Creating a Client from WSDL"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="bootstrap_config-client_from_wsdl"></a>7.2.&nbsp;Creating a Client from WSDL</h2></div></div></div><p>To create a web service client that can access and consume a web
+        service provider, you must obtain the information that defines the
+        interoperability requirements of the web service provider. Providers
+        make this information available by means of WSDL files. WSDL files may
+        be made available in service registries or published on the Internet
+        using a URL (or both). You can use a web browser or NetBeans IDE to
+        obtain WSDL files.</p><p>A WSDL file contains descriptions of the following:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><span class="emphasis"><em>Network services</em></span>: The description
+                includes the name of the service, the location of the service,
+                and ways to communicate with the service, that is, what
+                transport to use.</p></li><li class="listitem"><p><span class="emphasis"><em>Web services policies</em></span>: Policies
+                express the capabilities, requirements, and general
+                characteristics of a web service. Web service providers use
+                policies to specify policy information in a standardized way.
+                Policies convey conditions on interactions between two web
+                service endpoints. Typically, the provider of a web service
+                exposes a policy to convey conditions under which it provides
+                the service. A requester (a client) might use the policy to
+                decide whether or not to use the service.</p></li></ul></div><p>Web Services Metadata Exchange (WS-MEX) is the protocol for
+        requesting and transferring the WSDL from the provider to the client.
+        This protocol is a bootstrap mechanism for communication.</p></div><div class="section" title="7.3.&nbsp;Client From WSDL Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="bootstrap_config-client_from_wsdl_examples"></a>7.3.&nbsp;Client From WSDL Examples</h2></div></div></div><p>The following sections, found in other chapters of this
+        tutorial, explain how to create a client from a WSDL file using the
+        example files in the tutorial bundle:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a class="xref" href="ch02.html#wsit_example_with_nb-creating_wsit_client" title="2.3.5.&nbsp;Creating a Client to Consume a WSIT-Enabled Web Service">Creating a Client to Consume a WSIT-Enabled Web
+            Service</a> shows how to create a client from
+                WSDL using a web container and the NetBeans IDE.</p></li><li class="listitem"><p><a class="xref" href="ch14.html#ahigi" title="14.5.2.&nbsp;Creating a Client from WSDL">Creating a Client from WSDL</a> shows
+                how to create a client from WSDL using only a web
+                container.</p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;6.&nbsp;Processing Large Data&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;8.&nbsp;Message Optimization</td></tr></table></div></body></html>

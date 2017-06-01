@@ -1,0 +1,107 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;15.&nbsp;Accessing Metro Services Using WCF Clients</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Metro User Guide"><link rel="up" href="index.html" title="Metro User Guide"><link rel="prev" href="ch14.html" title="Chapter&nbsp;14.&nbsp;WSIT Example Using a Web Container Without NetBeans IDE"><link rel="next" href="ch16.html" title="Chapter&nbsp;16.&nbsp;Data Contracts"><script xmlns:fo="http://www.w3.org/1999/XSL/Format" type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;15.&nbsp;Accessing Metro Services Using WCF Clients</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch14.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch16.html">Next</a></td></tr></table><hr></div><small xmlns:fo="http://www.w3.org/1999/XSL/Format" class="small">Links: <a href="index.html">Table of Contents</a> | <a href="user-guide.html">Single HTML</a> | <a href="user-guide.pdf">Single PDF</a></small><div lang="en" class="chapter" title="Chapter&nbsp;15.&nbsp;Accessing Metro Services Using WCF Clients"><div class="titlepage"><div><div><h2 class="title"><a name="accessing-metro-using-wcf-client"></a>Chapter&nbsp;15.&nbsp;Accessing Metro Services Using WCF Clients</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch15.html#ahigp">15.1. Creating a WCF Client</a></span></dt><dd><dl><dt><span class="section"><a href="ch15.html#ahigq">15.1.1. Prerequisites to Creating the WCF Client</a></span></dt><dt><span class="section"><a href="ch15.html#ahigr">15.1.2. Examining the Client Class</a></span></dt><dt><span class="section"><a href="ch15.html#ahigs">15.1.3. Building and Running the Client</a></span></dt></dl></dd></dl></div><div class="section" title="15.1.&nbsp;Creating a WCF Client"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ahigp"></a>15.1.&nbsp;Creating a WCF Client</h2></div></div></div><p>The process of creating a WCF C# client to the
+        <code class="code">addnumbers</code> service is similar to that for a Java
+        programming language client. To create a WCF client you will:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Use the <code class="code">svcutil.exe</code> tool to generate the C#
+                proxy class and contracts for accessing the web
+                service.</p></li><li class="listitem"><p>Create a client program that uses the generated files to
+                make calls to the <code class="code">addnumbers</code> web service.</p></li></ol></div><p>This section covers the following topics:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a class="xref" href="ch15.html#ahigq" title="15.1.1.&nbsp;Prerequisites to Creating the WCF Client">Prerequisites to Creating the WCF Client</a></p></li><li class="listitem"><p><a class="xref" href="ch15.html#ahigr" title="15.1.2.&nbsp;Examining the Client Class">Examining the Client Class</a></p></li><li class="listitem"><p><a class="xref" href="ch15.html#ahigs" title="15.1.3.&nbsp;Building and Running the Client">Building and Running the Client</a></p></li></ul></div><div class="section" title="15.1.1.&nbsp;Prerequisites to Creating the WCF Client"><div class="titlepage"><div><div><h3 class="title"><a name="ahigq"></a>15.1.1.&nbsp;Prerequisites to Creating the WCF Client</h3></div></div></div><p>You must have the following software installed to create the
+            WCF client: </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Microsoft Windows Software Development Kit (SDK)
+                        for July Community Technology Preview</p></li><li class="listitem"><p>Microsoft .NET Framework 3.5 RTM</p></li><li class="listitem"><p>The <code class="code">csclient-enabled-fromjava.zip</code>
+                        example bundle, which is availalble for <a class="link" href="http://metro.java.net/getting-started/download/csclient.zip" target="_top">download</a>.</p></li></ul></div><p> You must also deploy the
+            <code class="code">addnumbers</code> service described in <a class="xref" href="ch14.html" title="Chapter&nbsp;14.&nbsp;WSIT Example Using a Web Container Without NetBeans IDE"><i>WSIT Example Using a Web Container Without NetBeans IDE</i></a>. The service is also available for
+            <a class="link" href="http://metro.java.net/getting-started/download/wsit-enabled-fromjava.zip" target="_top">download</a>.</p></div><div class="section" title="15.1.2.&nbsp;Examining the Client Class"><div class="titlepage"><div><div><h3 class="title"><a name="ahigr"></a>15.1.2.&nbsp;Examining the Client Class</h3></div></div></div><p>The client class uses a generated proxy class,
+            <code class="code">AddNumbersImpl</code>, to access the web service. The
+            <code class="code">port</code> instance variable stores a reference to the
+            proxy class.</p><div class="example"><a name="d0e13857"></a><p class="title"><b>Example&nbsp;15.1.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">port = new AddNumbersImplClient("AddNumbersImplPort");
+...</pre></div></div><br class="example-break"><p>Then the web service operation <code class="code">addNumbers</code> is
+            called on <code class="code">port</code>:</p><div class="example"><a name="d0e13868"></a><p class="title"><b>Example&nbsp;15.2.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">...
+int result = port.addNumbers (number1, number2);
+...</pre></div></div><br class="example-break"><p>The full <code class="code">Client.cs</code> class is as follows:</p><div class="example"><a name="d0e13876"></a><p class="title"><b>Example&nbsp;15.3.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">using System;
+
+class Client {
+    static void Main(String[] args) {
+        AddNumbersImplClient port = null;
+        try {
+            port = new AddNumbersImplClient("AddNumbersImplPort");
+            int number1 = 10;
+            int number2 = 20;
+
+            Console.Write("Adding {0} and {1}. ", number1, number2);
+            int result = port.addNumbers (number1, number2);
+            Console.WriteLine("Result is {0}.\n\n",result);
+
+            number1 = -10;
+            Console.Write("Adding {0} and {1}. ", number1, number2);
+            result = port.addNumbers (number1, number2);
+            Console.WriteLine("Result is {0}.\n\n",result);
+            port.Close();
+        } catch (System.ServiceModel.FaultException e) {
+            Console.WriteLine("Exception: " + e.Message);
+            if (port != null) port.Close();
+        }
+    }
+}</pre></div></div><br class="example-break"></div><div class="section" title="15.1.3.&nbsp;Building and Running the Client"><div class="titlepage"><div><div><h3 class="title"><a name="ahigs"></a>15.1.3.&nbsp;Building and Running the Client</h3></div></div></div><p>The example bundle contains all the files you need to build
+            and run a WCF client that accesses a Metro web service written in
+            the Java programming language.</p><p>The <code class="code">csclient-enabled-fromjava.zip</code> bundle
+            contains the following files: </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">Client.cs</code>, the C# client
+                        class</p></li><li class="listitem"><p><code class="code">build.bat</code>, the build batch
+                        file</p></li></ul></div><p>This section covers the following topics: </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a class="xref" href="ch15.html#ahigt" title="15.1.3.1.&nbsp;Generating the Proxy Class and Configuration File">Generating the Proxy Class and Configuration
+                File</a></p></li><li class="listitem"><p><a class="xref" href="ch15.html#gfrfw" title="15.1.3.1.1.&nbsp;To Build the AddNumbers Client">To Build the AddNumbers Client</a></p></li><li class="listitem"><p><a class="xref" href="ch15.html#gfreh" title="15.1.3.1.2.&nbsp;To Customize the build.bat File">To Customize the build.bat File</a></p></li><li class="listitem"><p><a class="xref" href="ch15.html#gfreu" title="15.1.3.1.3.&nbsp;To Run the AddNumbers Client">To Run the AddNumbers Client</a></p></li></ul></div><div class="section" title="15.1.3.1.&nbsp;Generating the Proxy Class and Configuration File"><div class="titlepage"><div><div><h4 class="title"><a name="ahigt"></a>15.1.3.1.&nbsp;Generating the Proxy Class and Configuration
+                File</h4></div></div></div><p>When creating a Java programming language client, you
+                use the <code class="code">wsimport</code> tool to generate the proxy and
+                helper classes used by the client class to access the web
+                service. When creating a WCF client, the
+                <code class="code">svcutil.exe</code> tool provides the same functionality
+                as the <code class="code">wsimport</code> tool. <code class="code">svcutil.exe</code>
+                generates the C# proxy class and contracts for accessing the
+                service from a C# client program.</p><p>The example bundle contains a batch file,
+                <code class="code">build.bat</code>, that calls <code class="code">svcutil.exe</code> to
+                generate the proxy class. The command is:</p><pre class="programlisting"><span class="bold"><strong>svcutil /config:Client.exe.config http://localhost:8080/wsit-enabled-fromjava/addnumbers?wsdl</strong></span></pre><div class="section" title="15.1.3.1.1.&nbsp;To Build the AddNumbers Client"><div class="titlepage"><div><div><h5 class="title"><a name="gfrfw"></a>15.1.3.1.1.&nbsp;To Build the AddNumbers Client</h5></div></div></div><p>The example bundle's <code class="code">build.bat</code> file
+                    first generates the proxy class and configuration file for
+                    the client, then compiles the proxy class, configuration
+                    file, and <code class="code">Client.cs</code> client class into the
+                    <code class="code">Client.exe</code> executable file.</p><p>To run <code class="code">build.bat</code>, do the following.
+                    </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><span class="bold"><strong>At a command prompt,
+                                navigate to the location where you extracted the
+                                example bundle.</strong></span></p></li><li class="listitem"><p><span class="bold"><strong>If necessary, customize
+                                the <code class="code">build.bat</code> file as described in
+                                <a class="xref" href="ch15.html#gfreh" title="15.1.3.1.2.&nbsp;To Customize the build.bat File">To Customize the build.bat File</a>.</strong></span></p></li><li class="listitem"><p><span class="bold"><strong>Type the following
+                                command:</strong></span> </p><pre class="programlisting"><span class="bold"><strong>build.bat</strong></span></pre></li></ol></div></div><div class="section" title="15.1.3.1.2.&nbsp;To Customize the build.bat File"><div class="titlepage"><div><div><h5 class="title"><a name="gfreh"></a>15.1.3.1.2.&nbsp;To Customize the build.bat File</h5></div></div></div><p>To customize the <code class="code">build.bat</code> file for
+                    your environment, do the following: </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><span class="bold"><strong>Open
+                                <code class="code">build.bat</code> in a text
+                                editor.</strong></span></p></li><li class="listitem"><p><span class="bold"><strong>On the first line, type
+                                the full path to the <code class="code">svcutil.exe</code> tool.
+                                By default, it is installed at <code class="code">C:\Program
+                                Files\Microsoft
+                                SDKs\Windows\v6.0\Bin</code>.</strong></span></p></li><li class="listitem"><p><span class="bold"><strong>On the first line,
+                                change the WSDL location URL if you did not deploy
+                                the <code class="code">addnumbers</code> service to the local
+                                machine, or if the service was deployed to a
+                                different port than the default 8080 port
+                                number.</strong></span></p><p>For example, the following command (all on one
+                                line) sets the host name to
+                                <code class="code">testmachine.example.com</code> and the port
+                                number to 8081:</p><pre class="programlisting"><span class="bold"><strong>svcutil /config:Client.exe.config http://testmachine.example.com:8081/wsit-enabled-fromjava/addnumbers?wsdl</strong></span></pre></li><li class="listitem"><p><span class="bold"><strong>On line 2, change the
+                                location of the <code class="code">csc.exe</code> C# compiler and
+                                the <code class="code">System.ServiceModel</code> and
+                                <code class="code">System.Runtime.Serialization</code> support
+                                DLLs if you installed the .NET 2.0 and 3.0
+                                frameworks to non-default
+                                locations.</strong></span></p></li></ol></div></div><div class="section" title="15.1.3.1.3.&nbsp;To Run the AddNumbers Client"><div class="titlepage"><div><div><h5 class="title"><a name="gfreu"></a>15.1.3.1.3.&nbsp;To Run the AddNumbers Client</h5></div></div></div><p>After the client has been built, run the client by
+                    following these steps. </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><span class="bold"><strong>At a command prompt,
+                                navigate to the location where you extracted the
+                                example bundle.</strong></span></p></li><li class="listitem"><p><span class="bold"><strong>Type the following
+                                command:</strong></span> </p><pre class="programlisting"><span class="bold"><strong>Client.exe</strong></span></pre><p>
+                                You will see the following output: </p><pre class="programlisting">Adding 10 and 20. Result is 30.
+Adding -10 and 20. Exception: Negative numbers can't be added!</pre></li></ol></div></div></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch14.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch16.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;14.&nbsp;WSIT Example Using a Web Container Without NetBeans IDE&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;16.&nbsp;Data Contracts</td></tr></table></div></body></html>

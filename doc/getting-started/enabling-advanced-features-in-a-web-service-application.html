@@ -1,0 +1,116 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Enabling Advanced Features in a Web Service Application</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><meta name="description" content="This article highlights the steps required to enable Metro-specific advanced functionalities in a web service and its corresponding client application. As with the previous article, two accompanying code samples are included. Again, one starts from Java source code and the other from an existing WSDL document to develop their respective web services. However, this article and its code samples show how WS-Policy can used to enable WS-Addressing and WS-Reliable Messaging in the web services and their clients."><link rel="home" href="index.html" title="Getting Started with Metro"><link rel="up" href="index.html" title="Getting Started with Metro"><link rel="prev" href="building-a-simple-metro-application.html" title="Building a Simple Metro Application"><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Enabling Advanced Features in a Web Service Application</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="building-a-simple-metro-application.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;</td></tr></table><hr></div><small class="small">Links: <a href="index.html">Table of Contents</a> | <a href="getting-started.html">Single HTML</a> | <a href="getting-started.pdf">Single PDF</a></small><div lang="en" class="article" title="Enabling Advanced Features in a Web Service Application"><div class="titlepage"><div><div><h2 class="title"><a name="enabling-advanced-features-in-a-web-service-application"></a>Enabling Advanced Features in a Web Service Application</h2></div><div><div class="abstract" title="Abstract"><p>This article highlights the steps required to enable
+            Metro-specific advanced functionalities in a web service and its
+            corresponding client application. As with the previous article,
+            two accompanying code samples are included. Again, one starts from
+            Java source code and the other from an existing WSDL document to
+            develop their respective web services. However, this article and
+            its code samples show how WS-Policy can used to enable
+            WS-Addressing and WS-Reliable Messaging in the web services and
+            their clients.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><div class="section"><a href="enabling-advanced-features-in-a-web-service-application.html#d0e450">1. Overview</a></div></dt><dt><div class="section"><a href="enabling-advanced-features-in-a-web-service-application.html#d0e478">2. Prerequisites and Environment Configuration</a></div></dt><dt><div class="section"><a href="enabling-advanced-features-in-a-web-service-application.html#d0e497">3. WSIT Configuration and WS-Policy</a></div></dt><dt><div class="section"><a href="enabling-advanced-features-in-a-web-service-application.html#d0e517">4. Configuring WSIT in the Web Service</a></div></dt><dt><div class="section"><a href="enabling-advanced-features-in-a-web-service-application.html#d0e553">5. Building and Deploying the Web Service</a></div></dt><dt><div class="section"><a href="enabling-advanced-features-in-a-web-service-application.html#d0e573">6. Configuring WSIT in the Web Service Client</a></div></dt><dt><div class="section"><a href="enabling-advanced-features-in-a-web-service-application.html#d0e578">7. Building and Running a Web Service Client</a></div></dt><dt><div class="section"><a href="enabling-advanced-features-in-a-web-service-application.html#d0e589">8. Undeploying a Web Service</a></div></dt></dl></div><div class="section" title="1.&nbsp;Overview"><div class="titlepage"><div><div><h2 class="title"><a name="d0e450"></a>1.&nbsp;Overview</h2></div></div></div><p>Supporting code samples are included to demonstrate building a
+        web service using WSIT functionality. The examples show how to develop
+        a web service both starting from Java source code and starting from an
+        existing WSDL document. For both cases, it shows how to develop a
+        corresponding client application from the web service's WSDL document.
+        The examples can be found in the WSIT source tree here:</p><div class="itemizedlist package"><ul class="itemizedlist package"><li class="listitem"><p><a class="link" href="download/wsit-enabled-fromjava.zip" target="_top">From-Java
+                example</a></p></li><li class="listitem"><p><a class="link" href="download/wsit-enabled-fromwsdl.zip" target="_top">From-WSDL
+                example</a></p></li></ul></div><p>As you follow along with the sample code, please confirm that
+        you are working in either <code class="literal">wsit-enabled-fromjava</code> or
+        <code class="literal">wsit-enabled-fromwsdl</code> rather than one of the
+        previous article's sample code directories,
+        <code class="literal">wsit-jaxws-fromjava</code> or
+        <code class="literal">wsit-jaxws-fromwsdl</code>.</p></div><div class="section" title="2.&nbsp;Prerequisites and Environment Configuration"><div class="titlepage"><div><div><h2 class="title"><a name="d0e478"></a>2.&nbsp;Prerequisites and Environment Configuration</h2></div></div></div><p>As in the previous article, the steps in this document require
+        that you have already installed the WSIT jars into your web container.
+        It also requires the following software be installed: <a class="link" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_top">JDK
+        6.0 Update 29</a> or later, <a class="link" href="http://ant.apache.org/" target="_top">Apache Ant 1.6.5</a> or later,
+        and a web container: either <a class="link" href="http://glassfish.java.net/" target="_top">Glassfish v3.x</a> or <a class="link" href="http://tomcat.apache.org/" target="_top">Apache Tomcat 7.0</a>.
+        Further, your Metro build environment needs to be configured as
+        described in the <a class="xref" href="building-a-simple-metro-application.html#basma-environment" title="2.&nbsp;Environment Configuration Settings">Environment Configuration Settings</a> section of the previous article.</p></div><div class="section" title="3.&nbsp;WSIT Configuration and WS-Policy"><div class="titlepage"><div><div><h2 class="title"><a name="d0e497"></a>3.&nbsp;WSIT Configuration and WS-Policy</h2></div></div></div><p>Advanced web service features are enabled and configured using a
+        mechanism defined by the <a class="link" href="http://specs.xmlsoap.org/ws/2004/09/policy/" target="_top">Web Services
+        Policy Framework</a> (WS-Policy) specification. A web service
+        expresses its requirements and capabilities via policies embedded in
+        the service's WSDL description. A service consumer verifies it can
+        handle the expressed requirements and, optionally, uses server
+        capabilities advertised in policies.</p><p>Technologies like Reliable Messaging, Addressing, or Secure
+        Conversations, provides a set of policy assertions it can process.
+        Those assertions provide the necessary configuration details to the
+        Metro run-time to enable proper operation of these features used by a
+        given web service. The assertions may specify particular configuration
+        settings or rely on default settings that are pre-determined by the
+        specific technology. For instance, in the snippet shown below,
+        <code class="literal">wsrm:AcknowledgementInterval</code> and
+        <code class="literal">wsrm:InactivityTimeout</code> are both optional and could
+        be omitted. The following is an XML snippet showing WS-Policy
+        assertions for WS-Addressing and WS-Reliable Messaging:</p><pre class="programlisting"><span class="ReservedWord">&lt;wsp:Policy</span> <span class="Identifier">wsu:Id</span>=<span class="String">"AddNumbers_policy"</span><span class="ReservedWord">&gt;</span>
+  <span class="ReservedWord">&lt;wsp:ExactlyOne&gt;</span>
+    <span class="ReservedWord">&lt;wsp:All&gt;</span>
+      <span class="ReservedWord">&lt;wsam:Addressing</span> <span class="Identifier">wsp:Optional</span>=<span class="String">"false"</span><span class="ReservedWord">/&gt;</span>
+      <span class="ReservedWord">&lt;wsrm:RMAssertion&gt;</span>
+        <span class="ReservedWord">&lt;wsrm:InactivityTimeout</span> <span class="Identifier">Milliseconds</span>=<span class="String">"600000"</span><span class="ReservedWord">/&gt;</span>
+        <span class="ReservedWord">&lt;wsrm:AcknowledgementInterval</span> <span class="Identifier">Milliseconds</span>=<span class="String">"200"</span><span class="ReservedWord">/&gt;</span>
+      <span class="ReservedWord">&lt;/wsrm:RMAssertion&gt;</span>
+    <span class="ReservedWord">&lt;/wsp:All&gt;</span>
+  <span class="ReservedWord">&lt;/wsp:ExactlyOne&gt;</span>
+<span class="ReservedWord">&lt;/wsp:Policy&gt;</span></pre><p>This snippet would be equally valid in either a WSIT
+        configuration file or a web service's WSDL document.</p></div><div class="section" title="4.&nbsp;Configuring WSIT in the Web Service"><div class="titlepage"><div><div><h2 class="title"><a name="d0e517"></a>4.&nbsp;Configuring WSIT in the Web Service</h2></div></div></div><div class="section" title="4.1.&nbsp;Starting from Java"><div class="titlepage"><div><div><h3 class="title"><a name="d0e520"></a>4.1.&nbsp;Starting from Java</h3></div></div></div><p>When developing a web service from scratch or based on an
+            existing Java class, WSIT features are enabled using a
+            configuration file. That file,
+            <code class="literal">wsit-fromjava.server.AddNumberImpl.xml</code>, is
+            written in WSDL format. An example configuration file can be found
+            in the accompanying samples:</p><div class="itemizedlist document"><ul class="itemizedlist document"><li class="listitem"><p><a class="link" href="samples/wsit-enabled-fromjava/etc/wsit-fromjava.server.AddNumbersImpl.xml" target="_top">wsit-enabled-fromjava/etc/wsit-fromjava.server.AddNumbersImpl.xml</a></p></li></ul></div><p>The configuration file settings will be incorporated
+            dynamically by the WSIT run-time into the WSDL it generates for
+            the web service. So when a client requests the service's WSDL, the
+            run-time will embed into the WSDL any publically visible policy
+            assertions contained in the configuration file. For the example
+            link above, the Addressing and Reliable Messsaging assertions
+            would be part of the WSDL as seen by the client.</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><code class="literal">wsit.xml</code> must be in the
+                <code class="literal">WEB-INF</code> sub-directories of the
+                application's WAR file when it is deployed to the web
+                container. Otherwise, the WSIT run-time environment will not
+                find it.</p></div></div><div class="section" title="4.2.&nbsp;Starting from WSDL"><div class="titlepage"><div><div><h3 class="title"><a name="d0e543"></a>4.2.&nbsp;Starting from WSDL</h3></div></div></div><p>When developing a web service starting from an existing
+            WSDL, the situation is actually simpler. The policy assertions
+            needed to enable various WSIT technologies will already be
+            embedded in the WSDL document. Here is an example WSDL document in
+            the accompanying samples:</p><div class="itemizedlist document"><ul class="itemizedlist document"><li class="listitem"><p><a class="link" href="samples/wsit-enabled-fromwsdl/etc/AddNumbers.wsdl" target="_top">wsit-enabled-fromwsdl/etc/AddNumbers.wsdl</a></p></li></ul></div></div></div><div class="section" title="5.&nbsp;Building and Deploying the Web Service"><div class="titlepage"><div><div><h2 class="title"><a name="d0e553"></a>5.&nbsp;Building and Deploying the Web Service</h2></div></div></div><p>Once configured, a WSIT-enabled web service is built and
+        deployed in the same manner as a standard JAX-WS web service. If you
+        are not familiar with those steps, please review the following
+        sections from <a class="xref" href="building-a-simple-metro-application.html" title="Building a Simple Metro Application">Building a Simple Metro Application</a>: <a class="xref" href="building-a-simple-metro-application.html#basma-building" title="3.&nbsp;Building a JAX-WS Web Service">Building a JAX-WS Web Service</a> and <a class="xref" href="building-a-simple-metro-application.html#basma-deploying" title="4.&nbsp;Deploying the Web Service to a Web Container">Deploying the Web Service to a Web Container</a>. However, the URLs needed to verify the
+        respective web services differ from the previous article's examples
+        and are listed below:</p><div class="itemizedlist document"><ul class="itemizedlist document"><li class="listitem"><p><a class="link" href="http://localhost:8080/wsit-enabled-fromjava/addnumbers?wsdl" target="_top">http://localhost:8080/wsit-enabled-fromjava/addnumbers?wsdl</a></p></li><li class="listitem"><p><a class="link" href="http://localhost:8080/wsit-enabled-fromwsdl/addnumbers?wsdl" target="_top">http://localhost:8080/wsit-enabled-fromwsdl/addnumbers?wsdl</a></p></li></ul></div></div><div class="section" title="6.&nbsp;Configuring WSIT in the Web Service Client"><div class="titlepage"><div><div><h2 class="title"><a name="d0e573"></a>6.&nbsp;Configuring WSIT in the Web Service Client</h2></div></div></div><p>Client-side configuration of WSIT functionality is largely
+        automatic in the WSIT environment. The WSDL document seen by the
+        client will already contain the WSIT policy assertions. Those
+        assertions describe any requirements from the server as well as any
+        optional features the client may use. The WSIT build tools and
+        run-time environment will detect the WSDL's policy assertions and
+        configure themselves appropriately, if possible. If an unsupported
+        assertion is found, an error message describing the problem will be
+        displayed.</p></div><div class="section" title="7.&nbsp;Building and Running a Web Service Client"><div class="titlepage"><div><div><h2 class="title"><a name="d0e578"></a>7.&nbsp;Building and Running a Web Service Client</h2></div></div></div><p>As with the web service itself, building and running a
+        WSIT-enabled client application is identical to running a standard
+        JAX-WS client application. Those steps are described in the following
+        sections of the previous article: <a class="xref" href="building-a-simple-metro-application.html#basma-building-client" title="5.&nbsp;Building a JAX-WS Web Service Client">Building a JAX-WS Web Service Client</a> and <a class="xref" href="building-a-simple-metro-application.html#basma-running-client" title="6.&nbsp;Running the Web Service Client">Running the Web Service Client</a>. You can
+        expect to see output from the client similar to the following:</p><pre class="programlisting">[java] Invoking addNumbers(10, 20)
+[java] The result of adding 10 and 20 is 30.
+[java]
+[java] Invoking addNumbers(-10, 20)
+[java] Caught AddNumbersFault_Exception: Numbers: -10, 20
+[java] 12.1.2012 15:34:37 [com.sun.xml.ws.rx.rm.runtime.ClientTube]  closeSequences
+[java] INFO: WSRM1157: Waiting for sequence [ uuid:6ecc55a3-78cf-4e8f-9b18-87ffa6fbb8b0 ] state change to [ CLOSED ] has timed out after 3 000 milliseconds
+
+[java] 12.1.2012 15:34:40 [com.sun.xml.ws.rx.rm.runtime.ClientTube]  closeRmSession
+[java] INFO: WSRM1157: Waiting for sequence [ uuid:6ecc55a3-78cf-4e8f-9b18-87ffa6fbb8b0 ] state change to [ TERMINATING ] has timed out after 3 000 milliseconds</pre></div><div class="section" title="8.&nbsp;Undeploying a Web Service"><div class="titlepage"><div><div><h2 class="title"><a name="d0e589"></a>8.&nbsp;Undeploying a Web Service</h2></div></div></div><p>As described in <a class="xref" href="building-a-simple-metro-application.html#basma-undeploying" title="7.&nbsp;Undeploying a JAX-WS Web Service">Undeploying a JAX-WS Web Service</a>, to undeploy a web service means to both
+        disable and remove it from the web container. This section provides
+        the necessary commands to undeploy this article's sample web services
+        from both GlassFish and Tomcat.</p><div class="section" title="8.1.&nbsp;Undeploying from GlassFish"><div class="titlepage"><div><div><h3 class="title"><a name="d0e596"></a>8.1.&nbsp;Undeploying from GlassFish</h3></div></div></div><pre class="programlisting">asadmin undeploy --user admin wsit-enabled-fromjava
+asadmin undeploy --user admin wsit-enabled-fromwsdl</pre></div><div class="section" title="8.2.&nbsp;Undeploying from Tomcat"><div class="titlepage"><div><div><h3 class="title"><a name="d0e601"></a>8.2.&nbsp;Undeploying from Tomcat</h3></div></div></div><pre class="programlisting">rm $CATALINA_HOME/webapps/wsit-enabled-fromjava.war
+rm $CATALINA_HOME/webapps/wsit-enabled-fromwsdl.war</pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="building-a-simple-metro-application.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;</td></tr><tr><td width="40%" align="left" valign="top">Building a Simple Metro Application&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;</td></tr></table></div></body></html>

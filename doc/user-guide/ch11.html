@@ -1,0 +1,129 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;11.&nbsp;WS-MakeConnection support</title><link rel="stylesheet" href="style/documentation.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Metro User Guide"><link rel="up" href="index.html" title="Metro User Guide"><link rel="prev" href="ch10.html" title="Chapter&nbsp;10.&nbsp;Using Reliable Messaging"><link rel="next" href="ch12.html" title="Chapter&nbsp;12.&nbsp;Using WSIT Security"><script xmlns:fo="http://www.w3.org/1999/XSL/Format" type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2105126-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;11.&nbsp;WS-MakeConnection support</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td></tr></table><hr></div><small xmlns:fo="http://www.w3.org/1999/XSL/Format" class="small">Links: <a href="index.html">Table of Contents</a> | <a href="user-guide.html">Single HTML</a> | <a href="user-guide.pdf">Single PDF</a></small><div lang="en" class="chapter" title="Chapter&nbsp;11.&nbsp;WS-MakeConnection support"><div class="titlepage"><div><div><h2 class="title"><a name="using-mc"></a>Chapter&nbsp;11.&nbsp;WS-MakeConnection support</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch11.html#using-mc-introduction">11.1. Introduction to WS-MakeConnection</a></span></dt><dt><span class="section"><a href="ch11.html#using-mc-config_endpoint">11.2. Configuring Web Service Endpoint</a></span></dt><dd><dl><dt><span class="section"><a href="ch11.html#using-mc-config_endpoint-wspolicy">11.2.1. Configuration via an WS-Policy expression</a></span></dt><dt><span class="section"><a href="ch11.html#using-mc-config_endpoint-annotation">11.2.2. Configuration via a Java annotation</a></span></dt></dl></dd><dt><span class="section"><a href="ch11.html#using-mc-config-client">11.3. Configuring Web Service Client</a></span></dt></dl></div><div class="section" title="11.1.&nbsp;Introduction to WS-MakeConnection"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-mc-introduction"></a>11.1.&nbsp;Introduction to WS-MakeConnection</h2></div></div></div><p>The <a class="link" href="http://docs.oasis-open.org/ws-rx/wsmc/v1.1/wsmc.html" target="_top">WS-MakeConnection</a>
+        specification defines a protocol that allows messages to be
+        transferred between WS-MakeConnection-aware nodes by using a
+        transport-specific back-channel. The protocol itself is described in a
+        transport-independent manner. This allows it to be implemented using
+        different network technologies. To support interoperable Web services,
+        a SOAP binding is defined within WS-MakeConnection
+        specification.</p><p>The WS-MakeConnection mechanism for the transfer of messages
+        between two endpoints is useful in situations when the sending
+        endpoint is unable to initiate a new connection to the receiving
+        endpoint. Such situation may typically occur when a connection from a
+        non-adressable client is broken before a response to client's request
+        has been delivered. Rather than discarding the old response, replaying
+        the whole request/response message exchange and generating a new
+        response, which may be computationally or otherwise resource
+        intensive, WS-MakeConnection provides a way how to uniquely identify
+        non-addressable endpoints, and a mechanism by which undelivered
+        messages destined for those endpoints can be delivered.</p><p>As all of the WS-* technologies, WS-MakeConnection mechanism is
+        extensible allowing additional functionality, such as security, to be
+        tightly integrated. WS-MakeConnection specification integrates with
+        and complements the WS-ReliableMessaging, WS-Security, WS-Policy, and
+        other Web services specifications.</p></div><div class="section" title="11.2.&nbsp;Configuring Web Service Endpoint"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-mc-config_endpoint"></a>11.2.&nbsp;Configuring Web Service Endpoint</h2></div></div></div><div class="section" title="11.2.1.&nbsp;Configuration via an WS-Policy expression"><div class="titlepage"><div><div><h3 class="title"><a name="using-mc-config_endpoint-wspolicy"></a>11.2.1.&nbsp;Configuration via an WS-Policy expression</h3></div></div></div><p>As all other WS-* features, WS-MakeConnection can be enabled
+            using a WS-Policy assertion. Unfortunately, unlike many other WS-*
+            features, <a class="link" href="http://netbeans.org/" target="_top">NetBeans
+            IDE</a> in it's current version 6.8 don't provide a nice
+            GUI-based support for enabling/disabling WS-MakeConnection feature
+            on an endpoint. This means that in order to enable
+            WS-MakeConnection, you need to manually put the assertion into
+            your endpoint's WSIT config file. Here are the steps:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Open the existing WSIT config file for the endpoint.
+                    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>If no config file has been created for the
+                                endpoint yet, you can create an empty one with a
+                                little help from NetBeans IDE by selecting and
+                                unselecting any feature in the QoS dialog or the
+                                "Design" tab of the web service endpoint.</p></li></ul></div></li><li class="listitem"><p>Add the WS-MakeConnection assertion namespace
+                    definition into the root XML element of the WSIT config
+                    file: </p><div class="example"><a name="d0e5573"></a><p class="title"><b>Example&nbsp;11.1.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">xmlns:wsmc="http://docs.oasis-open.org/ws-rx/wsmc/200702"</pre></div></div><p><br class="example-break"></p></li><li class="listitem"><p>Create new WS-Policy expression in the config file:
+                    </p><div class="example"><a name="d0e5579"></a><p class="title"><b>Example&nbsp;11.2.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;wsp:Policy wsu:Id="McTestEchoPortBindingPolicy"&gt;
+    &lt;wsp:ExactlyOne&gt;
+        &lt;wsp:All&gt;
+            &lt;wsam:Addressing wsp:Optional="false"/&gt;
+            &lt;wsmc:MCSupported /&gt;
+        &lt;/wsp:All&gt;
+    &lt;/wsp:ExactlyOne&gt;
+&lt;/wsp:Policy&gt;</pre></div></div><p><br class="example-break"></p></li><li class="listitem"><p>Attach newly created WS-Policy expression to the
+                    endpoint binding using WS-Policy reference: </p><div class="example"><a name="d0e5585"></a><p class="title"><b>Example&nbsp;11.3.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">&lt;binding name="McTestEchoPortBinding" type="tns:McTestEcho"&gt;
+    &lt;wsp:PolicyReference URI="#McTestEchoPortBindingPolicy"/&gt;
+
+    ...
+
+&lt;/binding&gt;</pre></div></div><p><br class="example-break"></p></li><li class="listitem"><p>Build and run the service. Service will now have
+                    WS-MakeConnection support enabled.</p></li></ol></div></div><div class="section" title="11.2.2.&nbsp;Configuration via a Java annotation"><div class="titlepage"><div><div><h3 class="title"><a name="using-mc-config_endpoint-annotation"></a>11.2.2.&nbsp;Configuration via a Java annotation</h3></div></div></div><p>In addition to using WS-Policy expression as discussed in
+            <a class="xref" href="ch11.html#using-mc-config_endpoint-wspolicy" title="11.2.1.&nbsp;Configuration via an WS-Policy expression">Configuration via an WS-Policy expression</a>, you may as well configure
+            WS-MakeConnection support using a
+            <code class="code">@MakeConnectionSupported</code> Java annotation provided by
+            Metro. Please note, that this annotation is meant to annotate
+            whole classes only. The resulting Java code for a sample web
+            service would look like this:</p><div class="example"><a name="d0e5601"></a><p class="title"><b>Example&nbsp;11.4.&nbsp;Example of WS-MakeConnection enabled service class
+                using @MakeConnectionSupported Java annotation</b></p><div class="example-contents"><pre class="programlisting">package com.sun.metro.mc.service;
+
+import com.sun.xml.ws.rx.mc.MakeConnectionSupported;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
+
+@WebService()
+@MakeConnectionSupported
+public class McTestEcho {
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "echo")
+    public String echo(@WebParam(name = "message")
+    final String message) {
+        return "Received: " + message;
+    }
+
+}</pre></div></div><br class="example-break"></div></div><div class="section" title="11.3.&nbsp;Configuring Web Service Client"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-mc-config-client"></a>11.3.&nbsp;Configuring Web Service Client</h2></div></div></div><p>Once the WS endpoint is properly configured in Metro to support
+        WS-MakeConnection protocol messages, it advertises this ability in
+        it's WSDL descriptor. In case you are developing a client for such an
+        endpoint (which advertises WS-MakeConnection support in its WSDL), all
+        the necessary configuration happens autmatically and you don't need to
+        take any additional steps to enable WS-MakeConnection support on the
+        client side.</p><p>There are however other web service frameworks that sometimes
+        fail to advertise their advanced capabilities. In case of such an
+        endpoint, which doesn't have the <code class="code">&lt;wsmc:MCSupported
+        /&gt;</code> assertion specified in its WSDL descriptor but you know
+        that it DOES support WS-MakeConnection, you can use the JAX-WS's WS
+        Feature mechanism to explicitly enable WS-MakeConnection support on
+        your client proxy by passing a
+        <code class="code">com.sun.xml.ws.rx.mc.MakeConnectionSupportedFeature</code>
+        instance as a parameter into a port getter method:</p><div class="example"><a name="d0e5619"></a><p class="title"><b>Example&nbsp;11.5.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">McTestEcho port = null;
+try {
+    McTestEchoService service = new McTestEchoService();
+    port = service.getMcTestEchoPort(
+        new com.sun.xml.ws.rx.mc.MakeConnectionSupportedFeature());
+
+    String message = "Test";
+
+    String result = port.echo(message);
+
+    System.out.println("Result = "+result);
+} catch (Exception ex) {
+    ex.printStackTrace();
+} finally {
+    if (port != null) {
+        try {
+            ((java.io.Closeable) port).close();
+        } catch (java.io.IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+}</pre></div></div><br class="example-break"><p>Please note once again that passing the
+        <code class="code">com.sun.xml.ws.rx.mc.MakeConnectionSupportedFeature</code>
+        explicitly is required ONLY if the endpoint fails to advertise its
+        support for WS-MakeConnection feature via the
+        <code class="code">&lt;wsmc:MCSupported /&gt;</code> WS-Policy assertion.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;Using Reliable Messaging&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;Using WSIT Security</td></tr></table></div></body></html>
