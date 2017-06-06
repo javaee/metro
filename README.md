@@ -13,7 +13,7 @@ Project Tango) includes implementations of:
 - SOAP over TCP 
 - WS-AtomicTransactions/Coordination
 - WS-MetadataExchange
-- WS-Policy (policy.java.net)
+- WS-Policy (https://github.com/javaee/metro-policy)
 - WS-ReliableMessaging
 - WS-SecureConversation
 - WS-Security
